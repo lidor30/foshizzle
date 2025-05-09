@@ -5,4 +5,10 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react()],
   base: "/foshizzle/",
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+    // Ensure Vite correctly handles public directory assets
+    emptyOutDir: true,
+  },
 });
