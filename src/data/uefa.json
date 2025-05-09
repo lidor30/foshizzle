@@ -1,0 +1,30 @@
+[
+  { "year": "2023", "winner": "Real Madrid", "runnerUp": "Borussia Dortmund" },
+  { "year": "2022", "winner": "Manchester City", "runnerUp": "Inter Milan" },
+  { "year": "2021", "winner": "Real Madrid", "runnerUp": "Liverpool" },
+  { "year": "2020", "winner": "Chelsea", "runnerUp": "Manchester City" },
+  {
+    "year": "2019",
+    "winner": "Bayern Munich",
+    "runnerUp": "Paris Saint-Germain"
+  },
+  { "year": "2018", "winner": "Liverpool", "runnerUp": "Tottenham Hotspur" },
+  { "year": "2017", "winner": "Real Madrid", "runnerUp": "Liverpool" },
+  { "year": "2016", "winner": "Real Madrid", "runnerUp": "Juventus" },
+  { "year": "2015", "winner": "Real Madrid", "runnerUp": "Atletico Madrid" },
+  { "year": "2014", "winner": "Barcelona", "runnerUp": "Juventus" },
+  { "year": "2013", "winner": "Real Madrid", "runnerUp": "Atletico Madrid" },
+  {
+    "year": "2012",
+    "winner": "Bayern Munich",
+    "runnerUp": "Borussia Dortmund"
+  },
+  { "year": "2011", "winner": "Chelsea", "runnerUp": "Bayern Munich" },
+  { "year": "2010", "winner": "Barcelona", "runnerUp": "Manchester United" },
+  { "year": "2009", "winner": "Barcelona", "runnerUp": "Manchester United" },
+  { "year": "2008", "winner": "Inter Milan", "runnerUp": "Bayern Munich" },
+  { "year": "2007", "winner": "Manchester United", "runnerUp": "Chelsea" },
+  { "year": "2006", "winner": "Barcelona", "runnerUp": "Arsenal" },
+  { "year": "2005", "winner": "Liverpool", "runnerUp": "AC Milan" },
+  { "year": "2004", "winner": "Porto", "runnerUp": "Monaco" }
+]

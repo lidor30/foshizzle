@@ -1,0 +1,74 @@
+[
+  {
+    "year": "2023",
+    "winner": "Boston Celtics",
+    "runnerUp": "Dallas Mavericks"
+  },
+  { "year": "2022", "winner": "Denver Nuggets", "runnerUp": "Miami Heat" },
+  {
+    "year": "2021",
+    "winner": "Golden State Warriors",
+    "runnerUp": "Boston Celtics"
+  },
+  { "year": "2020", "winner": "Milwaukee Bucks", "runnerUp": "Phoenix Suns" },
+  { "year": "2019", "winner": "Los Angeles Lakers", "runnerUp": "Miami Heat" },
+  {
+    "year": "2018",
+    "winner": "Toronto Raptors",
+    "runnerUp": "Golden State Warriors"
+  },
+  {
+    "year": "2017",
+    "winner": "Golden State Warriors",
+    "runnerUp": "Cleveland Cavaliers"
+  },
+  {
+    "year": "2016",
+    "winner": "Golden State Warriors",
+    "runnerUp": "Cleveland Cavaliers"
+  },
+  {
+    "year": "2015",
+    "winner": "Cleveland Cavaliers",
+    "runnerUp": "Golden State Warriors"
+  },
+  {
+    "year": "2014",
+    "winner": "Golden State Warriors",
+    "runnerUp": "Cleveland Cavaliers"
+  },
+  { "year": "2013", "winner": "San Antonio Spurs", "runnerUp": "Miami Heat" },
+  { "year": "2012", "winner": "Miami Heat", "runnerUp": "San Antonio Spurs" },
+  {
+    "year": "2011",
+    "winner": "Miami Heat",
+    "runnerUp": "Oklahoma City Thunder"
+  },
+  { "year": "2010", "winner": "Dallas Mavericks", "runnerUp": "Miami Heat" },
+  {
+    "year": "2009",
+    "winner": "Los Angeles Lakers",
+    "runnerUp": "Boston Celtics"
+  },
+  {
+    "year": "2008",
+    "winner": "Los Angeles Lakers",
+    "runnerUp": "Orlando Magic"
+  },
+  {
+    "year": "2007",
+    "winner": "Boston Celtics",
+    "runnerUp": "Los Angeles Lakers"
+  },
+  {
+    "year": "2006",
+    "winner": "San Antonio Spurs",
+    "runnerUp": "Cleveland Cavaliers"
+  },
+  { "year": "2005", "winner": "Miami Heat", "runnerUp": "Dallas Mavericks" },
+  {
+    "year": "2004",
+    "winner": "San Antonio Spurs",
+    "runnerUp": "Detroit Pistons"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  { "year": "2023", "winner": "Atalanta", "runnerUp": "Bayer Leverkusen" },
+  { "year": "2022", "winner": "Sevilla", "runnerUp": "Roma" },
+  { "year": "2021", "winner": "Eintracht Frankfurt", "runnerUp": "Rangers" },
+  { "year": "2020", "winner": "Villarreal", "runnerUp": "Manchester United" },
+  { "year": "2019", "winner": "Sevilla", "runnerUp": "Inter Milan" },
+  { "year": "2018", "winner": "Chelsea", "runnerUp": "Arsenal" },
+  { "year": "2017", "winner": "Atletico Madrid", "runnerUp": "Marseille" },
+  { "year": "2016", "winner": "Manchester United", "runnerUp": "Ajax" },
+  { "year": "2015", "winner": "Sevilla", "runnerUp": "Liverpool" },
+  { "year": "2014", "winner": "Sevilla", "runnerUp": "Dnipro" },
+  { "year": "2013", "winner": "Sevilla", "runnerUp": "Benfica" },
+  { "year": "2012", "winner": "Chelsea", "runnerUp": "Benfica" },
+  {
+    "year": "2011",
+    "winner": "Atletico Madrid",
+    "runnerUp": "Athletic Bilbao"
+  },
+  { "year": "2010", "winner": "Porto", "runnerUp": "Braga" },
+  { "year": "2009", "winner": "Atletico Madrid", "runnerUp": "Fulham" },
+  { "year": "2008", "winner": "Shakhtar Donetsk", "runnerUp": "Werder Bremen" },
+  { "year": "2007", "winner": "Zenit St. Petersburg", "runnerUp": "Rangers" },
+  { "year": "2006", "winner": "Sevilla", "runnerUp": "Espanyol" },
+  { "year": "2005", "winner": "CSKA Moscow", "runnerUp": "Sporting CP" },
+  { "year": "2004", "winner": "Valencia", "runnerUp": "Marseille" }
+]

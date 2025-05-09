@@ -1,0 +1,112 @@
+[
+  {
+    "year": "2022",
+    "winner": "Argentina",
+    "host": "Qatar",
+    "runnerUp": "France"
+  },
+  {
+    "year": "2018",
+    "winner": "France",
+    "host": "Russia",
+    "runnerUp": "Croatia"
+  },
+  {
+    "year": "2014",
+    "winner": "Germany",
+    "host": "Brazil",
+    "runnerUp": "Argentina"
+  },
+  {
+    "year": "2010",
+    "winner": "Spain",
+    "host": "South Africa",
+    "runnerUp": "Netherlands"
+  },
+  {
+    "year": "2006",
+    "winner": "Italy",
+    "host": "Germany",
+    "runnerUp": "France"
+  },
+  {
+    "year": "2002",
+    "winner": "Brazil",
+    "host": "South Korea & Japan",
+    "runnerUp": "Germany"
+  },
+  {
+    "year": "1998",
+    "winner": "France",
+    "host": "France",
+    "runnerUp": "Brazil"
+  },
+  {
+    "year": "1994",
+    "winner": "Brazil",
+    "host": "United States",
+    "runnerUp": "Italy"
+  },
+  {
+    "year": "1990",
+    "winner": "Germany",
+    "host": "Italy",
+    "runnerUp": "Argentina"
+  },
+  {
+    "year": "1986",
+    "winner": "Argentina",
+    "host": "Mexico",
+    "runnerUp": "West Germany"
+  },
+  {
+    "year": "1982",
+    "winner": "Italy",
+    "host": "Spain",
+    "runnerUp": "West Germany"
+  },
+  {
+    "year": "1978",
+    "winner": "Argentina",
+    "host": "Argentina",
+    "runnerUp": "Netherlands"
+  },
+  {
+    "year": "1974",
+    "winner": "West Germany",
+    "host": "West Germany",
+    "runnerUp": "Netherlands"
+  },
+  { "year": "1970", "winner": "Brazil", "host": "Mexico", "runnerUp": "Italy" },
+  {
+    "year": "1966",
+    "winner": "England",
+    "host": "England",
+    "runnerUp": "West Germany"
+  },
+  {
+    "year": "1962",
+    "winner": "Brazil",
+    "host": "Chile",
+    "runnerUp": "Czechoslovakia"
+  },
+  {
+    "year": "1958",
+    "winner": "Brazil",
+    "host": "Sweden",
+    "runnerUp": "Sweden"
+  },
+  {
+    "year": "1954",
+    "winner": "West Germany",
+    "host": "Switzerland",
+    "runnerUp": "Hungary"
+  },
+  {
+    "year": "1950",
+    "winner": "Uruguay",
+    "host": "Brazil",
+    "runnerUp": "Brazil"
+  },
+  { "year": "1938", "winner": "Italy", "host": "France", "runnerUp": "Hungary" }
+]
