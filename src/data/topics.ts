@@ -57,7 +57,7 @@ export interface TopicConfig<T extends SportData> {
 export const topics: TopicConfig<SportData>[] = [
   {
     id: "uefa",
-    name: "UEFA Champions League Winners",
+    name: "UEFA Champions League",
     icon: championsIcon,
     data: uefaData as UEFAData[],
     generateFlashcards: (data) =>
@@ -71,9 +71,9 @@ export const topics: TopicConfig<SportData>[] = [
             difficulty: "easy",
           },
           {
-            id: `uefa-runnerup-score-${uefaItem.season}`,
-            question: `Who was the runner-up and what was the score in the UEFA Champions League final in ${uefaItem.season}?`,
-            answer: `${uefaItem.runnerUp} (Score: ${uefaItem.score})`,
+            id: `uefa-final-${uefaItem.season}`,
+            question: `Which teams played in the ${uefaItem.season} UEFA Champions League final and what was the score?`,
+            answer: `${uefaItem.winner} vs ${uefaItem.runnerUp} (${uefaItem.score})`,
             difficulty: "medium",
           },
           {
@@ -87,7 +87,7 @@ export const topics: TopicConfig<SportData>[] = [
   },
   {
     id: "europa",
-    name: "UEFA Europa League Winners",
+    name: "UEFA Europa League",
     icon: europaIcon,
     data: europaData as EuropaData[],
     generateFlashcards: (data) =>
@@ -101,9 +101,9 @@ export const topics: TopicConfig<SportData>[] = [
             difficulty: "easy",
           },
           {
-            id: `europa-runnerup-score-${europaItem.season}`,
-            question: `Who was the runner-up and what was the score in the UEFA Europa League final in ${europaItem.season}?`,
-            answer: `${europaItem.runnerUp} (Score: ${europaItem.score})`,
+            id: `europa-final-${europaItem.season}`,
+            question: `Which teams played in the ${europaItem.season} UEFA Europa League final and what was the score?`,
+            answer: `${europaItem.winner} vs ${europaItem.runnerUp} (${europaItem.score})`,
             difficulty: "medium",
           },
           {
@@ -117,7 +117,7 @@ export const topics: TopicConfig<SportData>[] = [
   },
   {
     id: "fifa",
-    name: "FIFA World Cup Winners",
+    name: "FIFA World Cup",
     icon: worldCupIcon,
     data: fifaData as FIFAData[],
     generateFlashcards: (data) => {

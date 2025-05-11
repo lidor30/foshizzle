@@ -54,64 +54,62 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
   return (
     <div className="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
-        Select Topics
+        Topics
       </h2>
 
-      <div className="space-y-3 mb-6">
+      <div className="grid grid-cols-2 gap-2 mb-6">
         {topics.map((topic) => (
-          <div key={topic.id} className="flex items-center">
-            <input
-              type="checkbox"
-              id={`topic-${topic.id}`}
-              className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-              checked={!!selectedTopics[topic.id]}
-              onChange={() => toggleTopic(topic.id)}
-            />
-            <label
-              htmlFor={`topic-${topic.id}`}
-              className="ml-2 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200"
-            >
-              {topic.icon && (
-                <img
-                  src={topic.icon}
-                  alt={`${topic.name} icon`}
-                  className="w-5 h-5 object-contain dark:invert"
-                />
-              )}
-              {topic.name}
-            </label>
-          </div>
+          <button
+            key={topic.id}
+            onClick={() => toggleTopic(topic.id)}
+            className={`flex flex-col gap-3 items-center justify-start px-4 py-2 rounded-md transition-colors text-sm font-medium relative
+              ${
+                selectedTopics[topic.id]
+                  ? "bg-indigo-600 text-white"
+                  : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
+              }`}
+          >
+            {selectedTopics[topic.id] && (
+              <span className="absolute top-1 left-2">✓</span>
+            )}
+            {topic.icon && (
+              <img
+                src={topic.icon}
+                alt={`${topic.name} icon`}
+                className={`h-10 object-contain ${
+                  selectedTopics[topic.id] ? "invert" : "dark:invert"
+                }`}
+              />
+            )}
+            <span className="text-xs">{topic.name}</span>
+          </button>
         ))}
       </div>
 
       <div className="mb-6">
         <h3 className="text-md font-semibold mb-2 text-gray-800 dark:text-white">
-          Select Difficulty
+          Difficulty
         </h3>
-        <div className="flex gap-4">
+        <div className="grid grid-cols-3 gap-2">
           {[
             { value: "easy", label: "Easy" },
             { value: "medium", label: "Medium" },
             { value: "hard", label: "Hard" },
           ].map((difficulty) => (
-            <div key={difficulty.value} className="flex items-center">
-              <input
-                type="radio"
-                id={`difficulty-${difficulty.value}`}
-                name="difficulty"
-                className="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
-                checked={selectedDifficulty === difficulty.value}
-                onChange={() =>
-                  setSelectedDifficulty(difficulty.value as DifficultyLevel)
-                }
-              />
-              <label
-                htmlFor={`difficulty-${difficulty.value}`}
-                className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-200"
-              >
-                {difficulty.label}
-              </label>
-            </div>
+            <button
+              key={difficulty.value}
+              onClick={() =>
+                setSelectedDifficulty(difficulty.value as DifficultyLevel)
+              }
+              className={`px-4 py-2 rounded-md transition-colors text-sm font-medium
+                ${
+                  selectedDifficulty === difficulty.value
+                    ? "bg-indigo-600 text-white"
+                    : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
+                }`}
+            >
+              {difficulty.label}
+            </button>
           ))}
         </div>
       </div>

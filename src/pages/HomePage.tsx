@@ -29,7 +29,7 @@ const HomePage: React.FC = () => {
       <Header />
 
       <main className="max-w-4xl mx-auto px-4 mt-6">
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <p className="text-xl mt-2 text-gray-600 dark:text-gray-300">
             Test your knowledge with flashcards!
           </p>

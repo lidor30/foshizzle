@@ -5,7 +5,7 @@ import { topics } from "../data/topics";
 import type { AnswerResult } from "../types";
 
 // Default number of cards in a session
-const DEFAULT_SESSION_SIZE = 20;
+const DEFAULT_SESSION_SIZE = 1;
 
 // Extended flashcard that includes the icon
 export interface SessionFlashcard extends FlashcardItem {
