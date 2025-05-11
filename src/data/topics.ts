@@ -20,19 +20,19 @@ export interface FlashcardItem {
 }
 
 interface BaseData {
-  year?: string;
+  year?: string | number;
   season?: string;
   winner: string;
   runnerUp: string;
 }
 
-interface UEFAData extends BaseData {
+interface ChampionsLeagueData extends BaseData {
   score: string;
   location: string;
   stadium: string;
 }
 
-interface EuropaData extends BaseData {
+interface EuropaLeagueData extends BaseData {
   score: string;
   location: string;
   stadium: string;
@@ -41,10 +41,12 @@ interface EuropaData extends BaseData {
 interface NBAData extends BaseData {}
 
 interface FIFAData extends BaseData {
+  score: string;
+  runnerUp: string;
   host: string;
 }
 
-type SportData = UEFAData | EuropaData | FIFAData | NBAData;
+type SportData = ChampionsLeagueData | EuropaLeagueData | FIFAData | NBAData;
 
 export interface TopicConfig<T extends SportData> {
   id: string;
@@ -59,27 +61,27 @@ export const topics: TopicConfig<SportData>[] = [
     id: "uefa",
     name: "UEFA Champions League",
     icon: championsIcon,
-    data: uefaData as UEFAData[],
+    data: uefaData as ChampionsLeagueData[],
     generateFlashcards: (data) =>
       data.flatMap((item) => {
-        const uefaItem = item as UEFAData;
+        const championsItem = item as ChampionsLeagueData;
         return [
           {
-            id: `uefa-winner-${uefaItem.season}`,
-            question: `Who won the UEFA Champions League in ${uefaItem.season}?`,
-            answer: uefaItem.winner,
+            id: `uefa-winner-${championsItem.season}`,
+            question: `Who won the UEFA Champions League in ${championsItem.season}?`,
+            answer: championsItem.winner,
             difficulty: "easy",
           },
           {
-            id: `uefa-final-${uefaItem.season}`,
-            question: `Which teams played in the ${uefaItem.season} UEFA Champions League final and what was the score?`,
-            answer: `${uefaItem.winner} vs ${uefaItem.runnerUp} (${uefaItem.score})`,
+            id: `uefa-final-${championsItem.season}`,
+            question: `Which teams played in the ${championsItem.season} UEFA Champions League final and what was the score?`,
+            answer: `${championsItem.winner} vs ${championsItem.runnerUp} (${championsItem.score})`,
             difficulty: "medium",
           },
           {
-            id: `uefa-location-stadium-${uefaItem.season}`,
-            question: `Where was the UEFA Champions League final in ${uefaItem.season} held (city and stadium)?`,
-            answer: `${uefaItem.location} (${uefaItem.stadium})`,
+            id: `uefa-location-stadium-${championsItem.season}`,
+            question: `Where was the UEFA Champions League final in ${championsItem.season} held (city and stadium)?`,
+            answer: `${championsItem.location} (${championsItem.stadium})`,
             difficulty: "hard",
           },
         ];
@@ -89,10 +91,10 @@ export const topics: TopicConfig<SportData>[] = [
     id: "europa",
     name: "UEFA Europa League",
     icon: europaIcon,
-    data: europaData as EuropaData[],
+    data: europaData as EuropaLeagueData[],
     generateFlashcards: (data) =>
       data.flatMap((item) => {
-        const europaItem = item as EuropaData;
+        const europaItem = item as EuropaLeagueData;
         return [
           {
             id: `europa-winner-${europaItem.season}`,
@@ -129,6 +131,12 @@ export const topics: TopicConfig<SportData>[] = [
             question: `Who won the FIFA World Cup in ${fifaItem.year}?`,
             answer: fifaItem.winner,
             difficulty: "easy",
+          },
+          {
+            id: `fifa-final-${fifaItem.season}`,
+            question: `Which teams played in the ${fifaItem.year} FIFA World Cup final and what was the score?`,
+            answer: `${fifaItem.winner} vs ${fifaItem.runnerUp} (${fifaItem.score})`,
+            difficulty: "medium",
           },
           {
             id: `fifa-host-${fifaItem.year}`,

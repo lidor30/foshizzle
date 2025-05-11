@@ -1,112 +1,156 @@
 [
   {
-    "year": "2022",
-    "winner": "Argentina",
-    "host": "Qatar",
-    "runnerUp": "France"
-  },
-  {
-    "year": "2018",
-    "winner": "France",
-    "host": "Russia",
-    "runnerUp": "Croatia"
-  },
-  {
-    "year": "2014",
-    "winner": "Germany",
-    "host": "Brazil",
-    "runnerUp": "Argentina"
-  },
-  {
-    "year": "2010",
-    "winner": "Spain",
-    "host": "South Africa",
-    "runnerUp": "Netherlands"
-  },
-  {
-    "year": "2006",
-    "winner": "Italy",
-    "host": "Germany",
-    "runnerUp": "France"
-  },
-  {
-    "year": "2002",
-    "winner": "Brazil",
-    "host": "South Korea & Japan",
-    "runnerUp": "Germany"
-  },
-  {
-    "year": "1998",
-    "winner": "France",
-    "host": "France",
-    "runnerUp": "Brazil"
-  },
-  {
-    "year": "1994",
-    "winner": "Brazil",
-    "host": "United States",
-    "runnerUp": "Italy"
-  },
-  {
-    "year": "1990",
-    "winner": "Germany",
-    "host": "Italy",
-    "runnerUp": "Argentina"
-  },
-  {
-    "year": "1986",
-    "winner": "Argentina",
-    "host": "Mexico",
-    "runnerUp": "West Germany"
-  },
-  {
-    "year": "1982",
-    "winner": "Italy",
-    "host": "Spain",
-    "runnerUp": "West Germany"
-  },
-  {
-    "year": "1978",
-    "winner": "Argentina",
-    "host": "Argentina",
-    "runnerUp": "Netherlands"
-  },
-  {
-    "year": "1974",
-    "winner": "West Germany",
-    "host": "West Germany",
-    "runnerUp": "Netherlands"
-  },
-  { "year": "1970", "winner": "Brazil", "host": "Mexico", "runnerUp": "Italy" },
-  {
-    "year": "1966",
-    "winner": "England",
-    "host": "England",
-    "runnerUp": "West Germany"
-  },
-  {
-    "year": "1962",
-    "winner": "Brazil",
-    "host": "Chile",
-    "runnerUp": "Czechoslovakia"
-  },
-  {
-    "year": "1958",
-    "winner": "Brazil",
-    "host": "Sweden",
-    "runnerUp": "Sweden"
-  },
-  {
-    "year": "1954",
-    "winner": "West Germany",
-    "host": "Switzerland",
-    "runnerUp": "Hungary"
-  },
-  {
-    "year": "1950",
+    "year": 1930,
     "winner": "Uruguay",
-    "host": "Brazil",
-    "runnerUp": "Brazil"
+    "runnerUp": "Argentina",
+    "score": "4–2",
+    "host": "Uruguay"
   },
-  { "year": "1938", "winner": "Italy", "host": "France", "runnerUp": "Hungary" }
+  {
+    "year": 1934,
+    "winner": "Italy",
+    "runnerUp": "Czechoslovakia",
+    "score": "2–1 (a.e.t.)",
+    "host": "Italy"
+  },
+  {
+    "year": 1938,
+    "winner": "Italy",
+    "runnerUp": "Hungary",
+    "score": "4–2",
+    "host": "France"
+  },
+  {
+    "year": 1950,
+    "winner": "Uruguay",
+    "runnerUp": "Brazil",
+    "score": "2–1",
+    "host": "Brazil"
+  },
+  {
+    "year": 1954,
+    "winner": "West Germany",
+    "runnerUp": "Hungary",
+    "score": "3–2",
+    "host": "Switzerland"
+  },
+  {
+    "year": 1958,
+    "winner": "Brazil",
+    "runnerUp": "Sweden",
+    "score": "5–2",
+    "host": "Sweden"
+  },
+  {
+    "year": 1962,
+    "winner": "Brazil",
+    "runnerUp": "Czechoslovakia",
+    "score": "3–1",
+    "host": "Chile"
+  },
+  {
+    "year": 1966,
+    "winner": "England",
+    "runnerUp": "West Germany",
+    "score": "4–2 (a.e.t.)",
+    "host": "England"
+  },
+  {
+    "year": 1970,
+    "winner": "Brazil",
+    "runnerUp": "Italy",
+    "score": "4–1",
+    "host": "Mexico"
+  },
+  {
+    "year": 1974,
+    "winner": "West Germany",
+    "runnerUp": "Netherlands",
+    "score": "2–1",
+    "host": "West Germany"
+  },
+  {
+    "year": 1978,
+    "winner": "Argentina",
+    "runnerUp": "Netherlands",
+    "score": "3–1 (a.e.t.)",
+    "host": "Argentina"
+  },
+  {
+    "year": 1982,
+    "winner": "Italy",
+    "runnerUp": "West Germany",
+    "score": "3–1",
+    "host": "Spain"
+  },
+  {
+    "year": 1986,
+    "winner": "Argentina",
+    "runnerUp": "West Germany",
+    "score": "3–2",
+    "host": "Mexico"
+  },
+  {
+    "year": 1990,
+    "winner": "West Germany",
+    "runnerUp": "Argentina",
+    "score": "1–0",
+    "host": "Italy"
+  },
+  {
+    "year": 1994,
+    "winner": "Brazil",
+    "runnerUp": "Italy",
+    "score": "0–0 (3–2 pens)",
+    "host": "United States"
+  },
+  {
+    "year": 1998,
+    "winner": "France",
+    "runnerUp": "Brazil",
+    "score": "3–0",
+    "host": "France"
+  },
+  {
+    "year": 2002,
+    "winner": "Brazil",
+    "runnerUp": "Germany",
+    "score": "2–0",
+    "host": "South Korea/Japan"
+  },
+  {
+    "year": 2006,
+    "winner": "Italy",
+    "runnerUp": "France",
+    "score": "1–1 (5–3 pens)",
+    "host": "Germany"
+  },
+  {
+    "year": 2010,
+    "winner": "Spain",
+    "runnerUp": "Netherlands",
+    "score": "1–0 (a.e.t.)",
+    "host": "South Africa"
+  },
+  {
+    "year": 2014,
+    "winner": "Germany",
+    "runnerUp": "Argentina",
+    "score": "1–0 (a.e.t.)",
+    "host": "Brazil"
+  },
+  {
+    "year": 2018,
+    "winner": "France",
+    "runnerUp": "Croatia",
+    "score": "4–2",
+    "host": "Russia"
+  },
+  {
+    "year": 2022,
+    "winner": "Argentina",
+    "runnerUp": "France",
+    "score": "3–3 (4–2 pens)",
+    "host": "Qatar"
+  }
 ]
