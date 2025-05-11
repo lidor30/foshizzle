@@ -57,7 +57,7 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
         Topics
       </h2>
 
-      <div className="grid grid-cols-2 gap-2 mb-6">
+      <div className="grid grid-cols-2 gap-2 mb-4">
         {topics.map((topic) => (
           <button
             key={topic.id}
@@ -69,9 +69,6 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
                   : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
           >
-            {selectedTopics[topic.id] && (
-              <span className="absolute top-1 left-2">✓</span>
-            )}
             {topic.icon && (
               <img
                 src={topic.icon}
@@ -84,6 +81,23 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
             <span className="text-xs">{topic.name}</span>
           </button>
         ))}
+      </div>
+
+      <div className="flex justify-between mb-6">
+        <button
+          type="button"
+          className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300"
+          onClick={selectAll}
+        >
+          Select All
+        </button>
+        <button
+          type="button"
+          className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300"
+          onClick={clearAll}
+        >
+          Clear All
+        </button>
       </div>
 
       <div className="mb-6">
@@ -112,23 +126,6 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
             </button>
           ))}
         </div>
-      </div>
-
-      <div className="flex justify-between mb-6">
-        <button
-          type="button"
-          className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300"
-          onClick={selectAll}
-        >
-          Select All
-        </button>
-        <button
-          type="button"
-          className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300"
-          onClick={clearAll}
-        >
-          Clear All
-        </button>
       </div>
 
       <button
