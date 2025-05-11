@@ -7,9 +7,14 @@ import type { AnswerResult } from "../types";
 // Default number of cards in a session
 const DEFAULT_SESSION_SIZE = 20;
 
+// Extended flashcard that includes the icon
+export interface SessionFlashcard extends FlashcardItem {
+  topicIcon?: string;
+}
+
 export const useSession = (selectedTopicIds: string[]) => {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [sessionCards, setSessionCards] = useState<FlashcardItem[]>([]);
+  const [sessionCards, setSessionCards] = useState<SessionFlashcard[]>([]);
   const [isFlipped, setIsFlipped] = useState(false);
   const { calculateWeight, updateCardStat } = useStats();
 
@@ -21,7 +26,7 @@ export const useSession = (selectedTopicIds: string[]) => {
   }, [selectedTopicIds]);
 
   // Generate all possible flashcards from the selected topics
-  const generateAllFlashcards = (): FlashcardItem[] => {
+  const generateAllFlashcards = (): SessionFlashcard[] => {
     // Filter topics based on selected topic IDs
     const selectedTopics = topics.filter((topic) =>
       selectedTopicIds.includes(topic.id)
@@ -29,15 +34,18 @@ export const useSession = (selectedTopicIds: string[]) => {
 
     // Generate flashcards for each selected topic and flatten into a single array
     return selectedTopics.flatMap((topic) =>
-      topic.generateFlashcards(topic.data)
+      topic.generateFlashcards(topic.data).map((card) => ({
+        ...card,
+        topicIcon: topic.icon,
+      }))
     );
   };
 
   // Create a weighted sample of cards for the session
   const sampleCards = (
-    allCards: FlashcardItem[],
+    allCards: SessionFlashcard[],
     size: number
-  ): FlashcardItem[] => {
+  ): SessionFlashcard[] => {
     // Calculate weights for all cards
     const cardsWithWeights = allCards.map((card) => ({
       card,
@@ -51,7 +59,7 @@ export const useSession = (selectedTopicIds: string[]) => {
     );
 
     // Sample cards with replacement, using weights to determine probability
-    const sampledCards: FlashcardItem[] = [];
+    const sampledCards: SessionFlashcard[] = [];
 
     for (let i = 0; i < size; i++) {
       const randomValue = Math.random() * totalWeight;

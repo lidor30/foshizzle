@@ -63,8 +63,15 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
             />
             <label
               htmlFor={`topic-${topic.id}`}
-              className="ml-2 block text-sm font-medium text-gray-700 dark:text-gray-200"
+              className="ml-2 flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200"
             >
+              {topic.icon && (
+                <img
+                  src={topic.icon}
+                  alt={`${topic.name} icon`}
+                  className="w-5 h-5 object-contain dark:invert"
+                />
+              )}
               {topic.name}
             </label>
           </div>

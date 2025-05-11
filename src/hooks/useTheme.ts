@@ -2,23 +2,23 @@ import { useEffect, useState } from "react";
 
 type Theme = "light" | "dark";
 
+// Function to get initial theme based on localStorage or system preference
+const getInitialTheme = (): Theme => {
+  // Check for saved theme in localStorage
+  const savedTheme = localStorage.getItem("foshizzle-theme") as Theme | null;
+  if (savedTheme) {
+    return savedTheme;
+  }
+
+  // If no saved theme, check system preference
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
+};
+
 export const useTheme = () => {
-  const [theme, setTheme] = useState<Theme>("light");
-
-  // Initialize theme from localStorage or system preference
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("foshizzle-theme") as Theme | null;
-
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else {
-      // Check system preference
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setTheme(prefersDark ? "dark" : "light");
-    }
-  }, []);
+  // Initialize with the correct theme instead of hardcoding "light"
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
   // Update HTML class and localStorage when theme changes
   useEffect(() => {

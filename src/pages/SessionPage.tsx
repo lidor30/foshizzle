@@ -67,6 +67,7 @@ const SessionPage: React.FC = () => {
                     isFlipped={isFlipped}
                     onFlip={flipCard}
                     onAnswer={handleAnswer}
+                    icon={currentCard.topicIcon}
                   />
                 </div>
               </>

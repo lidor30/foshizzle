@@ -1,30 +1,274 @@
 [
-  { "year": "2023", "winner": "Real Madrid", "runnerUp": "Borussia Dortmund" },
-  { "year": "2022", "winner": "Manchester City", "runnerUp": "Inter Milan" },
-  { "year": "2021", "winner": "Real Madrid", "runnerUp": "Liverpool" },
-  { "year": "2020", "winner": "Chelsea", "runnerUp": "Manchester City" },
   {
-    "year": "2019",
-    "winner": "Bayern Munich",
-    "runnerUp": "Paris Saint-Germain"
+    "season": "1990–91",
+    "winner": "Red Star Belgrade",
+    "runnerUp": "Olympique de Marseille",
+    "score": "0–0 (5–3 pens)",
+    "location": "Bari, Italy",
+    "stadium": "Stadio San Nicola"
   },
-  { "year": "2018", "winner": "Liverpool", "runnerUp": "Tottenham Hotspur" },
-  { "year": "2017", "winner": "Real Madrid", "runnerUp": "Liverpool" },
-  { "year": "2016", "winner": "Real Madrid", "runnerUp": "Juventus" },
-  { "year": "2015", "winner": "Real Madrid", "runnerUp": "Atletico Madrid" },
-  { "year": "2014", "winner": "Barcelona", "runnerUp": "Juventus" },
-  { "year": "2013", "winner": "Real Madrid", "runnerUp": "Atletico Madrid" },
   {
-    "year": "2012",
-    "winner": "Bayern Munich",
-    "runnerUp": "Borussia Dortmund"
+    "season": "1991–92",
+    "winner": "Barcelona",
+    "runnerUp": "Sampdoria",
+    "score": "1–0 (a.e.t.)",
+    "location": "London, England",
+    "stadium": "Wembley Stadium"
   },
-  { "year": "2011", "winner": "Chelsea", "runnerUp": "Bayern Munich" },
-  { "year": "2010", "winner": "Barcelona", "runnerUp": "Manchester United" },
-  { "year": "2009", "winner": "Barcelona", "runnerUp": "Manchester United" },
-  { "year": "2008", "winner": "Inter Milan", "runnerUp": "Bayern Munich" },
-  { "year": "2007", "winner": "Manchester United", "runnerUp": "Chelsea" },
-  { "year": "2006", "winner": "Barcelona", "runnerUp": "Arsenal" },
-  { "year": "2005", "winner": "Liverpool", "runnerUp": "AC Milan" },
-  { "year": "2004", "winner": "Porto", "runnerUp": "Monaco" }
+  {
+    "season": "1992–93",
+    "winner": "Marseille",
+    "runnerUp": "AC Milan",
+    "score": "1–0",
+    "location": "Munich, Germany",
+    "stadium": "Olympiastadion"
+  },
+  {
+    "season": "1993–94",
+    "winner": "AC Milan",
+    "runnerUp": "Barcelona",
+    "score": "4–0",
+    "location": "Athens, Greece",
+    "stadium": "Olympic Stadium"
+  },
+  {
+    "season": "1994–95",
+    "winner": "Ajax",
+    "runnerUp": "AC Milan",
+    "score": "1–0",
+    "location": "Vienna, Austria",
+    "stadium": "Ernst-Happel-Stadion"
+  },
+  {
+    "season": "1995–96",
+    "winner": "Juventus",
+    "runnerUp": "Ajax",
+    "score": "1–1 (4–2 pens)",
+    "location": "Rome, Italy",
+    "stadium": "Stadio Olimpico"
+  },
+  {
+    "season": "1996–97",
+    "winner": "Borussia Dortmund",
+    "runnerUp": "Juventus",
+    "score": "3–1",
+    "location": "Munich, Germany",
+    "stadium": "Olympiastadion"
+  },
+  {
+    "season": "1997–98",
+    "winner": "Real Madrid",
+    "runnerUp": "Juventus",
+    "score": "1–0",
+    "location": "Amsterdam, Netherlands",
+    "stadium": "Amsterdam Arena"
+  },
+  {
+    "season": "1998–99",
+    "winner": "Manchester United",
+    "runnerUp": "Bayern Munich",
+    "score": "2–1",
+    "location": "Barcelona, Spain",
+    "stadium": "Camp Nou"
+  },
+  {
+    "season": "1999–2000",
+    "winner": "Real Madrid",
+    "runnerUp": "Valencia",
+    "score": "3–0",
+    "location": "Paris, France",
+    "stadium": "Stade de France"
+  },
+  {
+    "season": "2000–01",
+    "winner": "Bayern Munich",
+    "runnerUp": "Valencia",
+    "score": "1–1 (5–4 pens)",
+    "location": "Milan, Italy",
+    "stadium": "San Siro"
+  },
+  {
+    "season": "2001–02",
+    "winner": "Real Madrid",
+    "runnerUp": "Bayer Leverkusen",
+    "score": "2–1",
+    "location": "Glasgow, Scotland",
+    "stadium": "Hampden Park"
+  },
+  {
+    "season": "2002–03",
+    "winner": "AC Milan",
+    "runnerUp": "Juventus",
+    "score": "0–0 (3–2 pens)",
+    "location": "Manchester, England",
+    "stadium": "Old Trafford"
+  },
+  {
+    "season": "2003–04",
+    "winner": "Porto",
+    "runnerUp": "AS Monaco",
+    "score": "3–0",
+    "location": "Gelsenkirchen, Germany",
+    "stadium": "Arena AufSchalke"
+  },
+  {
+    "season": "2004–05",
+    "winner": "Liverpool",
+    "runnerUp": "AC Milan",
+    "score": "3–3 (3–2 pens)",
+    "location": "Istanbul, Turkey",
+    "stadium": "Atatürk Olympic Stadium"
+  },
+  {
+    "season": "2005–06",
+    "winner": "Barcelona",
+    "runnerUp": "Arsenal",
+    "score": "2–1",
+    "location": "Paris, France",
+    "stadium": "Stade de France"
+  },
+  {
+    "season": "2006–07",
+    "winner": "AC Milan",
+    "runnerUp": "Liverpool",
+    "score": "2–1",
+    "location": "Athens, Greece",
+    "stadium": "Olympic Stadium"
+  },
+  {
+    "season": "2007–08",
+    "winner": "Manchester United",
+    "runnerUp": "Chelsea",
+    "score": "1–1 (6–5 pens)",
+    "location": "Moscow, Russia",
+    "stadium": "Luzhniki Stadium"
+  },
+  {
+    "season": "2008–09",
+    "winner": "Barcelona",
+    "runnerUp": "Manchester United",
+    "score": "2–0",
+    "location": "Rome, Italy",
+    "stadium": "Stadio Olimpico"
+  },
+  {
+    "season": "2009–10",
+    "winner": "Inter Milan",
+    "runnerUp": "Bayern Munich",
+    "score": "2–0",
+    "location": "Madrid, Spain",
+    "stadium": "Santiago Bernabéu Stadium"
+  },
+  {
+    "season": "2010–11",
+    "winner": "Barcelona",
+    "runnerUp": "Manchester United",
+    "score": "3–1",
+    "location": "London, England",
+    "stadium": "Wembley Stadium"
+  },
+  {
+    "season": "2011–12",
+    "winner": "Chelsea",
+    "runnerUp": "Bayern Munich",
+    "score": "1–1 (4–3 pens)",
+    "location": "Munich, Germany",
+    "stadium": "Allianz Arena"
+  },
+  {
+    "season": "2012–13",
+    "winner": "Bayern Munich",
+    "runnerUp": "Borussia Dortmund",
+    "score": "2–1",
+    "location": "London, England",
+    "stadium": "Wembley Stadium"
+  },
+  {
+    "season": "2013–14",
+    "winner": "Real Madrid",
+    "runnerUp": "Atlético Madrid",
+    "score": "4–1 (a.e.t.)",
+    "location": "Lisbon, Portugal",
+    "stadium": "Estádio da Luz"
+  },
+  {
+    "season": "2014–15",
+    "winner": "Barcelona",
+    "runnerUp": "Juventus",
+    "score": "3–1",
+    "location": "Berlin, Germany",
+    "stadium": "Olympiastadion"
+  },
+  {
+    "season": "2015–16",
+    "winner": "Real Madrid",
+    "runnerUp": "Atlético Madrid",
+    "score": "1–1 (5–3 pens)",
+    "location": "Milan, Italy",
+    "stadium": "San Siro"
+  },
+  {
+    "season": "2016–17",
+    "winner": "Real Madrid",
+    "runnerUp": "Juventus",
+    "score": "4–1",
+    "location": "Cardiff, Wales",
+    "stadium": "Principality Stadium"
+  },
+  {
+    "season": "2017–18",
+    "winner": "Real Madrid",
+    "runnerUp": "Liverpool",
+    "score": "3–1",
+    "location": "Kyiv, Ukraine",
+    "stadium": "NSC Olimpiyskiy Stadium"
+  },
+  {
+    "season": "2018–19",
+    "winner": "Liverpool",
+    "runnerUp": "Tottenham Hotspur",
+    "score": "2–0",
+    "location": "Madrid, Spain",
+    "stadium": "Wanda Metropolitano"
+  },
+  {
+    "season": "2019–20",
+    "winner": "Bayern Munich",
+    "runnerUp": "Paris Saint-Germain",
+    "score": "1–0",
+    "location": "Lisbon, Portugal",
+    "stadium": "Estádio da Luz"
+  },
+  {
+    "season": "2020–21",
+    "winner": "Chelsea",
+    "runnerUp": "Manchester City",
+    "score": "1–0",
+    "location": "Porto, Portugal",
+    "stadium": "Estádio do Dragão"
+  },
+  {
+    "season": "2021–22",
+    "winner": "Real Madrid",
+    "runnerUp": "Liverpool",
+    "score": "1–0",
+    "location": "Saint-Denis, France",
+    "stadium": "Stade de France"
+  },
+  {
+    "season": "2022–23",
+    "winner": "Manchester City",
+    "runnerUp": "Inter Milan",
+    "score": "1–0",
+    "location": "Istanbul, Turkey",
+    "stadium": "Atatürk Olympic Stadium"
+  },
+  {
+    "season": "2023–24",
+    "winner": "Real Madrid",
+    "runnerUp": "Borussia Dortmund",
+    "score": "2–0",
+    "location": "London, England",
+    "stadium": "Wembley Stadium"
+  }
 ]

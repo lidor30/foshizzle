@@ -1,7 +1,13 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 import europaData from "./europa.json";
 import fifaData from "./fifa.json";
 import nbaData from "./nba.json";
 import uefaData from "./uefa.json";
+
+// Import icons
+import championsIcon from "../assets/champions.png";
+import europaIcon from "../assets/europa.png";
+import worldCupIcon from "../assets/world-cup.png";
 
 export interface FlashcardItem {
   id: string;
@@ -10,13 +16,24 @@ export interface FlashcardItem {
 }
 
 interface BaseData {
-  year: string;
+  year?: string;
+  season?: string;
   winner: string;
   runnerUp: string;
 }
 
-interface UEFAData extends BaseData {}
-interface EuropaData extends BaseData {}
+interface UEFAData extends BaseData {
+  score: string;
+  location: string;
+  stadium: string;
+}
+
+interface EuropaData extends BaseData {
+  score: string;
+  location: string;
+  stadium: string;
+}
+
 interface NBAData extends BaseData {}
 
 interface FIFAData extends BaseData {
@@ -28,6 +45,7 @@ type SportData = UEFAData | EuropaData | FIFAData | NBAData;
 export interface TopicConfig<T extends SportData> {
   id: string;
   name: string;
+  icon?: string;
   data: T[];
   generateFlashcards: (data: T[]) => FlashcardItem[];
 }
@@ -36,28 +54,31 @@ export const topics: TopicConfig<SportData>[] = [
   {
     id: "uefa",
     name: "UEFA Champions League Winners",
+    icon: championsIcon,
     data: uefaData as UEFAData[],
     generateFlashcards: (data) =>
       data.map((item) => ({
-        id: `uefa-${item.year}`,
-        question: `Who won the UEFA Champions League in ${item.year}?`,
+        id: `uefa-${item.season}`,
+        question: `Who won the UEFA Champions League in ${item.season}?`,
         answer: item.winner,
       })),
   },
   {
     id: "europa",
     name: "UEFA Europa League Winners",
+    icon: europaIcon,
     data: europaData as EuropaData[],
     generateFlashcards: (data) =>
       data.map((item) => ({
-        id: `europa-${item.year}`,
-        question: `Who won the UEFA Europa League in ${item.year}?`,
+        id: `europa-${item.season}`,
+        question: `Who won the UEFA Europa League in ${item.season}?`,
         answer: item.winner,
       })),
   },
   {
     id: "fifa",
     name: "FIFA World Cup Winners",
+    icon: worldCupIcon,
     data: fifaData as FIFAData[],
     generateFlashcards: (data) => {
       return data.flatMap((item) => {

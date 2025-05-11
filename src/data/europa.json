@@ -1,26 +1,194 @@
 [
-  { "year": "2023", "winner": "Atalanta", "runnerUp": "Bayer Leverkusen" },
-  { "year": "2022", "winner": "Sevilla", "runnerUp": "Roma" },
-  { "year": "2021", "winner": "Eintracht Frankfurt", "runnerUp": "Rangers" },
-  { "year": "2020", "winner": "Villarreal", "runnerUp": "Manchester United" },
-  { "year": "2019", "winner": "Sevilla", "runnerUp": "Inter Milan" },
-  { "year": "2018", "winner": "Chelsea", "runnerUp": "Arsenal" },
-  { "year": "2017", "winner": "Atletico Madrid", "runnerUp": "Marseille" },
-  { "year": "2016", "winner": "Manchester United", "runnerUp": "Ajax" },
-  { "year": "2015", "winner": "Sevilla", "runnerUp": "Liverpool" },
-  { "year": "2014", "winner": "Sevilla", "runnerUp": "Dnipro" },
-  { "year": "2013", "winner": "Sevilla", "runnerUp": "Benfica" },
-  { "year": "2012", "winner": "Chelsea", "runnerUp": "Benfica" },
   {
-    "year": "2011",
-    "winner": "Atletico Madrid",
-    "runnerUp": "Athletic Bilbao"
+    "season": "2000–01",
+    "winner": "Liverpool",
+    "runnerUp": "Deportivo Alavés",
+    "score": "5–4 (a.e.t.)",
+    "location": "Dortmund, Germany",
+    "stadium": "Westfalenstadion"
   },
-  { "year": "2010", "winner": "Porto", "runnerUp": "Braga" },
-  { "year": "2009", "winner": "Atletico Madrid", "runnerUp": "Fulham" },
-  { "year": "2008", "winner": "Shakhtar Donetsk", "runnerUp": "Werder Bremen" },
-  { "year": "2007", "winner": "Zenit St. Petersburg", "runnerUp": "Rangers" },
-  { "year": "2006", "winner": "Sevilla", "runnerUp": "Espanyol" },
-  { "year": "2005", "winner": "CSKA Moscow", "runnerUp": "Sporting CP" },
-  { "year": "2004", "winner": "Valencia", "runnerUp": "Marseille" }
+  {
+    "season": "2001–02",
+    "winner": "Feyenoord",
+    "runnerUp": "Borussia Dortmund",
+    "score": "3–2",
+    "location": "Rotterdam, Netherlands",
+    "stadium": "De Kuip"
+  },
+  {
+    "season": "2002–03",
+    "winner": "Porto",
+    "runnerUp": "Celtic",
+    "score": "3–2 (a.e.t.)",
+    "location": "Seville, Spain",
+    "stadium": "Estadio La Cartuja"
+  },
+  {
+    "season": "2003–04",
+    "winner": "Valencia",
+    "runnerUp": "Marseille",
+    "score": "2–0",
+    "location": "Gothenburg, Sweden",
+    "stadium": "Ullevi"
+  },
+  {
+    "season": "2004–05",
+    "winner": "CSKA Moscow",
+    "runnerUp": "Sporting CP",
+    "score": "3–1",
+    "location": "Lisbon, Portugal",
+    "stadium": "Estádio José Alvalade"
+  },
+  {
+    "season": "2005–06",
+    "winner": "Sevilla",
+    "runnerUp": "Middlesbrough",
+    "score": "4–0",
+    "location": "Eindhoven, Netherlands",
+    "stadium": "Philips Stadion"
+  },
+  {
+    "season": "2006–07",
+    "winner": "Sevilla",
+    "runnerUp": "Espanyol",
+    "score": "2–2 (3–1 pens)",
+    "location": "Glasgow, Scotland",
+    "stadium": "Hampden Park"
+  },
+  {
+    "season": "2007–08",
+    "winner": "Zenit Saint Petersburg",
+    "runnerUp": "Rangers",
+    "score": "2–0",
+    "location": "Manchester, England",
+    "stadium": "City of Manchester Stadium"
+  },
+  {
+    "season": "2008–09",
+    "winner": "Shakhtar Donetsk",
+    "runnerUp": "Werder Bremen",
+    "score": "2–1 (a.e.t.)",
+    "location": "Istanbul, Turkey",
+    "stadium": "Şükrü Saracoğlu Stadium"
+  },
+  {
+    "season": "2009–10",
+    "winner": "Atlético Madrid",
+    "runnerUp": "Fulham",
+    "score": "2–1 (a.e.t.)",
+    "location": "Hamburg, Germany",
+    "stadium": "Volksparkstadion"
+  },
+  {
+    "season": "2010–11",
+    "winner": "Porto",
+    "runnerUp": "Braga",
+    "score": "1–0",
+    "location": "Dublin, Ireland",
+    "stadium": "Aviva Stadium"
+  },
+  {
+    "season": "2011–12",
+    "winner": "Atlético Madrid",
+    "runnerUp": "Athletic Bilbao",
+    "score": "3–0",
+    "location": "Bucharest, Romania",
+    "stadium": "Arena Națională"
+  },
+  {
+    "season": "2012–13",
+    "winner": "Chelsea",
+    "runnerUp": "Benfica",
+    "score": "2–1",
+    "location": "Amsterdam, Netherlands",
+    "stadium": "Amsterdam Arena"
+  },
+  {
+    "season": "2013–14",
+    "winner": "Sevilla",
+    "runnerUp": "Benfica",
+    "score": "0–0 (4–2 pens)",
+    "location": "Turin, Italy",
+    "stadium": "Juventus Stadium"
+  },
+  {
+    "season": "2014–15",
+    "winner": "Sevilla",
+    "runnerUp": "Dnipro Dnipropetrovsk",
+    "score": "3–2",
+    "location": "Warsaw, Poland",
+    "stadium": "National Stadium"
+  },
+  {
+    "season": "2015–16",
+    "winner": "Sevilla",
+    "runnerUp": "Liverpool",
+    "score": "3–1",
+    "location": "Basel, Switzerland",
+    "stadium": "St. Jakob-Park"
+  },
+  {
+    "season": "2016–17",
+    "winner": "Manchester United",
+    "runnerUp": "Ajax",
+    "score": "2–0",
+    "location": "Stockholm, Sweden",
+    "stadium": "Friends Arena"
+  },
+  {
+    "season": "2017–18",
+    "winner": "Atlético Madrid",
+    "runnerUp": "Marseille",
+    "score": "3–0",
+    "location": "Lyon, France",
+    "stadium": "Parc Olympique Lyonnais"
+  },
+  {
+    "season": "2018–19",
+    "winner": "Chelsea",
+    "runnerUp": "Arsenal",
+    "score": "4–1",
+    "location": "Baku, Azerbaijan",
+    "stadium": "Baku Olympic Stadium"
+  },
+  {
+    "season": "2019–20",
+    "winner": "Sevilla",
+    "runnerUp": "Inter Milan",
+    "score": "3–2",
+    "location": "Cologne, Germany",
+    "stadium": "RheinEnergieStadion"
+  },
+  {
+    "season": "2020–21",
+    "winner": "Villarreal",
+    "runnerUp": "Manchester United",
+    "score": "1–1 (11–10 pens)",
+    "location": "Gdańsk, Poland",
+    "stadium": "Stadion Energa Gdańsk"
+  },
+  {
+    "season": "2021–22",
+    "winner": "Eintracht Frankfurt",
+    "runnerUp": "Rangers",
+    "score": "1–1 (5–4 pens)",
+    "location": "Seville, Spain",
+    "stadium": "Ramon Sanchez Pizjuan Stadium"
+  },
+  {
+    "season": "2022–23",
+    "winner": "Sevilla",
+    "runnerUp": "Roma",
+    "score": "1–1 (4–1 pens)",
+    "location": "Budapest, Hungary",
+    "stadium": "Puskás Aréna"
+  },
+  {
+    "season": "2023–24",
+    "winner": "Atalanta",
+    "runnerUp": "Bayer Leverkusen",
+    "score": "3–0",
+    "location": "Dublin, Ireland",
+    "stadium": "Aviva Stadium"
+  }
 ]

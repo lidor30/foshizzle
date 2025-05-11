@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
-// Check if there's a saved theme preference
+// Check if there's a saved theme preference or use system preference
 const savedTheme = localStorage.getItem("foshizzle-theme");
 if (
   savedTheme === "dark" ||
