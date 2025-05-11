@@ -5,7 +5,7 @@ import { topics } from "../data/topics";
 import type { AnswerResult } from "../types";
 
 // Default number of cards in a session
-const DEFAULT_SESSION_SIZE = 1;
+const DEFAULT_SESSION_SIZE = 20;
 
 // Extended flashcard that includes the icon
 export interface SessionFlashcard extends FlashcardItem {
@@ -19,6 +19,7 @@ export const useSession = (
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [sessionCards, setSessionCards] = useState<SessionFlashcard[]>([]);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [isLastCardAnswered, setIsLastCardAnswered] = useState(false);
   const { calculateWeight, updateCardStat } = useStats();
 
   // Generate a new session whenever selected topics or difficulty change
@@ -102,6 +103,7 @@ export const useSession = (
     setSessionCards(newSessionCards);
     setCurrentCardIndex(0);
     setIsFlipped(false);
+    setIsLastCardAnswered(false);
   };
 
   // Move to the next card
@@ -115,7 +117,12 @@ export const useSession = (
   const handleAnswer = (result: AnswerResult) => {
     const currentCard = sessionCards[currentCardIndex];
     updateCardStat(currentCard.id, result);
-    nextCard();
+
+    if (currentCardIndex >= sessionCards.length - 1) {
+      setIsLastCardAnswered(true);
+    } else {
+      nextCard();
+    }
   };
 
   const flipCard = () => {
@@ -123,7 +130,7 @@ export const useSession = (
   };
 
   const isSessionComplete =
-    currentCardIndex >= sessionCards.length - 1 && isFlipped;
+    currentCardIndex >= sessionCards.length - 1 && isLastCardAnswered;
 
   const currentCard = sessionCards[currentCardIndex];
 
