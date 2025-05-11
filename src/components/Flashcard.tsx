@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import type { FlashcardItem } from "../data/topics";
 import type { AnswerResult } from "../types";
 
@@ -10,6 +10,11 @@ interface FlashcardProps {
   icon?: string;
 }
 
+interface DelayedAnswer {
+  answer: string;
+  icon?: string;
+}
+
 const Flashcard: React.FC<FlashcardProps> = ({
   card,
   isFlipped,
@@ -17,6 +22,25 @@ const Flashcard: React.FC<FlashcardProps> = ({
   onAnswer,
   icon,
 }) => {
+  const [delayedAnswer, setDelayedAnswer] = useState<DelayedAnswer | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (card) {
+      setTimeout(() => {
+        console.log("delayedAnswer", {
+          answer: card.answer,
+          icon,
+        });
+        setDelayedAnswer({
+          answer: card.answer,
+          icon,
+        });
+      }, 500);
+    }
+  }, [card, icon]);
+
   return (
     <div
       className="w-full h-[60vh] cursor-pointer"
@@ -49,18 +73,20 @@ const Flashcard: React.FC<FlashcardProps> = ({
 
           {/* Back Side (Answer) */}
           <div className="card-back bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 flex flex-col items-center justify-center">
-            {icon && (
-              <img
-                src={icon}
-                alt="Topic icon"
-                className="w-16 h-16 object-contain mb-6 dark:invert"
-              />
+            {delayedAnswer && (
+              <>
+                <img
+                  src={delayedAnswer.icon}
+                  alt="Topic icon"
+                  className="w-16 h-16 object-contain mb-6 dark:invert"
+                />
+                <div className="text-center mb-6">
+                  <p className="text-xl font-semibold text-gray-700 dark:text-gray-300 font-semibold">
+                    {delayedAnswer.answer}
+                  </p>
+                </div>
+              </>
             )}
-            <div className="text-center mb-6">
-              <p className="text-xl font-semibold text-gray-700 dark:text-gray-300 font-semibold">
-                {card.answer}
-              </p>
-            </div>
 
             <div className="flex space-x-4">
               <button
