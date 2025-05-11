@@ -7,6 +7,7 @@ import uefaData from "./uefa.json";
 // Import icons
 import championsIcon from "../assets/champions.png";
 import europaIcon from "../assets/europa.png";
+import nbaIcon from "../assets/nba.png";
 import worldCupIcon from "../assets/world-cup.png";
 
 export interface FlashcardItem {
@@ -131,6 +132,7 @@ export const topics: TopicConfig<SportData>[] = [
   {
     id: "nba",
     name: "NBA Champions",
+    icon: nbaIcon,
     data: nbaData as NBAData[],
     generateFlashcards: (data) =>
       data.map((item) => ({
