@@ -57,11 +57,26 @@ export const topics: TopicConfig<SportData>[] = [
     icon: championsIcon,
     data: uefaData as UEFAData[],
     generateFlashcards: (data) =>
-      data.map((item) => ({
-        id: `uefa-${item.season}`,
-        question: `Who won the UEFA Champions League in ${item.season}?`,
-        answer: item.winner,
-      })),
+      data.flatMap((item) => {
+        const uefaItem = item as UEFAData;
+        return [
+          {
+            id: `uefa-winner-${uefaItem.season}`,
+            question: `Who won the UEFA Champions League in ${uefaItem.season}?`,
+            answer: uefaItem.winner,
+          },
+          {
+            id: `uefa-runnerup-score-${uefaItem.season}`,
+            question: `Who was the runner-up and what was the score in the UEFA Champions League final in ${uefaItem.season}?`,
+            answer: `${uefaItem.runnerUp} (Score: ${uefaItem.score})`,
+          },
+          {
+            id: `uefa-location-stadium-${uefaItem.season}`,
+            question: `Where was the UEFA Champions League final in ${uefaItem.season} held (city and stadium)?`,
+            answer: `${uefaItem.location} (${uefaItem.stadium})`,
+          },
+        ];
+      }),
   },
   {
     id: "europa",
@@ -69,11 +84,26 @@ export const topics: TopicConfig<SportData>[] = [
     icon: europaIcon,
     data: europaData as EuropaData[],
     generateFlashcards: (data) =>
-      data.map((item) => ({
-        id: `europa-${item.season}`,
-        question: `Who won the UEFA Europa League in ${item.season}?`,
-        answer: item.winner,
-      })),
+      data.flatMap((item) => {
+        const europaItem = item as EuropaData;
+        return [
+          {
+            id: `europa-winner-${europaItem.season}`,
+            question: `Who won the UEFA Europa League in ${europaItem.season}?`,
+            answer: europaItem.winner,
+          },
+          {
+            id: `europa-runnerup-score-${europaItem.season}`,
+            question: `Who was the runner-up and what was the score in the UEFA Europa League final in ${europaItem.season}?`,
+            answer: `${europaItem.runnerUp} (Score: ${europaItem.score})`,
+          },
+          {
+            id: `europa-location-stadium-${europaItem.season}`,
+            question: `Where was the UEFA Europa League final in ${europaItem.season} held (city and stadium)?`,
+            answer: `${europaItem.location} (${europaItem.stadium})`,
+          },
+        ];
+      }),
   },
   {
     id: "fifa",

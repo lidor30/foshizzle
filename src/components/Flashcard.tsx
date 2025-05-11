@@ -19,7 +19,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
 }) => {
   return (
     <div
-      className="w-full h-64 cursor-pointer"
+      className="w-full h-[60vh] cursor-pointer"
       onClick={!isFlipped ? onFlip : undefined}
     >
       <div
@@ -34,11 +34,11 @@ const Flashcard: React.FC<FlashcardProps> = ({
               <img
                 src={icon}
                 alt="Topic icon"
-                className="w-8 h-8 object-contain mb-3 dark:invert"
+                className="w-16 h-16 object-contain mb-6 dark:invert"
               />
             )}
             <div className="text-center">
-              <p className="text-gray-700 dark:text-gray-300">
+              <p className="text-xl font-semibold text-gray-700 dark:text-gray-300">
                 {card.question}
               </p>
             </div>
@@ -53,14 +53,11 @@ const Flashcard: React.FC<FlashcardProps> = ({
               <img
                 src={icon}
                 alt="Topic icon"
-                className="w-8 h-8 object-contain mb-3 dark:invert"
+                className="w-16 h-16 object-contain mb-6 dark:invert"
               />
             )}
             <div className="text-center mb-6">
-              <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white">
-                Answer
-              </h3>
-              <p className="text-gray-700 dark:text-gray-300 font-semibold">
+              <p className="text-xl font-semibold text-gray-700 dark:text-gray-300 font-semibold">
                 {card.answer}
               </p>
             </div>
