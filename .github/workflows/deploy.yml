@@ -36,6 +36,12 @@ jobs:
       - name: Create .nojekyll file
         run: touch dist/.nojekyll
 
+      - name: Copy CNAME file
+        run: cp CNAME dist/
+
+      - name: Create SPA fallback
+        run: cp dist/index.html dist/404.html
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
