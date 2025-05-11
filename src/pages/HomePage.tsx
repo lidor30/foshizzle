@@ -2,16 +2,23 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import TopicSelector from "../components/TopicSelector";
+import type { DifficultyLevel } from "../data/topics";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleStartSession = (selectedTopicIds: string[]) => {
+  const handleStartSession = (
+    selectedTopicIds: string[],
+    difficulty: DifficultyLevel
+  ) => {
     // Store selected topics in sessionStorage
     sessionStorage.setItem(
       "selectedTopicIds",
       JSON.stringify(selectedTopicIds)
     );
+
+    // Store selected difficulty in sessionStorage
+    sessionStorage.setItem("selectedDifficulty", difficulty);
 
     // Navigate to session page
     navigate("/session");

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useStats } from "../context/StatsContext";
-import type { FlashcardItem } from "../data/topics";
+import type { DifficultyLevel, FlashcardItem } from "../data/topics";
 import { topics } from "../data/topics";
 import type { AnswerResult } from "../types";
 
@@ -12,18 +12,21 @@ export interface SessionFlashcard extends FlashcardItem {
   topicIcon?: string;
 }
 
-export const useSession = (selectedTopicIds: string[]) => {
+export const useSession = (
+  selectedTopicIds: string[],
+  difficulty: DifficultyLevel = "medium"
+) => {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [sessionCards, setSessionCards] = useState<SessionFlashcard[]>([]);
   const [isFlipped, setIsFlipped] = useState(false);
   const { calculateWeight, updateCardStat } = useStats();
 
-  // Generate a new session whenever selected topics change
+  // Generate a new session whenever selected topics or difficulty change
   useEffect(() => {
     if (selectedTopicIds.length === 0) return;
 
     generateSession();
-  }, [selectedTopicIds]);
+  }, [selectedTopicIds, difficulty]);
 
   // Generate all possible flashcards from the selected topics
   const generateAllFlashcards = (): SessionFlashcard[] => {
@@ -46,19 +49,26 @@ export const useSession = (selectedTopicIds: string[]) => {
     allCards: SessionFlashcard[],
     size: number
   ): SessionFlashcard[] => {
-    // Calculate weights for all cards
-    const cardsWithWeights = allCards.map((card) => ({
+    // Filter cards by selected difficulty (include easier difficulties too)
+    const filteredCards = allCards.filter((card) => {
+      if (difficulty === "easy") return card.difficulty === "easy";
+      if (difficulty === "medium")
+        return card.difficulty === "easy" || card.difficulty === "medium";
+      return true; // "hard" includes all difficulties
+    });
+
+    const cardsToSample = filteredCards.length > 0 ? filteredCards : allCards;
+
+    const cardsWithWeights = cardsToSample.map((card) => ({
       card,
       weight: calculateWeight(card.id),
     }));
 
-    // Calculate total weight
     const totalWeight = cardsWithWeights.reduce(
       (sum, item) => sum + item.weight,
       0
     );
 
-    // Sample cards with replacement, using weights to determine probability
     const sampledCards: SessionFlashcard[] = [];
 
     for (let i = 0; i < size; i++) {
@@ -78,7 +88,6 @@ export const useSession = (selectedTopicIds: string[]) => {
     return sampledCards;
   };
 
-  // Generate a new session of flashcards
   const generateSession = () => {
     const allCards = generateAllFlashcards();
 
@@ -103,23 +112,19 @@ export const useSession = (selectedTopicIds: string[]) => {
     }
   };
 
-  // Handle user's answer
   const handleAnswer = (result: AnswerResult) => {
     const currentCard = sessionCards[currentCardIndex];
     updateCardStat(currentCard.id, result);
     nextCard();
   };
 
-  // Toggle the card flip state
   const flipCard = () => {
     setIsFlipped((prev) => !prev);
   };
 
-  // Check if the session is complete
   const isSessionComplete =
     currentCardIndex >= sessionCards.length - 1 && isFlipped;
 
-  // Current card to display
   const currentCard = sessionCards[currentCardIndex];
 
   return {

@@ -4,23 +4,32 @@ import Flashcard from "../components/Flashcard";
 import Header from "../components/Header";
 import SessionComplete from "../components/SessionComplete";
 import SessionProgress from "../components/SessionProgress";
+import type { DifficultyLevel } from "../data/topics";
 import { useSession } from "../hooks/useSession";
 
 const SessionPage: React.FC = () => {
   const navigate = useNavigate();
   const [selectedTopicIds, setSelectedTopicIds] = useState<string[]>([]);
+  const [selectedDifficulty, setSelectedDifficulty] =
+    useState<DifficultyLevel>("medium");
 
   // Load selected topics from sessionStorage
   useEffect(() => {
     const storedTopics = sessionStorage.getItem("selectedTopicIds");
+    const storedDifficulty = sessionStorage.getItem(
+      "selectedDifficulty"
+    ) as DifficultyLevel | null;
 
     if (!storedTopics) {
-      // If no topics selected, redirect to home
       navigate("/");
       return;
     }
 
     setSelectedTopicIds(JSON.parse(storedTopics));
+
+    if (storedDifficulty) {
+      setSelectedDifficulty(storedDifficulty);
+    }
   }, [navigate]);
 
   const {
@@ -31,7 +40,7 @@ const SessionPage: React.FC = () => {
     handleAnswer,
     generateSession,
     progress,
-  } = useSession(selectedTopicIds);
+  } = useSession(selectedTopicIds, selectedDifficulty);
 
   const handleReturnHome = () => {
     navigate("/");
@@ -41,6 +50,13 @@ const SessionPage: React.FC = () => {
   if (selectedTopicIds.length === 0) {
     return <div>Loading...</div>;
   }
+
+  // Color variants for different difficulty levels
+  const difficultyColors = {
+    easy: "bg-green-500",
+    medium: "bg-yellow-500",
+    hard: "bg-red-500",
+  };
 
   return (
     <div className="min-h-screen pb-10 pt-20">
@@ -56,10 +72,19 @@ const SessionPage: React.FC = () => {
           <div className="max-w-md mx-auto">
             {currentCard && (
               <>
-                <SessionProgress
-                  current={progress.current}
-                  total={progress.total}
-                />
+                <div className="flex items-center justify-between gap-4 mb-4">
+                  <SessionProgress
+                    current={progress.current}
+                    total={progress.total}
+                  />
+                  <div
+                    className={`text-xs px-2 py-1 rounded-full text-white capitalize ${difficultyColors[selectedDifficulty]}`}
+                  >
+                    {selectedDifficulty === "easy" && "Easy"}
+                    {selectedDifficulty === "medium" && "Medium"}
+                    {selectedDifficulty === "hard" && "Hard"}
+                  </div>
+                </div>
 
                 <div className="my-6">
                   <Flashcard
