@@ -60,6 +60,7 @@ export const useSession = (
 
     const cardsToSample = filteredCards.length > 0 ? filteredCards : allCards;
 
+    // Create a map of cards with their weights for sampling
     const cardsWithWeights = cardsToSample.map((card) => ({
       card,
       weight: calculateWeight(card.id),
@@ -70,17 +71,33 @@ export const useSession = (
       0
     );
 
+    const sampledQuestions = new Set<string>();
     const sampledCards: SessionFlashcard[] = [];
 
-    for (let i = 0; i < size; i++) {
+    // Adjust session size if not enough unique questions are available
+    const availableUniqueCards = new Set(
+      cardsToSample.map((card) => card.question)
+    ).size;
+    const adjustedSize = Math.min(size, availableUniqueCards);
+
+    // Try to sample until we have enough unique cards or run out of attempts
+    let attempts = 0;
+    const maxAttempts = cardsToSample.length * 3; // Prevent infinite loops
+
+    while (sampledCards.length < adjustedSize && attempts < maxAttempts) {
+      attempts++;
       const randomValue = Math.random() * totalWeight;
       let cumulativeWeight = 0;
 
       for (const { card, weight } of cardsWithWeights) {
         cumulativeWeight += weight;
 
-        if (randomValue <= cumulativeWeight) {
+        if (
+          randomValue <= cumulativeWeight &&
+          !sampledQuestions.has(card.question)
+        ) {
           sampledCards.push(card);
+          sampledQuestions.add(card.question);
           break;
         }
       }
