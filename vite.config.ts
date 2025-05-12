@@ -11,5 +11,15 @@ export default defineConfig({
     assetsDir: "assets",
     // Ensure Vite correctly handles public directory assets
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: "./index.html",
+      },
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom"],
+        },
+      },
+    },
   },
 });
