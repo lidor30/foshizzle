@@ -1,4 +1,6 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../contexts/LanguageContext";
 
 interface SessionCompleteProps {
   onStartNewSession: () => void;
@@ -9,8 +11,14 @@ const SessionComplete: React.FC<SessionCompleteProps> = ({
   onStartNewSession,
   onReturnHome,
 }) => {
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
+  const rtlClass = isRTL ? "rtl" : "";
+
   return (
-    <div className="mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <div
+      className={`mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md ${rtlClass}`}
+    >
       <div className="text-center mb-6">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -28,7 +36,7 @@ const SessionComplete: React.FC<SessionCompleteProps> = ({
         </svg>
 
         <h2 className="mt-4 text-2xl font-bold text-gray-800 dark:text-white">
-          Session Complete!
+          {t("session.complete.title")}
         </h2>
 
         <p className="mt-2 text-gray-600 dark:text-gray-300">
@@ -43,7 +51,7 @@ const SessionComplete: React.FC<SessionCompleteProps> = ({
                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 
                    transition-colors"
         >
-          Start New Session
+          {t("session.complete.restartButton")}
         </button>
 
         <button
@@ -52,7 +60,7 @@ const SessionComplete: React.FC<SessionCompleteProps> = ({
                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 
                    transition-colors dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
         >
-          Return to Topic Selection
+          {t("session.complete.homeButton")}
         </button>
       </div>
     </div>

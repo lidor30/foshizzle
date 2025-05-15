@@ -1,0 +1,41 @@
+{
+  "header": {
+    "title": "FoShizzle",
+    "subtitle": "Master with flashcards"
+  },
+  "topics": {
+    "title": "Choose Topics",
+    "description": "Select topics you want to practice",
+    "startButton": "Start Session",
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    }
+  },
+  "session": {
+    "complete": {
+      "title": "Session Complete!",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "restartButton": "Restart",
+      "homeButton": "Home"
+    },
+    "progress": {
+      "progress": "Progress"
+    },
+    "flashcard": {
+      "show": "Show Translation",
+      "next": "Next",
+      "correct": "I Got It Right",
+      "incorrect": "I Got It Wrong"
+    }
+  },
+  "voice": {
+    "title": "Select Voice",
+    "play": "Play Sound"
+  },
+  "settings": {
+    "language": "Language"
+  }
+}

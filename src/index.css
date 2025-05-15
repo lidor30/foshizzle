@@ -21,6 +21,25 @@ body {
   background-color: rgb(var(--background-rgb));
 }
 
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+.rtl .ml-1 {
+  margin-left: 0;
+  margin-right: 0.25rem;
+}
+
+.rtl .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+}
+
 .card-inner {
   position: relative;
   width: 100%;

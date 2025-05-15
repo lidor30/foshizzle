@@ -1,6 +1,6 @@
 {
   "name": "foshizzle",
-  "version": "v1.0.2",
+  "version": "v1.0.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,9 +13,12 @@
   "dependencies": {
     "autoprefixer": "^10.4.21",
     "clsx": "^2.1.1",
+    "i18next": "^25.1.3",
+    "i18next-browser-languagedetector": "^8.1.0",
     "postcss": "^8.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-i18next": "^15.5.1",
     "react-router-dom": "^7.6.0",
     "react-spring": "^9.7.5",
     "tailwindcss": "^4.1.6"

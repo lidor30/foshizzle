@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../contexts/LanguageContext";
 import type { FlashcardItem } from "../data/topics";
 import type { AnswerResult } from "../types";
 import SpeakButton from "./SpeakButton";
@@ -24,6 +26,8 @@ const Flashcard: React.FC<FlashcardProps> = ({
   onAnswer,
   icon,
 }) => {
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
   const [delayedAnswer, setDelayedAnswer] = useState<DelayedAnswer | null>(
     null
   );
@@ -43,9 +47,11 @@ const Flashcard: React.FC<FlashcardProps> = ({
     }
   }, [card, icon]);
 
+  const rtlClass = isRTL ? "rtl" : "";
+
   return (
     <div
-      className="w-full h-[60vh] cursor-pointer"
+      className={`w-full h-[60vh] cursor-pointer ${rtlClass}`}
       onClick={!isFlipped ? onFlip : undefined}
     >
       <div
@@ -69,7 +75,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
               </p>
             </div>
             <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
-              Tap to reveal answer
+              {t("session.flashcard.show")}
             </div>
 
             <div className="absolute right-2 top-2 flex">
@@ -109,7 +115,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
                 }}
                 className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
               >
-                Incorrect
+                {t("session.flashcard.incorrect")}
               </button>
               <button
                 onClick={(e) => {
@@ -118,7 +124,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
                 }}
                 className="px-4 py-2 rounded-md bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
               >
-                Correct
+                {t("session.flashcard.correct")}
               </button>
             </div>
           </div>

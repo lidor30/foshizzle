@@ -1,6 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
+import { LanguageProvider } from "./contexts/LanguageContext";
+
+import "./i18n";
 import "./index.css";
 
 // Check if there's a saved theme preference or use system preference
@@ -14,6 +17,8 @@ if (
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <LanguageProvider>
+      <App />
+    </LanguageProvider>
   </React.StrictMode>
 );

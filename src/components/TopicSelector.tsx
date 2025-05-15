@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../contexts/LanguageContext";
 import type { DifficultyLevel } from "../data/topics";
 import { topics } from "../data/topics";
 
@@ -10,6 +12,8 @@ interface TopicSelectorProps {
 }
 
 const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
   const [selectedTopics, setSelectedTopics] = useState<{
     [id: string]: boolean;
   }>({});
@@ -51,10 +55,14 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
 
   const selectedCount = Object.values(selectedTopics).filter(Boolean).length;
 
+  const rtlClass = isRTL ? "rtl" : "";
+
   return (
-    <div className="mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <div
+      className={`mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md ${rtlClass}`}
+    >
       <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
-        Topics
+        {t("topics.title")}
       </h2>
 
       <div className="grid grid-cols-2 gap-2 mb-4">
@@ -102,13 +110,13 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
 
       <div className="mb-6">
         <h3 className="text-md font-semibold mb-2 text-gray-800 dark:text-white">
-          Difficulty
+          {t("topics.description")}
         </h3>
         <div className="grid grid-cols-3 gap-2">
           {[
-            { value: "easy", label: "Easy" },
-            { value: "medium", label: "Medium" },
-            { value: "hard", label: "Hard" },
+            { value: "easy", label: t("topics.difficulty.easy") },
+            { value: "medium", label: t("topics.difficulty.medium") },
+            { value: "hard", label: t("topics.difficulty.hard") },
           ].map((difficulty) => (
             <button
               key={difficulty.value}
@@ -136,7 +144,8 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
         onClick={handleStartSession}
         disabled={selectedCount === 0}
       >
-        Start Session ({selectedCount} topic{selectedCount !== 1 ? "s" : ""})
+        {t("topics.startButton")} ({selectedCount} topic
+        {selectedCount !== 1 ? "s" : ""})
       </button>
     </div>
   );
