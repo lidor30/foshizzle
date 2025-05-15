@@ -21,6 +21,22 @@ interface TTSProviderProps {
   children: ReactNode;
 }
 
+// Helper function to detect if text is primarily Hebrew
+const isHebrewText = (text: string): boolean => {
+  const hebrewPattern = /[\u0590-\u05FF\uFB1D-\uFB4F]/;
+  const englishPattern = /[a-zA-Z]/;
+
+  let hebrewCount = 0;
+  let englishCount = 0;
+
+  for (const char of text) {
+    if (hebrewPattern.test(char)) hebrewCount++;
+    else if (englishPattern.test(char)) englishCount++;
+  }
+
+  return hebrewCount > englishCount;
+};
+
 export const TTSProvider: React.FC<TTSProviderProps> = ({ children }) => {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [selectedVoice, setSelectedVoice] = useState<string | null>(null);
@@ -64,7 +80,10 @@ export const TTSProvider: React.FC<TTSProviderProps> = ({ children }) => {
       window.speechSynthesis.cancel();
 
       const speech = new SpeechSynthesisUtterance(text);
-      speech.lang = "he-IL"; // Set language to Hebrew
+
+      // Detect language from text
+      const isHebrew = isHebrewText(text);
+      speech.lang = isHebrew ? "he-IL" : "en-US";
 
       let bestVoice: SpeechSynthesisVoice | undefined;
 
@@ -73,23 +92,40 @@ export const TTSProvider: React.FC<TTSProviderProps> = ({ children }) => {
         bestVoice = voices.find((voice) => voice.name === selectedVoice);
       }
 
-      // Otherwise try to find the best Hebrew voice
+      // Otherwise try to find the best voice for the detected language
       if (!bestVoice) {
-        // First look for premium/enhanced voices that tend to sound more natural
-        bestVoice = voices.find(
-          (voice) =>
-            (voice.lang.includes("he") || voice.lang.includes("iw")) &&
-            (voice.name.includes("Premium") ||
-              voice.name.includes("Enhanced") ||
-              voice.name.includes("Natural") ||
-              voice.name.toLowerCase().includes("neural"))
-        );
-
-        // If no premium voice, try any Hebrew voice
-        if (!bestVoice) {
+        if (isHebrew) {
+          // First look for premium/enhanced Hebrew voices
           bestVoice = voices.find(
-            (voice) => voice.lang.includes("he") || voice.lang.includes("iw")
+            (voice) =>
+              (voice.lang.includes("he") || voice.lang.includes("iw")) &&
+              (voice.name.includes("Premium") ||
+                voice.name.includes("Enhanced") ||
+                voice.name.includes("Natural") ||
+                voice.name.toLowerCase().includes("neural"))
           );
+
+          // If no premium voice, try any Hebrew voice
+          if (!bestVoice) {
+            bestVoice = voices.find(
+              (voice) => voice.lang.includes("he") || voice.lang.includes("iw")
+            );
+          }
+        } else {
+          // For English, look for good English voices
+          bestVoice = voices.find(
+            (voice) =>
+              voice.lang.includes("en") &&
+              (voice.name.includes("Premium") ||
+                voice.name.includes("Enhanced") ||
+                voice.name.includes("Natural") ||
+                voice.name.toLowerCase().includes("neural"))
+          );
+
+          // If no premium voice, try any English voice
+          if (!bestVoice) {
+            bestVoice = voices.find((voice) => voice.lang.includes("en"));
+          }
         }
 
         // If still no voice, try a general voice
