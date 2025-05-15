@@ -1,7 +1,6 @@
 {
   "name": "foshizzle",
-  "private": true,
-  "version": "v1.0.1",
+  "version": "v1.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",

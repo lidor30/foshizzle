@@ -65,7 +65,7 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
             className={`flex flex-col gap-3 items-center justify-start px-4 py-2 rounded-md transition-colors text-sm font-medium relative
               ${
                 selectedTopics[topic.id]
-                  ? "bg-indigo-600 text-white"
+                  ? "bg-primary-600 text-white"
                   : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
           >
@@ -74,7 +74,7 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
                 src={topic.icon}
                 alt={`${topic.name} icon`}
                 className={`h-10 object-contain ${
-                  selectedTopics[topic.id] ? "invert" : "dark:invert"
+                  selectedTopics[topic.id] ? "invert" : "dark-invert-workaround"
                 }`}
               />
             )}
@@ -86,14 +86,14 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
       <div className="flex justify-between mb-6">
         <button
           type="button"
-          className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300"
+          className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300"
           onClick={selectAll}
         >
           Select All
         </button>
         <button
           type="button"
-          className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300"
+          className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300"
           onClick={clearAll}
         >
           Clear All
@@ -118,7 +118,7 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
               className={`px-4 py-2 rounded-md transition-colors text-sm font-medium
                 ${
                   selectedDifficulty === difficulty.value
-                    ? "bg-indigo-600 text-white"
+                    ? "bg-primary-600 text-white"
                     : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
                 }`}
             >
@@ -130,8 +130,8 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
 
       <button
         type="button"
-        className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 
-                  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 
+        className="w-full bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 
+                  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 
                   transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={handleStartSession}
         disabled={selectedCount === 0}

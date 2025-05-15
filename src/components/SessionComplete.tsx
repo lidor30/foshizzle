@@ -39,8 +39,8 @@ const SessionComplete: React.FC<SessionCompleteProps> = ({
       <div className="space-y-3">
         <button
           onClick={onStartNewSession}
-          className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 
-                   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 
+          className="w-full bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 
+                   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 
                    transition-colors"
         >
           Start New Session

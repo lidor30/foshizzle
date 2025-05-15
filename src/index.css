@@ -7,10 +7,18 @@
   --background-rgb: 10, 10, 10;
 }
 
+html.dark img.dark-invert-workaround {
+  filter: invert(1);
+}
+
 body {
   color: rgb(var(--foreground-rgb));
-  background-color: rgb(var(--background-rgb));
+  background-color: oklch(98.5% 0.002 247.839);
   transition: color 0.3s, background-color 0.3s;
+}
+
+.dark body {
+  background-color: rgb(var(--background-rgb));
 }
 
 .card-inner {

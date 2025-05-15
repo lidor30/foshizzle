@@ -174,16 +174,16 @@ export const topics: TopicConfig<SportData>[] = [
         };
       }),
   },
-  {
-    id: "test",
-    name: "Test",
-    data: [{ id: 1 }, { id: 2 }, { id: 3 }] as TestData[],
-    generateFlashcards: (data) =>
-      data.map((item) => ({
-        id: `test-${item}`,
-        question: `מה הדגל של לבנון, מה הדגל של ספרד, מה הדגל של יפן, מה הדגל של אפגניסטן?`,
-        answer: "42",
-        difficulty: "easy",
-      })),
-  },
+  // {
+  //   id: "test",
+  //   name: "Test",
+  //   data: [{ id: 1 }, { id: 2 }, { id: 3 }] as TestData[],
+  //   generateFlashcards: (data) =>
+  //     data.map((item) => ({
+  //       id: `test-${item}`,
+  //       question: `מה הדגל של לבנון, מה הדגל של ספרד, מה הדגל של יפן, מה הדגל של אפגניסטן?`,
+  //       answer: "42",
+  //       difficulty: "easy",
+  //     })),
+  // },
 ];
