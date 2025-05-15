@@ -2,7 +2,7 @@ import { getCountryName } from "./countryTranslations";
 import type {
   DifficultyLevel,
   FlashcardItem,
-  MultipleChoiceFlashcardItem,
+  MultipleChoiceQuestionItem,
 } from "./topics";
 
 export interface Country {
@@ -157,7 +157,7 @@ export const generateFlagsFlashcards = async (): Promise<FlashcardItem[]> => {
         countryCode: country.cca2,
         flagUrl: getFlagUrl(country.cca2),
       },
-    } as MultipleChoiceFlashcardItem;
+    } as MultipleChoiceQuestionItem;
   });
 };
 

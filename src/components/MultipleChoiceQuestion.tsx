@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { MultipleChoiceFlashcardItem } from "../data/topics";
+import type { MultipleChoiceQuestionItem } from "../data/topics";
 import type { AnswerResult } from "../types";
 
 interface MultipleChoiceQuestionProps {
-  card: MultipleChoiceFlashcardItem;
+  card: MultipleChoiceQuestionItem;
   onAnswer: (result: AnswerResult) => void;
   icon?: string;
 }

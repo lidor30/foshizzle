@@ -25,12 +25,12 @@ export interface BasicFlashcardItem extends BaseFlashcardItem {
   type: "basic";
 }
 
-export interface MultipleChoiceFlashcardItem extends BaseFlashcardItem {
+export interface MultipleChoiceQuestionItem extends BaseFlashcardItem {
   type: "multiple_choice";
   options: string[];
 }
 
-export type FlashcardItem = BasicFlashcardItem | MultipleChoiceFlashcardItem;
+export type FlashcardItem = BasicFlashcardItem | MultipleChoiceQuestionItem;
 
 interface BaseData {
   winner: string;
@@ -114,7 +114,7 @@ export const topics: TopicConfig<SportData>[] = [
                 championsItem.runnerUp,
               ]),
             ].sort(() => Math.random() - 0.5),
-          } as MultipleChoiceFlashcardItem,
+          } as MultipleChoiceQuestionItem,
           {
             id: `uefa-final-${championsItem.season}`,
             question: `Which teams played in the ${championsItem.season} UEFA Champions League final and what was the score?`,
@@ -134,7 +134,7 @@ export const topics: TopicConfig<SportData>[] = [
                 `${championsItem.location}\n(${championsItem.stadium})`,
               ]),
             ].sort(() => Math.random() - 0.5),
-          } as MultipleChoiceFlashcardItem,
+          } as MultipleChoiceQuestionItem,
         ];
       }),
   },
@@ -191,7 +191,7 @@ export const topics: TopicConfig<SportData>[] = [
               fifaItem.runnerUp,
               ...getRandomTeams(2, [fifaItem.winner, fifaItem.runnerUp]),
             ].sort(() => Math.random() - 0.5),
-          } as MultipleChoiceFlashcardItem,
+          } as MultipleChoiceQuestionItem,
           {
             id: `fifa-final-${fifaItem.year}`,
             question: `Which teams played in the ${fifaItem.year} FIFA World Cup final and what was the score?`,
@@ -209,7 +209,7 @@ export const topics: TopicConfig<SportData>[] = [
               fifaItem.host,
               ...getRandomCountries(3, [fifaItem.host]),
             ].sort(() => Math.random() - 0.5),
-          } as MultipleChoiceFlashcardItem,
+          } as MultipleChoiceQuestionItem,
         ];
       });
     },
