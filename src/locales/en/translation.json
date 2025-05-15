@@ -13,6 +13,8 @@
     "title": "Choose Topics",
     "description": "Select topics you want to practice",
     "startButton": "Start Session",
+    "startButtonWithCount": "Start Session ({{count}} topic)",
+    "startButtonWithCount_plural": "Start Session ({{count}} topics)",
     "difficulty": {
       "easy": "Easy",
       "medium": "Medium",

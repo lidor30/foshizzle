@@ -144,8 +144,12 @@ const TopicSelector: React.FC<TopicSelectorProps> = ({ onStartSession }) => {
         onClick={handleStartSession}
         disabled={selectedCount === 0}
       >
-        {t("topics.startButton")} ({selectedCount} topic
-        {selectedCount !== 1 ? "s" : ""})
+        {t(
+          selectedCount === 1
+            ? "topics.startButtonWithCount"
+            : "topics.startButtonWithCount_plural",
+          { count: selectedCount }
+        )}
       </button>
     </div>
   );

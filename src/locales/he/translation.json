@@ -13,6 +13,8 @@
     "title": "בחר נושאים",
     "description": "בחר נושאים שתרצה לתרגל",
     "startButton": "התחל אימון",
+    "startButtonWithCount": "התחל אימון (נושא אחד)",
+    "startButtonWithCount_plural": "התחל אימון ({{count}} נושאים)",
     "difficulty": {
       "easy": "קל",
       "medium": "בינוני",
