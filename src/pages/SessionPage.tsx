@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Flashcard from "../components/Flashcard";
 import Header from "../components/Header";
-import QuestionCard from "../components/QuestionCard";
+import MultipleChoiceQuestion from "../components/MultipleChoiceQuestion";
 import SessionComplete from "../components/SessionComplete";
 import SessionProgress from "../components/SessionProgress";
 import type {
@@ -94,7 +94,7 @@ const SessionPage: React.FC = () => {
                 <div className="my-6">
                   {"type" in currentCard &&
                   currentCard.type === "multiple_choice" ? (
-                    <QuestionCard
+                    <MultipleChoiceQuestion
                       card={currentCard as MultipleChoiceFlashcardItem}
                       onAnswer={handleAnswer}
                       icon={currentCard.topicIcon}
@@ -105,7 +105,6 @@ const SessionPage: React.FC = () => {
                       isFlipped={isFlipped}
                       onFlip={flipCard}
                       onAnswer={handleAnswer}
-                      icon={currentCard.topicIcon}
                     />
                   )}
                 </div>
