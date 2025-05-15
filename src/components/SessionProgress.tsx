@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface SessionProgressProps {
   current: number;
@@ -9,13 +10,18 @@ const SessionProgress: React.FC<SessionProgressProps> = ({
   current,
   total,
 }) => {
+  const { t } = useTranslation();
   const progressPercentage = Math.round((current / total) * 100);
 
   return (
     <div className="w-full">
       <div className="flex justify-between mb-1 text-sm">
         <span className="text-gray-700 dark:text-gray-300">
-          Card {current} of {total}
+          {t("session.progress.card", {
+            current,
+            total,
+            defaultValue: `Card ${current} of ${total}`,
+          })}
         </span>
         <span className="text-gray-700 dark:text-gray-300">
           {progressPercentage}%

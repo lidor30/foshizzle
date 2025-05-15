@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import logoImage from "../assets/logo.png";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -9,6 +10,7 @@ import Modal from "./ui/Modal";
 const Header: React.FC = () => {
   const { isRTL } = useLanguage();
   const { theme, toggleTheme } = useTheme();
+  const { t } = useTranslation();
   const [showEndGameModal, setShowEndGameModal] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -157,27 +159,29 @@ const Header: React.FC = () => {
       <Modal
         isOpen={showEndGameModal}
         onClose={() => setShowEndGameModal(false)}
-        title="End Game"
+        title={t("header.endGame.title", "End Game")}
         actions={
           <>
             <button
               onClick={() => setShowEndGameModal(false)}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500"
             >
-              Cancel
+              {t("header.endGame.cancel", "Cancel")}
             </button>
             <button
               onClick={handleEndGame}
               className="ml-1 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
-              End Game
+              {t("header.endGame.confirm", "End Game")}
             </button>
           </>
         }
       >
         <p className="text-gray-700 dark:text-gray-300">
-          Are you sure you want to end this game and return to the home screen?
-          Your progress will be lost.
+          {t(
+            "header.endGame.message",
+            "Are you sure you want to end this game and return to the home screen? Your progress will be lost."
+          )}
         </p>
       </Modal>
     </>

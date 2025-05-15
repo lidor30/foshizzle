@@ -1,7 +1,13 @@
 {
   "header": {
     "title": "FoShizzle",
-    "subtitle": "Master with flashcards"
+    "subtitle": "Master with flashcards",
+    "endGame": {
+      "title": "End Game",
+      "cancel": "Cancel",
+      "confirm": "End Game",
+      "message": "Are you sure you want to end this game and return to the home screen? Your progress will be lost."
+    }
   },
   "topics": {
     "title": "Choose Topics",
@@ -31,7 +37,8 @@
       "homeButton": "Home"
     },
     "progress": {
-      "progress": "Progress"
+      "progress": "Progress",
+      "card": "Card {{current}} of {{total}}"
     },
     "flashcard": {
       "show": "Tap to reveal the answer",
