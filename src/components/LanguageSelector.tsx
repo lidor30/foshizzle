@@ -13,7 +13,7 @@ const LanguageSelector: React.FC = () => {
           className={clsx(
             "px-2 py-1 text-sm rounded-md transition-colors",
             language === "en"
-              ? "bg-indigo-600 text-white"
+              ? "bg-primary-600 text-white"
               : "bg-gray-200 text-gray-800 hover:bg-gray-300"
           )}
         >
@@ -24,7 +24,7 @@ const LanguageSelector: React.FC = () => {
           className={clsx(
             "px-2 py-1 text-sm rounded-md transition-colors",
             language === "he"
-              ? "bg-indigo-600 text-white"
+              ? "bg-primary-600 text-white"
               : "bg-gray-200 text-gray-800 hover:bg-gray-300"
           )}
         >
