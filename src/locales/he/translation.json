@@ -28,7 +28,12 @@
       "show": "לחץ כדי לראות את התשובה",
       "next": "הבא",
       "correct": "ידעתי נכון",
-      "incorrect": "טעיתי"
+      "incorrect": "טעיתי",
+      "choose_option": "בחר את התשובה הנכונה"
+    },
+    "question_types": {
+      "multiple_choice": "שאלות אמריקאיות",
+      "basic": "כרטיסיות"
     }
   },
   "voice": {

@@ -2,9 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Flashcard from "../components/Flashcard";
 import Header from "../components/Header";
+import QuestionCard from "../components/QuestionCard";
 import SessionComplete from "../components/SessionComplete";
 import SessionProgress from "../components/SessionProgress";
-import type { DifficultyLevel } from "../data/topics";
+import type {
+  BasicFlashcardItem,
+  DifficultyLevel,
+  MultipleChoiceFlashcardItem,
+} from "../data/topics";
 import { useSession } from "../hooks/useSession";
 
 const SessionPage: React.FC = () => {
@@ -87,13 +92,22 @@ const SessionPage: React.FC = () => {
                 </div>
 
                 <div className="my-6">
-                  <Flashcard
-                    card={currentCard}
-                    isFlipped={isFlipped}
-                    onFlip={flipCard}
-                    onAnswer={handleAnswer}
-                    icon={currentCard.topicIcon}
-                  />
+                  {"type" in currentCard &&
+                  currentCard.type === "multiple_choice" ? (
+                    <QuestionCard
+                      card={currentCard as MultipleChoiceFlashcardItem}
+                      onAnswer={handleAnswer}
+                      icon={currentCard.topicIcon}
+                    />
+                  ) : (
+                    <Flashcard
+                      card={currentCard as BasicFlashcardItem}
+                      isFlipped={isFlipped}
+                      onFlip={flipCard}
+                      onAnswer={handleAnswer}
+                      icon={currentCard.topicIcon}
+                    />
+                  )}
                 </div>
               </>
             )}

@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useStats } from "../context/StatsContext";
-import type { DifficultyLevel, FlashcardItem } from "../data/topics";
+import type {
+  BasicFlashcardItem,
+  DifficultyLevel,
+  MultipleChoiceFlashcardItem,
+} from "../data/topics";
 import { topics } from "../data/topics";
 import type { AnswerResult } from "../types";
 
@@ -8,9 +12,12 @@ import type { AnswerResult } from "../types";
 const DEFAULT_SESSION_SIZE = 20;
 
 // Extended flashcard that includes the icon
-export interface SessionFlashcard extends FlashcardItem {
+export type SessionFlashcard = (
+  | BasicFlashcardItem
+  | MultipleChoiceFlashcardItem
+) & {
   topicIcon?: string;
-}
+};
 
 export const useSession = (
   selectedTopicIds: string[],

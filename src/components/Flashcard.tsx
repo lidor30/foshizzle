@@ -35,10 +35,6 @@ const Flashcard: React.FC<FlashcardProps> = ({
   useEffect(() => {
     if (card) {
       setTimeout(() => {
-        console.log("delayedAnswer", {
-          answer: card.answer,
-          icon,
-        });
         setDelayedAnswer({
           answer: card.answer,
           icon,

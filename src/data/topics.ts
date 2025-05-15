@@ -9,13 +9,25 @@ import nbaIcon from "../assets/nba.png";
 import worldCupIcon from "../assets/world-cup.png";
 
 export type DifficultyLevel = "easy" | "medium" | "hard";
+export type QuestionType = "basic" | "multiple_choice";
 
-export interface FlashcardItem {
+interface BaseFlashcardItem {
   id: string;
   question: string;
   answer: string;
   difficulty: DifficultyLevel;
 }
+
+export interface BasicFlashcardItem extends BaseFlashcardItem {
+  type: "basic";
+}
+
+export interface MultipleChoiceFlashcardItem extends BaseFlashcardItem {
+  type: "multiple_choice";
+  options: string[];
+}
+
+export type FlashcardItem = BasicFlashcardItem | MultipleChoiceFlashcardItem;
 
 interface BaseData {
   winner: string;
@@ -81,19 +93,36 @@ export const topics: TopicConfig<SportData>[] = [
             question: `Who won the UEFA Champions League in ${championsItem.season}?`,
             answer: championsItem.winner,
             difficulty: "easy",
-          },
+            type: "multiple_choice",
+            options: [
+              championsItem.winner,
+              championsItem.runnerUp,
+              ...getRandomTeams(2, [
+                championsItem.winner,
+                championsItem.runnerUp,
+              ]),
+            ].sort(() => Math.random() - 0.5),
+          } as MultipleChoiceFlashcardItem,
           {
             id: `uefa-final-${championsItem.season}`,
             question: `Which teams played in the ${championsItem.season} UEFA Champions League final and what was the score?`,
             answer: `${championsItem.winner} vs ${championsItem.runnerUp}\n(${championsItem.score})`,
             difficulty: "medium",
-          },
+            type: "basic",
+          } as BasicFlashcardItem,
           {
             id: `uefa-location-stadium-${championsItem.season}`,
             question: `Where was the UEFA Champions League final in ${championsItem.season} held (city and stadium)?`,
             answer: `${championsItem.location}\n(${championsItem.stadium})`,
             difficulty: "hard",
-          },
+            type: "multiple_choice",
+            options: [
+              `${championsItem.location}\n(${championsItem.stadium})`,
+              ...getRandomStadiums(3, [
+                `${championsItem.location}\n(${championsItem.stadium})`,
+              ]),
+            ].sort(() => Math.random() - 0.5),
+          } as MultipleChoiceFlashcardItem,
         ];
       }),
   },
@@ -111,19 +140,22 @@ export const topics: TopicConfig<SportData>[] = [
             question: `Who won the UEFA Europa League in ${europaItem.season}?`,
             answer: europaItem.winner,
             difficulty: "easy",
-          },
+            type: "basic",
+          } as BasicFlashcardItem,
           {
             id: `europa-final-${europaItem.season}`,
             question: `Which teams played in the ${europaItem.season} UEFA Europa League final and what was the score?`,
             answer: `${europaItem.winner} vs ${europaItem.runnerUp}\n(${europaItem.score})`,
             difficulty: "medium",
-          },
+            type: "basic",
+          } as BasicFlashcardItem,
           {
             id: `europa-location-stadium-${europaItem.season}`,
             question: `Where was the UEFA Europa League final in ${europaItem.season} held (city and stadium)?`,
             answer: `${europaItem.location}\n(${europaItem.stadium})`,
             difficulty: "hard",
-          },
+            type: "basic",
+          } as BasicFlashcardItem,
         ];
       }),
   },
@@ -141,19 +173,31 @@ export const topics: TopicConfig<SportData>[] = [
             question: `Who won the FIFA World Cup in ${fifaItem.year}?`,
             answer: fifaItem.winner,
             difficulty: "easy",
-          },
+            type: "multiple_choice",
+            options: [
+              fifaItem.winner,
+              fifaItem.runnerUp,
+              ...getRandomTeams(2, [fifaItem.winner, fifaItem.runnerUp]),
+            ].sort(() => Math.random() - 0.5),
+          } as MultipleChoiceFlashcardItem,
           {
             id: `fifa-final-${fifaItem.year}`,
             question: `Which teams played in the ${fifaItem.year} FIFA World Cup final and what was the score?`,
             answer: `${fifaItem.winner} vs ${fifaItem.runnerUp}\n(${fifaItem.score})`,
             difficulty: "medium",
-          },
+            type: "basic",
+          } as BasicFlashcardItem,
           {
             id: `fifa-host-${fifaItem.year}`,
             question: `Which country hosted the FIFA World Cup in ${fifaItem.year}?`,
             answer: fifaItem.host,
             difficulty: "medium",
-          },
+            type: "multiple_choice",
+            options: [
+              fifaItem.host,
+              ...getRandomCountries(3, [fifaItem.host]),
+            ].sort(() => Math.random() - 0.5),
+          } as MultipleChoiceFlashcardItem,
         ];
       });
     },
@@ -171,7 +215,8 @@ export const topics: TopicConfig<SportData>[] = [
           question: `Which team won the NBA Championship in ${nbaItem.year}?`,
           answer: nbaItem.winner,
           difficulty: "easy",
-        };
+          type: "basic",
+        } as BasicFlashcardItem;
       }),
   },
   // {
@@ -187,3 +232,84 @@ export const topics: TopicConfig<SportData>[] = [
   //     })),
   // },
 ];
+
+// Helper function to get random teams for multiple choice questions
+const getRandomTeams = (count: number, excludeTeams: string[]): string[] => {
+  const teams = [
+    "Brazil",
+    "Germany",
+    "Italy",
+    "France",
+    "Argentina",
+    "Spain",
+    "England",
+    "Uruguay",
+    "Netherlands",
+    "Portugal",
+    "Mexico",
+    "Croatia",
+    "Belgium",
+    "Sweden",
+    "Russia",
+  ].filter((team) => !excludeTeams.includes(team));
+
+  return shuffleArray(teams).slice(0, count);
+};
+
+// Helper function to get random countries for multiple choice questions
+const getRandomCountries = (
+  count: number,
+  excludeCountries: string[]
+): string[] => {
+  const countries = [
+    "Brazil",
+    "Germany",
+    "South Africa",
+    "France",
+    "Qatar",
+    "Spain",
+    "England",
+    "United States",
+    "Japan",
+    "Russia",
+    "Mexico",
+    "Italy",
+    "South Korea",
+    "Argentina",
+    "Canada",
+  ].filter((country) => !excludeCountries.includes(country));
+
+  return shuffleArray(countries).slice(0, count);
+};
+
+// Helper function to shuffle an array
+const shuffleArray = <T>(array: T[]): T[] => {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+};
+
+// Helper function to get random stadiums for multiple choice questions
+const getRandomStadiums = (
+  count: number,
+  excludeStadiums: string[]
+): string[] => {
+  const stadiums = [
+    "London\n(Wembley Stadium)",
+    "Madrid\n(Santiago Bernabéu)",
+    "Munich\n(Allianz Arena)",
+    "Paris\n(Parc des Princes)",
+    "Milan\n(San Siro)",
+    "Barcelona\n(Camp Nou)",
+    "Berlin\n(Olympiastadion)",
+    "Istanbul\n(Atatürk Olympic Stadium)",
+    "Lisbon\n(Estádio da Luz)",
+    "Athens\n(Olympic Stadium)",
+    "Amsterdam\n(Johan Cruyff Arena)",
+  ].filter((stadium) => !excludeStadiums.includes(stadium));
+
+  return shuffleArray(stadiums).slice(0, count);
+};

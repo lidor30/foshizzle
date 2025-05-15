@@ -25,10 +25,15 @@
       "progress": "Progress"
     },
     "flashcard": {
-      "show": "Show Translation",
+      "show": "Tap to reveal the answer",
       "next": "Next",
       "correct": "I Got It Right",
-      "incorrect": "I Got It Wrong"
+      "incorrect": "I Got It Wrong",
+      "choose_option": "Choose the correct answer"
+    },
+    "question_types": {
+      "multiple_choice": "Multiple Choice",
+      "basic": "Flashcards"
     }
   },
   "voice": {
