@@ -55,7 +55,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
       >
         <div className="card-inner">
           {/* Front Side (Question) */}
-          <div className="card-front bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5 flex flex-col items-center justify-center relative">
+          <div className="card-front bg-gray-100 dark:bg-gray-800 shadow-lg rounded-lg p-5 flex flex-col items-center justify-center relative">
             {icon && (
               <img
                 src={icon}
@@ -79,7 +79,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
           </div>
 
           {/* Back Side (Answer) */}
-          <div className="card-back bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 flex flex-col items-center justify-center relative">
+          <div className="card-back bg-gray-100 dark:bg-gray-800 shadow-lg rounded-lg p-6 flex flex-col items-center justify-center relative">
             {delayedAnswer && (
               <>
                 {delayedAnswer.icon && (
