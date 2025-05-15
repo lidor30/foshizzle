@@ -23,7 +23,7 @@ const SessionProgress: React.FC<SessionProgressProps> = ({
       </div>
       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
         <div
-          className="bg-indigo-600 h-2.5 rounded-full transition-all duration-300 ease-out"
+          className="bg-primary-600 h-2.5 rounded-full transition-all duration-300 ease-out"
           style={{ width: `${progressPercentage}%` }}
         ></div>
       </div>

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { MultipleChoiceQuestionItem } from "../data/topics";
+import type { MultipleChoiceFlashcardItem } from "../data/topics";
 import type { AnswerResult } from "../types";
+
 interface MultipleChoiceQuestionProps {
-  card: MultipleChoiceQuestionItem;
+  card: MultipleChoiceFlashcardItem;
   onAnswer: (result: AnswerResult) => void;
   icon?: string;
 }
@@ -15,6 +16,11 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
 }) => {
   const { t } = useTranslation();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+  // Reset selected option when the card changes
+  useEffect(() => {
+    setSelectedOption(null);
+  }, [card.id]); // Reset when the card id changes
 
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
@@ -63,10 +69,10 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
         <div className="grid gap-3">
           {card.options.map((option, index) => (
             <button
-              key={index}
+              key={`${card.id}-option-${index}`}
               onClick={() => handleOptionSelect(option)}
               disabled={selectedOption !== null}
-              className={`px-4 py-3 text-left rounded-md transition-colors text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 ${
+              className={`px-4 py-3 text-left rtl:text-right rounded-md transition-colors text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 ${
                 selectedOption === option
                   ? option === card.answer
                     ? "bg-green-50 dark:bg-green-900 border-green-500"

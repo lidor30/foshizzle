@@ -143,7 +143,7 @@ export const generateFlagsFlashcards = async (): Promise<FlashcardItem[]> => {
     // Get the question text in the appropriate language
     const questionText =
       currentLanguage === "he"
-        ? "לאיזו מדינה שייך דגל זה?"
+        ? "לאיזו מדינה שייך הדגל הזה?"
         : "Which country does this flag belong to?";
 
     return {
