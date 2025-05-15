@@ -11,14 +11,14 @@ const HomePage: React.FC = () => {
     selectedTopicIds: string[],
     difficulty: DifficultyLevel
   ) => {
+    // Store selected difficulty in sessionStorage
+    sessionStorage.setItem("selectedDifficulty", difficulty);
+
     // Store selected topics in sessionStorage
     sessionStorage.setItem(
       "selectedTopicIds",
       JSON.stringify(selectedTopicIds)
     );
-
-    // Store selected difficulty in sessionStorage
-    sessionStorage.setItem("selectedDifficulty", difficulty);
 
     // Navigate to session page
     navigate("/session");

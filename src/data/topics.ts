@@ -5,8 +5,10 @@ import uefaData from "./uefa.json";
 
 import championsIcon from "../assets/champions.png";
 import europaIcon from "../assets/europa.png";
+import globeIcon from "../assets/globe.png";
 import nbaIcon from "../assets/nba.png";
 import worldCupIcon from "../assets/world-cup.png";
+import { generateFlagsFlashcards } from "./flags";
 
 export type DifficultyLevel = "easy" | "medium" | "hard";
 export type QuestionType = "basic" | "multiple_choice";
@@ -16,6 +18,7 @@ interface BaseFlashcardItem {
   question: string;
   answer: string;
   difficulty: DifficultyLevel;
+  metadata?: Record<string, string | number | boolean>;
 }
 
 export interface BasicFlashcardItem extends BaseFlashcardItem {
@@ -75,10 +78,19 @@ export interface TopicConfig<T extends SportData> {
   name: string;
   icon?: string;
   data: T[];
-  generateFlashcards: (data: T[]) => FlashcardItem[];
+  generateFlashcards: (data: T[]) => FlashcardItem[] | Promise<FlashcardItem[]>;
 }
 
 export const topics: TopicConfig<SportData>[] = [
+  {
+    id: "flags",
+    name: "World Flags",
+    icon: globeIcon,
+    data: [], // Data is loaded dynamically
+    generateFlashcards: async () => {
+      return await generateFlagsFlashcards();
+    },
+  },
   {
     id: "uefa",
     name: "UEFA Champions League",

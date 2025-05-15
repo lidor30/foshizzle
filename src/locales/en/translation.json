@@ -13,6 +13,15 @@
       "hard": "Hard"
     }
   },
+  "flagGame": {
+    "question": "Question",
+    "score": "Score",
+    "correct": "Correct!",
+    "incorrect": "Incorrect! The correct answer is",
+    "complete": "Quiz Complete!",
+    "noData": "No flag data available",
+    "flagQuestion": "Which country does this flag belong to?"
+  },
   "session": {
     "complete": {
       "title": "Session Complete!",

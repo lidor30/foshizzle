@@ -6,9 +6,9 @@ import MultipleChoiceQuestion from "../components/MultipleChoiceQuestion";
 import SessionComplete from "../components/SessionComplete";
 import SessionProgress from "../components/SessionProgress";
 import type {
-  BasicFlashcardItem,
   DifficultyLevel,
-  MultipleChoiceFlashcardItem,
+  FlashcardItem,
+  MultipleChoiceQuestionItem,
 } from "../data/topics";
 import { useSession } from "../hooks/useSession";
 
@@ -41,6 +41,7 @@ const SessionPage: React.FC = () => {
     currentCard,
     isFlipped,
     isSessionComplete,
+    isLoading,
     flipCard,
     handleAnswer,
     generateSession,
@@ -73,6 +74,13 @@ const SessionPage: React.FC = () => {
             onStartNewSession={generateSession}
             onReturnHome={handleReturnHome}
           />
+        ) : isLoading ? (
+          <div className="flex flex-col items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600 mb-4"></div>
+            <p className="text-gray-600 dark:text-gray-300">
+              Loading questions...
+            </p>
+          </div>
         ) : (
           <div className="mx-auto">
             {currentCard && (
@@ -95,13 +103,13 @@ const SessionPage: React.FC = () => {
                   {"type" in currentCard &&
                   currentCard.type === "multiple_choice" ? (
                     <MultipleChoiceQuestion
-                      card={currentCard as MultipleChoiceFlashcardItem}
+                      card={currentCard as MultipleChoiceQuestionItem}
                       onAnswer={handleAnswer}
                       icon={currentCard.topicIcon}
                     />
                   ) : (
                     <Flashcard
-                      card={currentCard as BasicFlashcardItem}
+                      card={currentCard as FlashcardItem}
                       isFlipped={isFlipped}
                       onFlip={flipCard}
                       onAnswer={handleAnswer}

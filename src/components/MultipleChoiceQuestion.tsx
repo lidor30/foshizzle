@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { MultipleChoiceFlashcardItem } from "../data/topics";
+import type { MultipleChoiceQuestionItem } from "../data/topics";
 import type { AnswerResult } from "../types";
 interface MultipleChoiceQuestionProps {
-  card: MultipleChoiceFlashcardItem;
+  card: MultipleChoiceQuestionItem;
   onAnswer: (result: AnswerResult) => void;
   icon?: string;
 }
@@ -23,14 +23,29 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
     onAnswer(result);
   };
 
+  // Check if this is a flag question (has countryCode in metadata)
+  const isFlag = card.metadata?.countryCode !== undefined;
+  const flagUrl = card.metadata?.flagUrl as string | undefined;
+
   return (
     <div className="w-full">
-      {icon && (
+      {icon && !isFlag && (
         <div className="flex justify-center mb-4">
           <img
             src={icon}
             alt="Topic icon"
             className="w-16 h-16 object-contain dark-invert-workaround"
+          />
+        </div>
+      )}
+
+      {/* Display flag if this is a flag question */}
+      {isFlag && flagUrl && (
+        <div className="flex justify-center mb-6">
+          <img
+            src={flagUrl}
+            alt="Flag"
+            className="w-64 h-auto border border-gray-300 shadow-md"
           />
         </div>
       )}

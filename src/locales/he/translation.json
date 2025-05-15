@@ -13,6 +13,15 @@
       "hard": "קשה"
     }
   },
+  "flagGame": {
+    "question": "שאלה",
+    "score": "ניקוד",
+    "correct": "נכון!",
+    "incorrect": "לא נכון! התשובה הנכונה היא",
+    "complete": "החידון הושלם!",
+    "noData": "אין נתונים זמינים",
+    "flagQuestion": "לאיזו מדינה שייך דגל זה?"
+  },
   "session": {
     "complete": {
       "title": "האימון הושלם!",

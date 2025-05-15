@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import { useStats } from "../context/StatsContext";
-import type {
-  BasicFlashcardItem,
-  DifficultyLevel,
-  MultipleChoiceFlashcardItem,
-} from "../data/topics";
+import type { DifficultyLevel, FlashcardItem } from "../data/topics";
 import { topics } from "../data/topics";
 import type { AnswerResult } from "../types";
 
@@ -12,10 +8,7 @@ import type { AnswerResult } from "../types";
 const DEFAULT_SESSION_SIZE = 20;
 
 // Extended flashcard that includes the icon
-export type SessionFlashcard = (
-  | BasicFlashcardItem
-  | MultipleChoiceFlashcardItem
-) & {
+export type SessionFlashcard = FlashcardItem & {
   topicIcon?: string;
 };
 
@@ -27,7 +20,8 @@ export const useSession = (
   const [sessionCards, setSessionCards] = useState<SessionFlashcard[]>([]);
   const [isFlipped, setIsFlipped] = useState(false);
   const [isLastCardAnswered, setIsLastCardAnswered] = useState(false);
-  const { calculateWeight, updateCardStat } = useStats();
+  const [isLoading, setIsLoading] = useState(false);
+  const { updateCardStat } = useStats();
 
   // Generate a new session whenever selected topics or difficulty change
   useEffect(() => {
@@ -37,19 +31,24 @@ export const useSession = (
   }, [selectedTopicIds, difficulty]);
 
   // Generate all possible flashcards from the selected topics
-  const generateAllFlashcards = (): SessionFlashcard[] => {
+  const generateAllFlashcards = async (): Promise<SessionFlashcard[]> => {
     // Filter topics based on selected topic IDs
     const selectedTopics = topics.filter((topic) =>
       selectedTopicIds.includes(topic.id)
     );
 
     // Generate flashcards for each selected topic and flatten into a single array
-    return selectedTopics.flatMap((topic) =>
-      topic.generateFlashcards(topic.data).map((card) => ({
-        ...card,
-        topicIcon: topic.icon,
-      }))
+    const topicsWithCards = await Promise.all(
+      selectedTopics.map(async (topic) => {
+        const cards = await topic.generateFlashcards(topic.data);
+        return cards.map((card) => ({
+          ...card,
+          topicIcon: topic.icon,
+        }));
+      })
     );
+
+    return topicsWithCards.flat();
   };
 
   // Create a weighted sample of cards for the session
@@ -67,67 +66,39 @@ export const useSession = (
 
     const cardsToSample = filteredCards.length > 0 ? filteredCards : allCards;
 
-    // Create a map of cards with their weights for sampling
-    const cardsWithWeights = cardsToSample.map((card) => ({
-      card,
-      weight: calculateWeight(card.id),
-    }));
+    // Shuffle the cards to ensure randomness
+    const shuffled = [...cardsToSample].sort(() => Math.random() - 0.5);
 
-    const totalWeight = cardsWithWeights.reduce(
-      (sum, item) => sum + item.weight,
-      0
-    );
+    // Take the minimum between requested size and available cards
+    const sampleSize = Math.min(size, shuffled.length);
 
-    const sampledQuestions = new Set<string>();
-    const sampledCards: SessionFlashcard[] = [];
-
-    // Adjust session size if not enough unique questions are available
-    const availableUniqueCards = new Set(
-      cardsToSample.map((card) => card.question)
-    ).size;
-    const adjustedSize = Math.min(size, availableUniqueCards);
-
-    // Try to sample until we have enough unique cards or run out of attempts
-    let attempts = 0;
-    const maxAttempts = cardsToSample.length * 3; // Prevent infinite loops
-
-    while (sampledCards.length < adjustedSize && attempts < maxAttempts) {
-      attempts++;
-      const randomValue = Math.random() * totalWeight;
-      let cumulativeWeight = 0;
-
-      for (const { card, weight } of cardsWithWeights) {
-        cumulativeWeight += weight;
-
-        if (
-          randomValue <= cumulativeWeight &&
-          !sampledQuestions.has(card.question)
-        ) {
-          sampledCards.push(card);
-          sampledQuestions.add(card.question);
-          break;
-        }
-      }
-    }
-
-    return sampledCards;
+    // Return the first sampleSize cards from the shuffled array
+    return shuffled.slice(0, sampleSize);
   };
 
-  const generateSession = () => {
-    const allCards = generateAllFlashcards();
+  const generateSession = async () => {
+    setIsLoading(true);
+    try {
+      const allCards = await generateAllFlashcards();
 
-    if (allCards.length === 0) {
+      if (allCards.length === 0) {
+        setSessionCards([]);
+        return;
+      }
+
+      const sessionSize = Math.min(DEFAULT_SESSION_SIZE, allCards.length);
+      const newSessionCards = sampleCards(allCards, sessionSize);
+
+      setSessionCards(newSessionCards);
+      setCurrentCardIndex(0);
+      setIsFlipped(false);
+      setIsLastCardAnswered(false);
+    } catch (error) {
+      console.error("Error generating session:", error);
       setSessionCards([]);
-      return;
+    } finally {
+      setIsLoading(false);
     }
-
-    const sessionSize = Math.min(DEFAULT_SESSION_SIZE, allCards.length);
-    const newSessionCards = sampleCards(allCards, sessionSize);
-
-    setSessionCards(newSessionCards);
-    setCurrentCardIndex(0);
-    setIsFlipped(false);
-    setIsLastCardAnswered(false);
   };
 
   // Move to the next card
@@ -164,6 +135,7 @@ export const useSession = (
     sessionCards,
     isFlipped,
     isSessionComplete,
+    isLoading,
     flipCard,
     handleAnswer,
     generateSession,
