@@ -69,7 +69,7 @@ const SessionPage: React.FC = () => {
             onReturnHome={handleReturnHome}
           />
         ) : (
-          <div className="max-w-md mx-auto">
+          <div className="mx-auto">
             {currentCard && (
               <>
                 <div className="flex items-center justify-between gap-4 mb-4">

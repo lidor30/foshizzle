@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import type { FlashcardItem } from "../data/topics";
 import type { AnswerResult } from "../types";
+import SpeakButton from "./SpeakButton";
+import VoiceSelector from "./VoiceSelector";
 
 interface FlashcardProps {
   card: FlashcardItem;
@@ -47,13 +49,13 @@ const Flashcard: React.FC<FlashcardProps> = ({
       onClick={!isFlipped ? onFlip : undefined}
     >
       <div
-        className={`relative w-full h-full transition-transform duration-500 ${
+        className={`relative w-full h-full transition-transform duration-500 px-4 pt-2 ${
           isFlipped ? "card flipped" : "card"
         }`}
       >
         <div className="card-inner">
           {/* Front Side (Question) */}
-          <div className="card-front bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 flex flex-col items-center justify-center">
+          <div className="card-front bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5 flex flex-col items-center justify-center relative">
             {icon && (
               <img
                 src={icon}
@@ -61,29 +63,40 @@ const Flashcard: React.FC<FlashcardProps> = ({
                 className="w-16 h-16 object-contain mb-6 dark:invert"
               />
             )}
-            <div className="text-center">
-              <p className="text-xl font-semibold text-gray-700 dark:text-gray-300">
+            <div className="text-center relative">
+              <p className="text-xl font-semibold text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                 {card.question}
               </p>
             </div>
             <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
               Tap to reveal answer
             </div>
+
+            <div className="absolute right-2 top-2 flex">
+              <VoiceSelector />
+              <SpeakButton text={card.question} />
+            </div>
           </div>
 
           {/* Back Side (Answer) */}
-          <div className="card-back bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 flex flex-col items-center justify-center">
+          <div className="card-back bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 flex flex-col items-center justify-center relative">
             {delayedAnswer && (
               <>
-                <img
-                  src={delayedAnswer.icon}
-                  alt="Topic icon"
-                  className="w-16 h-16 object-contain mb-6 dark:invert"
-                />
-                <div className="text-center mb-6">
-                  <p className="text-xl font-semibold text-gray-700 dark:text-gray-300 font-semibold">
+                {delayedAnswer.icon && (
+                  <img
+                    src={delayedAnswer.icon}
+                    alt="Topic icon"
+                    className="w-16 h-16 object-contain mb-6 dark:invert"
+                  />
+                )}
+                <div className="text-center mb-6 relative">
+                  <p className="text-xl font-semibold text-gray-700 dark:text-gray-300 font-semibold whitespace-pre-wrap">
                     {delayedAnswer.answer}
                   </p>
+                </div>
+
+                <div className="absolute right-2 top-2 flex">
+                  <SpeakButton text={delayedAnswer.answer} />
                 </div>
               </>
             )}

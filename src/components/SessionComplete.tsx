@@ -10,7 +10,7 @@ const SessionComplete: React.FC<SessionCompleteProps> = ({
   onReturnHome,
 }) => {
   return (
-    <div className="max-w-md mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <div className="mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
       <div className="text-center mb-6">
         <svg
           xmlns="http://www.w3.org/2000/svg"
