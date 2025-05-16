@@ -59,11 +59,11 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
 
       {/* Display question image if available */}
       {card.question.image && (
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-6 w-full h-40 md:h-52 md:landscape:h-64 lg:h-64">
           <img
             src={card.question.image}
             alt="Question image"
-            className="w-64 h-auto border border-gray-300 shadow-md"
+            className="h-full w-auto max-h-full object-contain border border-gray-300 shadow-md"
           />
         </div>
       )}
@@ -74,13 +74,15 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
         </p>
       </div>
 
-      <div className="w-full max-w-lg mx-auto">
+      <div className="w-full max-w-lg md:landscape:max-w-3xl mx-auto">
         <div className="text-sm text-gray-500 dark:text-gray-400 mb-3">
           {t("session.flashcard.choose_option")}
         </div>
         <div
           className={`grid ${
-            isIdentifyFlagQuestion ? "grid-cols-2 gap-4" : "gap-3"
+            isIdentifyFlagQuestion
+              ? "grid-cols-2 md:landscape:grid-cols-2 gap-4 md:gap-6 md:landscape:gap-8"
+              : "gap-3"
           }`}
         >
           {card.options.map((option, index) => (
@@ -107,15 +109,21 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
               {/* Display option image - make it larger if it's primarily an image-based option */}
               {option.image && (
                 <div
-                  className={`flex justify-center ${option.text ? "mb-2" : ""}`}
+                  className={`flex justify-center ${
+                    option.text ? "mb-2" : ""
+                  } w-full ${
+                    isIdentifyFlagQuestion
+                      ? "h-32 md:h-40 md:landscape:h-40 lg:h-40"
+                      : ""
+                  }`}
                 >
                   <img
                     src={option.image}
                     alt="Option"
                     className={`${
                       isIdentifyFlagQuestion
-                        ? "w-full max-w-[120px] h-auto"
-                        : "w-24 h-auto"
+                        ? "w-full h-full object-contain"
+                        : "w-28 md:w-40 md:landscape:w-56 lg:w-48 h-auto"
                     }`}
                   />
                 </div>

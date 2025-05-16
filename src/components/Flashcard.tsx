@@ -67,11 +67,13 @@ const Flashcard: React.FC<FlashcardProps> = ({
             )}
 
             {card.question.image && (
-              <img
-                src={card.question.image}
-                alt="Question image"
-                className="w-64 h-auto mb-6 border border-gray-300 shadow-md"
-              />
+              <div className="flex justify-center mb-6 w-full h-40 md:h-52 md:landscape:h-64 lg:h-64">
+                <img
+                  src={card.question.image}
+                  alt="Question image"
+                  className="h-full w-auto max-h-full object-contain border border-gray-300 shadow-md"
+                />
+              </div>
             )}
 
             <div className="text-center relative">
@@ -102,11 +104,13 @@ const Flashcard: React.FC<FlashcardProps> = ({
                 )}
 
                 {delayedAnswer.answer.image && (
-                  <img
-                    src={delayedAnswer.answer.image}
-                    alt="Answer image"
-                    className="w-64 h-auto mb-6 border border-gray-300 shadow-md"
-                  />
+                  <div className="flex justify-center mb-6 w-full h-40 md:h-52 md:landscape:h-64 lg:h-64">
+                    <img
+                      src={delayedAnswer.answer.image}
+                      alt="Answer image"
+                      className="h-full w-auto max-h-full object-contain border border-gray-300 shadow-md"
+                    />
+                  </div>
                 )}
 
                 <div className="text-center mb-6 relative">
