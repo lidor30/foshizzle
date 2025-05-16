@@ -121,6 +121,25 @@ export const generateFlagsFlashcards = async (): Promise<FlashcardItem[]> => {
     ...hardCountries,
   ];
 
+  // Generate both types of flag questions
+  const identifyCountryQuestions = generateIdentifyCountryQuestions(
+    selectedCountries,
+    currentLanguage
+  );
+  const identifyFlagQuestions = generateIdentifyFlagQuestions(
+    selectedCountries,
+    currentLanguage
+  );
+
+  // Combine both types of questions
+  return [...identifyCountryQuestions, ...identifyFlagQuestions];
+};
+
+// Generate questions where users need to identify the country from a flag
+const generateIdentifyCountryQuestions = (
+  selectedCountries: Country[],
+  currentLanguage: string
+): FlashcardItem[] => {
   return selectedCountries.map((country) => {
     // Get 3 random countries for wrong options
     const randomCountries = getRandomCountries(3, [country.cca2]);
@@ -149,7 +168,7 @@ export const generateFlagsFlashcards = async (): Promise<FlashcardItem[]> => {
     const flagUrl = getFlagUrl(country.cca2);
 
     return {
-      id: `flag-${country.cca2}`,
+      id: `flag-country-${country.cca2}`,
       question: {
         text: questionText,
         image: flagUrl,
@@ -162,6 +181,60 @@ export const generateFlagsFlashcards = async (): Promise<FlashcardItem[]> => {
       options: translatedOptions,
       metadata: {
         countryCode: country.cca2,
+      },
+    } as MultipleChoiceQuestionItem;
+  });
+};
+
+// Generate questions where users need to identify the flag from a country name
+const generateIdentifyFlagQuestions = (
+  selectedCountries: Country[],
+  currentLanguage: string
+): FlashcardItem[] => {
+  return selectedCountries.map((country) => {
+    // Get 3 random countries for wrong options
+    const randomCountries = getRandomCountries(3, [country.cca2]);
+
+    // Get translated country name based on the current UI language
+    const translatedCountryName = getCountryName(
+      country.cca2,
+      country.name.common,
+      currentLanguage
+    );
+
+    // Create options with flag images
+    const flagOptions = [
+      {
+        text: "",
+        image: getFlagUrl(country.cca2),
+      },
+      ...randomCountries.map((c) => ({
+        text: "",
+        image: getFlagUrl(c.cca2),
+      })),
+    ].sort(() => Math.random() - 0.5); // Shuffle
+
+    // Get the question text in the appropriate language
+    const questionText =
+      currentLanguage === "he"
+        ? `איזה דגל שייך ל${translatedCountryName}?`
+        : `Which flag belongs to ${translatedCountryName}?`;
+
+    return {
+      id: `flag-identify-${country.cca2}`,
+      question: {
+        text: questionText,
+      },
+      answer: {
+        text: "",
+        image: getFlagUrl(country.cca2),
+      },
+      difficulty: getDifficultyForCountry(country),
+      type: "multiple_choice",
+      options: flagOptions,
+      metadata: {
+        countryCode: country.cca2,
+        identifyFlag: true,
       },
     } as MultipleChoiceQuestionItem;
   });
