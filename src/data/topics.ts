@@ -13,10 +13,15 @@ import { generateFlagsFlashcards } from "./flags";
 export type DifficultyLevel = "easy" | "medium" | "hard";
 export type QuestionType = "basic" | "multiple_choice";
 
+export interface ContentItem {
+  text?: string;
+  image?: string;
+}
+
 interface BaseFlashcardItem {
   id: string;
-  question: string;
-  answer: string;
+  question: ContentItem;
+  answer: ContentItem;
   difficulty: DifficultyLevel;
   metadata?: Record<string, string | number | boolean>;
 }
@@ -27,7 +32,7 @@ export interface BasicFlashcardItem extends BaseFlashcardItem {
 
 export interface MultipleChoiceQuestionItem extends BaseFlashcardItem {
   type: "multiple_choice";
-  options: string[];
+  options: ContentItem[];
 }
 
 export type FlashcardItem = BasicFlashcardItem | MultipleChoiceQuestionItem;
@@ -102,37 +107,59 @@ export const topics: TopicConfig<SportData>[] = [
         return [
           {
             id: `uefa-winner-${championsItem.season}`,
-            question: `Who won the UEFA Champions League in ${championsItem.season}?`,
-            answer: championsItem.winner,
+            question: {
+              text: `Who won the UEFA Champions League in ${championsItem.season}?`,
+            },
+            answer: {
+              text: championsItem.winner,
+            },
             difficulty: "easy",
             type: "multiple_choice",
             options: [
-              championsItem.winner,
-              championsItem.runnerUp,
+              {
+                text: championsItem.winner,
+              },
+              {
+                text: championsItem.runnerUp,
+              },
               ...getRandomTeams(2, [
                 championsItem.winner,
                 championsItem.runnerUp,
-              ]),
+              ]).map((team) => ({
+                text: team,
+              })),
             ].sort(() => Math.random() - 0.5),
           } as MultipleChoiceQuestionItem,
           {
             id: `uefa-final-${championsItem.season}`,
-            question: `Which teams played in the ${championsItem.season} UEFA Champions League final and what was the score?`,
-            answer: `${championsItem.winner} vs ${championsItem.runnerUp}\n(${championsItem.score})`,
+            question: {
+              text: `Which teams played in the ${championsItem.season} UEFA Champions League final and what was the score?`,
+            },
+            answer: {
+              text: `${championsItem.winner} vs ${championsItem.runnerUp}\n(${championsItem.score})`,
+            },
             difficulty: "medium",
             type: "basic",
           } as BasicFlashcardItem,
           {
             id: `uefa-location-stadium-${championsItem.season}`,
-            question: `Where was the UEFA Champions League final in ${championsItem.season} held (city and stadium)?`,
-            answer: `${championsItem.location}\n(${championsItem.stadium})`,
+            question: {
+              text: `Where was the UEFA Champions League final in ${championsItem.season} held (city and stadium)?`,
+            },
+            answer: {
+              text: `${championsItem.location}\n(${championsItem.stadium})`,
+            },
             difficulty: "hard",
             type: "multiple_choice",
             options: [
-              `${championsItem.location}\n(${championsItem.stadium})`,
+              {
+                text: `${championsItem.location}\n(${championsItem.stadium})`,
+              },
               ...getRandomStadiums(3, [
                 `${championsItem.location}\n(${championsItem.stadium})`,
-              ]),
+              ]).map((stadium) => ({
+                text: stadium,
+              })),
             ].sort(() => Math.random() - 0.5),
           } as MultipleChoiceQuestionItem,
         ];
@@ -149,22 +176,34 @@ export const topics: TopicConfig<SportData>[] = [
         return [
           {
             id: `europa-winner-${europaItem.season}`,
-            question: `Who won the UEFA Europa League in ${europaItem.season}?`,
-            answer: europaItem.winner,
+            question: {
+              text: `Who won the UEFA Europa League in ${europaItem.season}?`,
+            },
+            answer: {
+              text: europaItem.winner,
+            },
             difficulty: "easy",
             type: "basic",
           } as BasicFlashcardItem,
           {
             id: `europa-final-${europaItem.season}`,
-            question: `Which teams played in the ${europaItem.season} UEFA Europa League final and what was the score?`,
-            answer: `${europaItem.winner} vs ${europaItem.runnerUp}\n(${europaItem.score})`,
+            question: {
+              text: `Which teams played in the ${europaItem.season} UEFA Europa League final and what was the score?`,
+            },
+            answer: {
+              text: `${europaItem.winner} vs ${europaItem.runnerUp}\n(${europaItem.score})`,
+            },
             difficulty: "medium",
             type: "basic",
           } as BasicFlashcardItem,
           {
             id: `europa-location-stadium-${europaItem.season}`,
-            question: `Where was the UEFA Europa League final in ${europaItem.season} held (city and stadium)?`,
-            answer: `${europaItem.location}\n(${europaItem.stadium})`,
+            question: {
+              text: `Where was the UEFA Europa League final in ${europaItem.season} held (city and stadium)?`,
+            },
+            answer: {
+              text: `${europaItem.location}\n(${europaItem.stadium})`,
+            },
             difficulty: "hard",
             type: "basic",
           } as BasicFlashcardItem,
@@ -182,32 +221,56 @@ export const topics: TopicConfig<SportData>[] = [
         return [
           {
             id: `fifa-winner-${fifaItem.year}`,
-            question: `Who won the FIFA World Cup in ${fifaItem.year}?`,
-            answer: fifaItem.winner,
+            question: {
+              text: `Who won the FIFA World Cup in ${fifaItem.year}?`,
+            },
+            answer: {
+              text: fifaItem.winner,
+            },
             difficulty: "easy",
             type: "multiple_choice",
             options: [
-              fifaItem.winner,
-              fifaItem.runnerUp,
-              ...getRandomTeams(2, [fifaItem.winner, fifaItem.runnerUp]),
+              {
+                text: fifaItem.winner,
+              },
+              {
+                text: fifaItem.runnerUp,
+              },
+              ...getRandomTeams(2, [fifaItem.winner, fifaItem.runnerUp]).map(
+                (team) => ({
+                  text: team,
+                })
+              ),
             ].sort(() => Math.random() - 0.5),
           } as MultipleChoiceQuestionItem,
           {
             id: `fifa-final-${fifaItem.year}`,
-            question: `Which teams played in the ${fifaItem.year} FIFA World Cup final and what was the score?`,
-            answer: `${fifaItem.winner} vs ${fifaItem.runnerUp}\n(${fifaItem.score})`,
+            question: {
+              text: `Which teams played in the ${fifaItem.year} FIFA World Cup final and what was the score?`,
+            },
+            answer: {
+              text: `${fifaItem.winner} vs ${fifaItem.runnerUp}\n(${fifaItem.score})`,
+            },
             difficulty: "medium",
             type: "basic",
           } as BasicFlashcardItem,
           {
             id: `fifa-host-${fifaItem.year}`,
-            question: `Which country hosted the FIFA World Cup in ${fifaItem.year}?`,
-            answer: fifaItem.host,
+            question: {
+              text: `Which country hosted the FIFA World Cup in ${fifaItem.year}?`,
+            },
+            answer: {
+              text: fifaItem.host,
+            },
             difficulty: "medium",
             type: "multiple_choice",
             options: [
-              fifaItem.host,
-              ...getRandomCountries(3, [fifaItem.host]),
+              {
+                text: fifaItem.host,
+              },
+              ...getRandomCountries(3, [fifaItem.host]).map((country) => ({
+                text: country,
+              })),
             ].sort(() => Math.random() - 0.5),
           } as MultipleChoiceQuestionItem,
         ];
@@ -224,8 +287,12 @@ export const topics: TopicConfig<SportData>[] = [
         const nbaItem = item as NBAData;
         return {
           id: `nba-${nbaItem.year}`,
-          question: `Which team won the NBA Championship in ${nbaItem.year}?`,
-          answer: nbaItem.winner,
+          question: {
+            text: `Which team won the NBA Championship in ${nbaItem.year}?`,
+          },
+          answer: {
+            text: nbaItem.winner,
+          },
           difficulty: "easy",
           type: "basic",
         } as BasicFlashcardItem;

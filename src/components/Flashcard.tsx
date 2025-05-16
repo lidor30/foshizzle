@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../contexts/LanguageContext";
-import type { FlashcardItem } from "../data/topics";
+import type { ContentItem, FlashcardItem } from "../data/topics";
 import type { AnswerResult } from "../types";
 import SpeakButton from "./SpeakButton";
 import VoiceSelector from "./VoiceSelector";
@@ -15,7 +15,7 @@ interface FlashcardProps {
 }
 
 interface DelayedAnswer {
-  answer: string;
+  answer: ContentItem;
   icon?: string;
 }
 
@@ -58,16 +58,25 @@ const Flashcard: React.FC<FlashcardProps> = ({
         <div className="card-inner">
           {/* Front Side (Question) */}
           <div className="card-front bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5 flex flex-col items-center justify-center relative">
-            {icon && (
+            {icon && !card.question.image && (
               <img
                 src={icon}
                 alt="Topic icon"
                 className="w-16 h-16 object-contain mb-6 dark-invert-workaround"
               />
             )}
+
+            {card.question.image && (
+              <img
+                src={card.question.image}
+                alt="Question image"
+                className="w-64 h-auto mb-6 border border-gray-300 shadow-md"
+              />
+            )}
+
             <div className="text-center relative">
               <p className="text-xl font-semibold text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
-                {card.question}
+                {card.question.text}
               </p>
             </div>
             <div className="mt-6 text-sm text-gray-500 dark:text-gray-400">
@@ -76,7 +85,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
 
             <div className="absolute right-2 top-2 flex">
               <VoiceSelector />
-              <SpeakButton text={card.question} />
+              <SpeakButton text={card.question.text || ""} />
             </div>
           </div>
 
@@ -84,21 +93,30 @@ const Flashcard: React.FC<FlashcardProps> = ({
           <div className="card-back bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 flex flex-col items-center justify-center relative">
             {delayedAnswer && (
               <>
-                {delayedAnswer.icon && (
+                {delayedAnswer.icon && !delayedAnswer.answer.image && (
                   <img
                     src={delayedAnswer.icon}
                     alt="Topic icon"
                     className="w-16 h-16 object-contain mb-6 dark-invert-workaround"
                   />
                 )}
+
+                {delayedAnswer.answer.image && (
+                  <img
+                    src={delayedAnswer.answer.image}
+                    alt="Answer image"
+                    className="w-64 h-auto mb-6 border border-gray-300 shadow-md"
+                  />
+                )}
+
                 <div className="text-center mb-6 relative">
                   <p className="text-xl font-semibold text-gray-700 dark:text-gray-300 font-semibold whitespace-pre-wrap">
-                    {delayedAnswer.answer}
+                    {delayedAnswer.answer.text}
                   </p>
                 </div>
 
                 <div className="absolute right-2 top-2 flex">
-                  <SpeakButton text={delayedAnswer.answer} />
+                  <SpeakButton text={delayedAnswer.answer.text || ""} />
                 </div>
               </>
             )}

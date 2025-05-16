@@ -134,10 +134,10 @@ export const generateFlagsFlashcards = async (): Promise<FlashcardItem[]> => {
 
     // Translate the options as well
     const translatedOptions = [
-      translatedCountryName, // Correct answer (translated)
-      ...randomCountries.map((c) =>
-        getCountryName(c.cca2, c.name.common, currentLanguage)
-      ),
+      { text: translatedCountryName }, // Correct answer (translated)
+      ...randomCountries.map((c) => ({
+        text: getCountryName(c.cca2, c.name.common, currentLanguage),
+      })),
     ].sort(() => Math.random() - 0.5); // Shuffle
 
     // Get the question text in the appropriate language
@@ -146,16 +146,22 @@ export const generateFlagsFlashcards = async (): Promise<FlashcardItem[]> => {
         ? "לאיזו מדינה שייך הדגל הזה?"
         : "Which country does this flag belong to?";
 
+    const flagUrl = getFlagUrl(country.cca2);
+
     return {
       id: `flag-${country.cca2}`,
-      question: questionText,
-      answer: translatedCountryName, // Translated country name as the answer
+      question: {
+        text: questionText,
+        image: flagUrl,
+      },
+      answer: {
+        text: translatedCountryName,
+      },
       difficulty: getDifficultyForCountry(country),
       type: "multiple_choice",
       options: translatedOptions,
       metadata: {
         countryCode: country.cca2,
-        flagUrl: getFlagUrl(country.cca2),
       },
     } as MultipleChoiceQuestionItem;
   });
