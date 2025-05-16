@@ -49,6 +49,11 @@
       "incorrect": "טעיתי",
       "choose_option": "בחר את התשובה הנכונה"
     },
+    "feedback": {
+      "correct": "נכון!",
+      "incorrect": "לא נכון!",
+      "correct_answer": "התשובה הנכונה היא: {{answer}}"
+    },
     "question_types": {
       "multiple_choice": "שאלות אמריקאיות",
       "basic": "כרטיסיות"

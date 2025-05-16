@@ -49,6 +49,11 @@
       "incorrect": "I Got It Wrong",
       "choose_option": "Choose the correct answer"
     },
+    "feedback": {
+      "correct": "Correct!",
+      "incorrect": "Incorrect!",
+      "correct_answer": "The correct answer is: {{answer}}"
+    },
     "question_types": {
       "multiple_choice": "Multiple Choice",
       "basic": "Flashcards"
