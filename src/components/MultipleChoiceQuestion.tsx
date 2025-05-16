@@ -22,27 +22,37 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
     setSelectedOption(null);
   }, [card.id]); // Reset when the card id changes
 
-  // Check if this is a flag identification question
-  const isIdentifyFlagQuestion = card.metadata?.identifyFlag === true;
-
   const handleOptionSelect = (index: number) => {
     setSelectedOption(index);
 
     let result: AnswerResult;
-    if (isIdentifyFlagQuestion) {
-      // For flag identification, we compare the images
+
+    // If both option and answer have images, compare images
+    if (card.options[index].image && card.answer.image) {
       result =
         card.options[index].image === card.answer.image
           ? "correct"
           : "incorrect";
-    } else {
-      // For regular questions, we compare the text
+    }
+    // If both have text, compare text
+    else if (card.options[index].text && card.answer.text) {
       result =
         card.options[index].text === card.answer.text ? "correct" : "incorrect";
+    }
+    // Fallback - compare both properties
+    else {
+      result =
+        card.options[index].text === card.answer.text ||
+        card.options[index].image === card.answer.image
+          ? "correct"
+          : "incorrect";
     }
 
     onAnswer(result);
   };
+
+  // Check if there are images in the options
+  const hasImagesInOptions = card.options.some((option) => option.image);
 
   return (
     <div className="w-full">
@@ -80,7 +90,7 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
         </div>
         <div
           className={`grid ${
-            isIdentifyFlagQuestion
+            hasImagesInOptions
               ? "grid-cols-2 md:landscape:grid-cols-2 gap-4 md:gap-6 md:landscape:gap-8"
               : "gap-3"
           }`}
@@ -91,16 +101,17 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
               onClick={() => handleOptionSelect(index)}
               disabled={selectedOption !== null}
               className={`px-4 py-3 ${
-                isIdentifyFlagQuestion
+                option.image
                   ? "flex flex-col items-center justify-center"
                   : "text-left rtl:text-right"
               } rounded-md transition-colors text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 ${
                 selectedOption === index
-                  ? (
-                      isIdentifyFlagQuestion
-                        ? option.image === card.answer.image
-                        : option.text === card.answer.text
-                    )
+                  ? (option.image &&
+                      card.answer.image &&
+                      option.image === card.answer.image) ||
+                    (option.text &&
+                      card.answer.text &&
+                      option.text === card.answer.text)
                     ? "bg-green-50 dark:bg-green-900 border-green-500"
                     : "bg-red-50 dark:bg-red-900 border-red-500"
                   : ""
@@ -112,19 +123,13 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
                   className={`flex justify-center ${
                     option.text ? "mb-2" : ""
                   } w-full ${
-                    isIdentifyFlagQuestion
-                      ? "h-32 md:h-40 md:landscape:h-40 lg:h-40"
-                      : ""
+                    option.image ? "h-32 md:h-40 md:landscape:h-40 lg:h-40" : ""
                   }`}
                 >
                   <img
                     src={option.image}
                     alt="Option"
-                    className={`${
-                      isIdentifyFlagQuestion
-                        ? "w-full h-full object-contain"
-                        : "w-28 md:w-40 md:landscape:w-56 lg:w-48 h-auto"
-                    }`}
+                    className="w-full h-full object-contain"
                   />
                 </div>
               )}
