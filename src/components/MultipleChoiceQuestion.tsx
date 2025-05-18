@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useTTS } from "../contexts/TTSContext";
 import type { MultipleChoiceQuestionItem } from "../data/topics";
 import type { AnswerResult } from "../types";
+import SpeakButton from "./SpeakButton";
 
 interface MultipleChoiceQuestionProps {
   card: MultipleChoiceQuestionItem;
@@ -15,6 +17,7 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   icon,
 }) => {
   const { t } = useTranslation();
+  const { speakText } = useTTS();
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [answerResult, setAnswerResult] = useState<AnswerResult | null>(null);
@@ -24,7 +27,11 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
     setSelectedOption(null);
     setShowFeedback(false);
     setAnswerResult(null);
-  }, [card.id]); // Reset when the card id changes
+
+    if (card.autoReadQuestion && card.question.text) {
+      speakText(card.question.text);
+    }
+  }, [card.id, card.autoReadQuestion, card.question.text, speakText]); // Dependencies updated
 
   const handleOptionSelect = (index: number) => {
     setSelectedOption(index);
@@ -109,10 +116,14 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
         </div>
       )}
 
-      <div className="text-center mb-4">
+      <div className="text-center mb-4 relative">
         <p className="text-xl font-semibold text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
           {card.question.text}
         </p>
+
+        <div className="absolute right-2 top-2 flex">
+          <SpeakButton text={card.question.text || ""} />
+        </div>
       </div>
 
       {/* Feedback message */}

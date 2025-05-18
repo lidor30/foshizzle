@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../contexts/LanguageContext";
+import { useTTS } from "../contexts/TTSContext";
 import type { ContentItem, FlashcardItem } from "../data/topics";
 import type { AnswerResult } from "../types";
 import SpeakButton from "./SpeakButton";
@@ -28,6 +29,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
 }) => {
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
+  const { speakText } = useTTS();
   const [delayedAnswer, setDelayedAnswer] = useState<DelayedAnswer | null>(
     null
   );
@@ -40,8 +42,12 @@ const Flashcard: React.FC<FlashcardProps> = ({
           icon,
         });
       }, 500);
+
+      if (card.autoReadQuestion && card.question.text) {
+        speakText(card.question.text);
+      }
     }
-  }, [card, icon]);
+  }, [card, icon, card.autoReadQuestion, card.question.text, speakText]);
 
   const rtlClass = isRTL ? "rtl" : "";
 

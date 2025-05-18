@@ -24,6 +24,7 @@ interface BaseFlashcardItem {
   answer: ContentItem;
   difficulty: DifficultyLevel;
   metadata?: Record<string, string | number | boolean>;
+  autoReadQuestion?: boolean;
 }
 
 export interface BasicFlashcardItem extends BaseFlashcardItem {

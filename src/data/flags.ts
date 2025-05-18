@@ -182,6 +182,7 @@ const generateIdentifyCountryQuestions = (
       metadata: {
         countryCode: country.cca2,
       },
+      autoReadQuestion: true,
     } as MultipleChoiceQuestionItem;
   });
 };
@@ -236,6 +237,7 @@ const generateIdentifyFlagQuestions = (
         countryCode: country.cca2,
         identifyFlag: true,
       },
+      autoReadQuestion: true,
     } as MultipleChoiceQuestionItem;
   });
 };
