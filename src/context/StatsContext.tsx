@@ -14,7 +14,6 @@ export const StatsProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [stats, setStats] = useState<StatsState>({});
 
-  // Load stats from localStorage on initial render
   useEffect(() => {
     const savedStats = localStorage.getItem("foshizzle-stats");
     if (savedStats) {
@@ -22,12 +21,10 @@ export const StatsProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, []);
 
-  // Save stats to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("foshizzle-stats", JSON.stringify(stats));
   }, [stats]);
 
-  // Update stats for a card
   const updateCardStat = (cardId: string, result: AnswerResult) => {
     setStats((prevStats) => {
       const cardStats = prevStats[cardId] || { correct: 0, incorrect: 0 };
@@ -44,10 +41,8 @@ export const StatsProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   };
 
-  // Calculate weight for a card (used for sampling probability)
   const calculateWeight = (cardId: string) => {
     const cardStats = stats[cardId] || { correct: 0, incorrect: 0 };
-    // Formula: 1 + incorrect - (correct / 2), with minimum of 1
     return Math.max(1, 1 + cardStats.incorrect - cardStats.correct * 0.5);
   };
 
