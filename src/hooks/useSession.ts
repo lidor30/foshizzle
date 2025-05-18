@@ -89,7 +89,6 @@ export const useSession = (
     generateSession();
   }, [selectedTopicIds, difficulty, generateSession]);
 
-  // Move to the next card
   const nextCard = () => {
     if (currentCardIndex < sessionCards.length - 1) {
       setCurrentCardIndex((prev) => prev + 1);
