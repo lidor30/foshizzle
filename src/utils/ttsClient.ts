@@ -7,6 +7,8 @@ interface AudioCache {
 
 const audioCache: AudioCache = {};
 
+let currentAudio: HTMLAudioElement | null = null;
+
 // IndexedDB constants
 const DB_NAME = 'tts-cache';
 const STORE_NAME = 'audio-files';
@@ -392,11 +394,17 @@ export const speakText = async (
     // Don't attempt to speak empty text
     if (!text.trim()) return;
 
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+      currentAudio = null;
+    }
+
     const audioUrl = await generateSpeech(text, options);
     if (!audioUrl) return;
 
-    // Play the audio
     const audio = new Audio(audioUrl);
+    currentAudio = audio;
     await audio.play();
   } catch (error) {
     console.error('Error speaking text:', error);

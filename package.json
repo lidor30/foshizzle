@@ -1,6 +1,6 @@
 {
   "name": "foshizzle",
-  "version": "v1.1.0",
+  "version": "v1.2.0",
   "scripts": {
     "dev": "next dev --turbo",
     "dev:debug": "NODE_OPTIONS='--inspect' next dev",
