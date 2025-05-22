@@ -86,7 +86,7 @@ export default function Navigation() {
         <div className="flex items-center gap-4">
           <button onClick={handleLogoClick} className="flex items-center">
             <Image
-              src={'/images/logo.png'}
+              src={'/images/full-logo.png'}
               alt="Foshizzle Logo"
               width={256}
               height={60}

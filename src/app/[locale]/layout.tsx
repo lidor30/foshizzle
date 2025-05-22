@@ -1,5 +1,6 @@
 import KidsModeStyles from '@/components/KidsModeStyles';
 import Navigation from '@/components/Navigation';
+import PWAInstallPromptWrapper from '@/components/PWAInstallPromptWrapper';
 import { KidsModeProvider } from '@/context/KidsModeContext';
 import { StatsProvider } from '@/context/StatsContext';
 import { routing } from '@/i18n/routing';
@@ -40,7 +41,19 @@ export async function generateMetadata(props: Omit<Props, 'children'>) {
   const t = await getTranslations({ locale, namespace: 'LocaleLayout' });
 
   return {
-    title: t('title')
+    title: t('title'),
+    manifest: '/manifest.json',
+    themeColor: '#101E33',
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: 'default',
+      title: t('title')
+    },
+    viewport: {
+      width: 'device-width',
+      initialScale: 1,
+      maximumScale: 1
+    }
   };
 }
 
@@ -67,6 +80,11 @@ export default async function LocaleLayout({ children, params }: Props) {
       lang={locale}
       dir={dir}
     >
+      <head>
+        <link rel="apple-touch-icon" href="/images/logo.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+      </head>
       <body className={clsx(fontClass, 'flex h-full flex-col')}>
         <NextIntlClientProvider>
           <StatsProvider>
@@ -74,6 +92,7 @@ export default async function LocaleLayout({ children, params }: Props) {
               <KidsModeStyles />
               <Navigation />
               {children}
+              <PWAInstallPromptWrapper />
               <Toaster position="bottom-center" reverseOrder={false} />
             </KidsModeProvider>
           </StatsProvider>

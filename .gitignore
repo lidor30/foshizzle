@@ -63,11 +63,12 @@ coverage/
 # TypeScript cache
 *.tsbuildinfo
 
-# Vite
-.vite/
-
 # Misc
 .cache/
 .temp/
 tmp/
 .eslintcache
+
+# Cache
+.cache/
+public/cache/
