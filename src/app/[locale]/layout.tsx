@@ -44,17 +44,20 @@ export async function generateMetadata(props: Omit<Props, 'children'>) {
   return {
     title: t('title'),
     manifest: '/manifest.json',
-    themeColor: '#101E33',
     appleWebApp: {
       capable: true,
       statusBarStyle: 'default',
       title: t('title')
-    },
-    viewport: {
-      width: 'device-width',
-      initialScale: 1,
-      maximumScale: 1
     }
+  };
+}
+
+export async function generateViewport() {
+  return {
+    themeColor: '#101E33',
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1
   };
 }
 

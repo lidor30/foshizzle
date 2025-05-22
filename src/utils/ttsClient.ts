@@ -18,6 +18,10 @@ const MAX_CACHE_ENTRIES = 500;
 
 const isIndexedDBAvailable = (): boolean => {
   try {
+    if (typeof window === 'undefined') {
+      console.error('IndexedDB not available: Not in browser environment');
+      return false;
+    }
     return !!window.indexedDB;
   } catch (e) {
     console.error('IndexedDB not available:', e);
@@ -33,7 +37,7 @@ const testIndexedDB = async (): Promise<boolean> => {
     return false;
   }
 
-  if (window.isSecureContext === false) {
+  if (typeof window !== 'undefined' && window.isSecureContext === false) {
     console.warn(
       'Not in a secure context, IndexedDB might have limited functionality'
     );
@@ -120,10 +124,12 @@ const testIndexedDB = async (): Promise<boolean> => {
   }
 };
 
-// Initialize IndexedDB functionality test
-(async () => {
-  isDBWorking = await testIndexedDB();
-})();
+// Initialize IndexedDB functionality test - only on client side
+if (typeof window !== 'undefined') {
+  (async () => {
+    isDBWorking = await testIndexedDB();
+  })();
+}
 
 const createCacheKey = (text: string, voice?: string): string => {
   return `${text}-${voice || 'nova'}`;
@@ -131,6 +137,12 @@ const createCacheKey = (text: string, voice?: string): string => {
 
 const initDB = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
+    // Make sure we're in a browser environment
+    if (typeof window === 'undefined') {
+      reject(new Error('Not in browser environment'));
+      return;
+    }
+
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onerror = (event) => {
