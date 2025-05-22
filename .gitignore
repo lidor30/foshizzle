@@ -72,3 +72,4 @@ tmp/
 # Cache
 .cache/
 public/cache/
+public/workbox-*.js
