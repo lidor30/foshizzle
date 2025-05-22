@@ -14,18 +14,6 @@
       "url": "http://localhost:3000"
     },
     {
-      "name": "Next.js: Attach to Server",
-      "type": "node",
-      "request": "attach",
-      "port": 9229,
-      "address": "localhost",
-      "skipFiles": ["<node_internals>/**"],
-      "restart": true,
-      "sourceMaps": true,
-      "localRoot": "${workspaceFolder}",
-      "remoteRoot": "${workspaceFolder}"
-    },
-    {
       "name": "Next.js: Debug Full-stack",
       "type": "node",
       "request": "launch",

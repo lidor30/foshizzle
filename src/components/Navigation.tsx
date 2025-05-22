@@ -21,7 +21,7 @@ export default function Navigation() {
   const isRTL = locale === 'he';
 
   const handleLogoClick = () => {
-    if (pathname.endsWith('/session')) {
+    if (pathname?.endsWith('/session')) {
       setShowEndGameModal(true);
     } else {
       router.push('/');
