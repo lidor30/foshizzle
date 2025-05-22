@@ -14,6 +14,115 @@ const DB_VERSION = 1;
 const MAX_CACHE_SIZE = 500 * 1024; // 500KB
 const MAX_CACHE_ENTRIES = 500;
 
+const isIndexedDBAvailable = (): boolean => {
+  try {
+    return !!window.indexedDB;
+  } catch (e) {
+    console.error('IndexedDB not available:', e);
+    return false;
+  }
+};
+
+let isDBWorking = false;
+
+const testIndexedDB = async (): Promise<boolean> => {
+  if (!isIndexedDBAvailable()) {
+    console.error('IndexedDB is not available in this browser');
+    return false;
+  }
+
+  if (window.isSecureContext === false) {
+    console.warn(
+      'Not in a secure context, IndexedDB might have limited functionality'
+    );
+  }
+
+  try {
+    if ('storage' in navigator && 'estimate' in navigator.storage) {
+      const { usage, quota } = await navigator.storage.estimate();
+
+      const percentUsed = (usage! / quota!) * 100;
+      if (percentUsed > 90) {
+        console.warn(
+          'Storage usage is very high, may affect IndexedDB functionality'
+        );
+      }
+
+      if (
+        'persist' in navigator.storage &&
+        (await navigator.storage.persisted()) === false
+      ) {
+        try {
+          await navigator.storage.persist();
+        } catch (e) {
+          console.warn('Error requesting persistent storage:', e);
+        }
+      }
+    }
+  } catch (quotaError) {
+    console.warn('Error checking storage quota:', quotaError);
+  }
+
+  try {
+    const db = await initDB();
+    const testKey = '_test_key_';
+    const testBlob = new Blob(['test'], { type: 'text/plain' });
+
+    const transaction = db.transaction([STORE_NAME], 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
+
+    return new Promise((resolve) => {
+      const request = store.put({
+        key: testKey,
+        blob: testBlob,
+        timestamp: Date.now()
+      });
+
+      request.onsuccess = async () => {
+        try {
+          const readTransaction = db.transaction([STORE_NAME], 'readonly');
+          const readStore = readTransaction.objectStore(STORE_NAME);
+          const readRequest = readStore.get(testKey);
+
+          readRequest.onsuccess = () => {
+            const success = !!readRequest.result;
+
+            const cleanupTransaction = db.transaction(
+              [STORE_NAME],
+              'readwrite'
+            );
+            const cleanupStore = cleanupTransaction.objectStore(STORE_NAME);
+            cleanupStore.delete(testKey);
+
+            resolve(success);
+          };
+
+          readRequest.onerror = (event) => {
+            console.error('Error reading test entry from IndexedDB:', event);
+            resolve(false);
+          };
+        } catch (readError) {
+          console.error('Error setting up read test:', readError);
+          resolve(false);
+        }
+      };
+
+      request.onerror = (event) => {
+        console.error('Error writing test entry to IndexedDB:', event);
+        resolve(false);
+      };
+    });
+  } catch (error) {
+    console.error('Error testing IndexedDB:', error);
+    return false;
+  }
+};
+
+// Initialize IndexedDB functionality test
+(async () => {
+  isDBWorking = await testIndexedDB();
+})();
+
 const createCacheKey = (text: string, voice?: string): string => {
   return `${text}-${voice || 'nova'}`;
 };
@@ -43,6 +152,10 @@ const initDB = (): Promise<IDBDatabase> => {
 const getAudioFromIndexedDB = async (
   cacheKey: string
 ): Promise<Blob | null> => {
+  if (!isDBWorking) {
+    return null;
+  }
+
   try {
     const db = await initDB();
     return new Promise((resolve, reject) => {
@@ -111,8 +224,28 @@ const storeAudioInIndexedDB = async (
   cacheKey: string,
   audioBlob: Blob
 ): Promise<void> => {
+  if (!isDBWorking) {
+    return;
+  }
+
   if (audioBlob.size > MAX_CACHE_SIZE) {
     return;
+  }
+
+  try {
+    if ('storage' in navigator && 'estimate' in navigator.storage) {
+      const { usage, quota } = await navigator.storage.estimate();
+      const available = quota! - usage!;
+
+      if (audioBlob.size > available) {
+        console.warn(
+          `Not enough storage space available. Need: ${audioBlob.size}, Available: ${available}`
+        );
+        return;
+      }
+    }
+  } catch (quotaError) {
+    console.warn('Error checking storage quota:', quotaError);
   }
 
   try {
@@ -120,6 +253,7 @@ const storeAudioInIndexedDB = async (
     return new Promise((resolve, reject) => {
       const transaction = db.transaction([STORE_NAME], 'readwrite');
       const store = transaction.objectStore(STORE_NAME);
+
       const request = store.put({
         key: cacheKey,
         blob: audioBlob,
@@ -134,6 +268,10 @@ const storeAudioInIndexedDB = async (
       request.onerror = (event) => {
         console.error('Error storing in IndexedDB:', event);
         reject(new Error('Failed to store in IndexedDB'));
+      };
+
+      transaction.onerror = (event) => {
+        console.error('Transaction error when storing in IndexedDB:', event);
       };
     });
   } catch (error) {
@@ -158,8 +296,6 @@ export const generateSpeech = async (
   if (!text.trim()) return '';
 
   const cacheKey = createCacheKey(text, options.voice);
-
-  // Check if URL is already in memory cache
   if (audioCache[cacheKey]) {
     return audioCache[cacheKey];
   }
@@ -172,7 +308,6 @@ export const generateSpeech = async (
   }
 
   try {
-    // Call the API to generate speech
     const response = await fetch('/api/tts', {
       method: 'POST',
       headers: {
@@ -199,26 +334,47 @@ export const generateSpeech = async (
       throw new Error(error.error || 'Failed to generate speech');
     }
 
-    const data = await response.json();
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('audio/')) {
+      try {
+        const audioBlob = await response.blob();
 
-    // Fetch the audio file as blob
-    try {
-      const audioResponse = await fetch(data.url);
-      const audioBlob = await audioResponse.blob();
+        // Store in IndexedDB if appropriate size
+        if (audioBlob.size > 0 && audioBlob.size <= MAX_CACHE_SIZE) {
+          await storeAudioInIndexedDB(cacheKey, audioBlob);
+        }
 
-      await storeAudioInIndexedDB(cacheKey, audioBlob);
-      const audioUrl = createAudioUrlFromBlob(audioBlob);
-      audioCache[cacheKey] = audioUrl;
+        // Create blob URL and cache in memory
+        const audioUrl = createAudioUrlFromBlob(audioBlob);
+        audioCache[cacheKey] = audioUrl;
 
-      return audioUrl;
-    } catch (blobError) {
-      console.error('Error fetching or storing audio blob:', blobError);
-      // Fall back to the original URL if blob handling fails
-      audioCache[cacheKey] = data.url;
-      return data.url;
+        return audioUrl;
+      } catch (blobError) {
+        console.error('Error processing audio blob from API:', blobError);
+        // If error processing blob, try the legacy approach (URL)
+        return handleLegacyUrlResponse(response, cacheKey);
+      }
+    } else {
+      // Legacy approach: API returns a URL
+      return handleLegacyUrlResponse(response, cacheKey);
     }
   } catch (error) {
     console.error('Error generating speech:', error);
+    return '';
+  }
+};
+
+// Handle the legacy response format where API returns a URL
+const handleLegacyUrlResponse = async (
+  response: Response,
+  cacheKey: string
+): Promise<string> => {
+  try {
+    const data = await response.json();
+    audioCache[cacheKey] = data.url;
+    return data.url;
+  } catch (jsonError) {
+    console.error('Error parsing JSON response:', jsonError);
     return '';
   }
 };
@@ -266,7 +422,6 @@ export const clearTTSCache = async (): Promise<void> => {
 
     return new Promise((resolve, reject) => {
       transaction.oncomplete = () => {
-        console.log('TTS cache cleared successfully');
         resolve();
       };
 

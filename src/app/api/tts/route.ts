@@ -33,7 +33,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ url: audioUrl });
+    // Instead of returning the URL, fetch the audio file and return it directly
+    try {
+      const audioResponse = await fetch(audioUrl);
+
+      if (!audioResponse.ok) {
+        console.error(
+          `Failed to fetch audio from URL: ${audioUrl}`,
+          audioResponse.status
+        );
+        // Fall back to returning the URL if we can't fetch the audio
+        return NextResponse.json({ url: audioUrl });
+      }
+
+      const audioArrayBuffer = await audioResponse.arrayBuffer();
+
+      return new NextResponse(audioArrayBuffer, {
+        headers: {
+          'Content-Type': 'audio/mpeg',
+          'Content-Length': audioArrayBuffer.byteLength.toString(),
+          'Cache-Control': 'public, max-age=31536000' // 1 year
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching audio file:', error);
+      return NextResponse.json({ url: audioUrl });
+    }
   } catch (error) {
     console.error('Error in TTS API:', error);
     return NextResponse.json(
