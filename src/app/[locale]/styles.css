@@ -12,6 +12,10 @@
   }
 }
 
+body {
+  touch-action: pan-x pan-y;
+}
+
 .no-select {
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
