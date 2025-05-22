@@ -1,3 +1,4 @@
+import { listTTSCacheEntries } from '@/utils/firebase';
 import { generateSpeech } from '@/utils/openai';
 import fs from 'fs';
 import { NextRequest, NextResponse } from 'next/server';
@@ -47,6 +48,13 @@ export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url);
     const fileHash = url.searchParams.get('file');
+    const listAll = url.searchParams.get('list') === 'true';
+
+    // If list=true is provided, return all cache entries
+    if (listAll) {
+      const entries = await listTTSCacheEntries();
+      return NextResponse.json({ entries });
+    }
 
     if (!fileHash) {
       return NextResponse.json(

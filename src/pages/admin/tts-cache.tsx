@@ -1,8 +1,4 @@
-import {
-  TTSCacheEntry,
-  deleteTTSCacheEntry,
-  listTTSCacheEntries
-} from '@/utils/firebase';
+import { TTSCacheEntry, deleteTTSCacheEntry } from '@/utils/firebase';
 import { useEffect, useState } from 'react';
 
 export default function TTSCacheAdmin() {
@@ -17,8 +13,12 @@ export default function TTSCacheAdmin() {
   const loadCacheEntries = async () => {
     try {
       setLoading(true);
-      const entries = await listTTSCacheEntries();
-      setCacheEntries(entries);
+      const response = await fetch('/api/tts?list=true');
+      if (!response.ok) {
+        throw new Error('Failed to fetch cache entries');
+      }
+      const data = await response.json();
+      setCacheEntries(data.entries);
       setError(null);
     } catch (err) {
       setError('Failed to load cache entries');
