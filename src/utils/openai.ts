@@ -1,46 +1,15 @@
 import crypto from 'crypto';
-import fs from 'fs';
 import OpenAI from 'openai';
-import path from 'path';
+import { audioFileExists, getAudioFileURL, uploadAudioFile } from './firebase';
 
 // Initialize OpenAI client
 const apiKey = process.env.OPENAI_API_KEY || '';
 const isEnabled = process.env.ENABLE_OPENAI_TTS === 'true';
 const openai = new OpenAI({ apiKey });
 
-// Cache directory
-const CACHE_DIR = path.join(process.cwd(), 'public', 'cache', 'tts');
-
-// Ensure cache directory exists
-if (typeof window === 'undefined') {
-  try {
-    fs.mkdirSync(CACHE_DIR, { recursive: true });
-  } catch (error) {
-    console.error('Error creating cache directory:', error);
-  }
-}
-
 // Create a hash of the text to use as filename
 const getTextHash = (text: string, voice: string): string => {
   return crypto.createHash('md5').update(`${text}-${voice}`).digest('hex');
-};
-
-// Get cached file path
-const getCachedFilePath = (textHash: string): string => {
-  return path.join(CACHE_DIR, `${textHash}.mp3`);
-};
-
-// Check if audio exists in cache
-const isAudioCached = (textHash: string): boolean => {
-  if (typeof window !== 'undefined') return false;
-  const filePath = getCachedFilePath(textHash);
-
-  return fs.existsSync(filePath);
-};
-
-// Get public URL for cached file
-const getCachedFileUrl = (textHash: string): string => {
-  return `/cache/tts/${textHash}.mp3`;
 };
 
 export interface TTSOptions {
@@ -49,7 +18,7 @@ export interface TTSOptions {
 }
 
 /**
- * Generate speech from text and cache it
+ * Generate speech from text and cache it in Firebase Storage
  * @param text Text to convert to speech
  * @param options TTS options (voice, model)
  * @returns URL to the audio file
@@ -75,9 +44,9 @@ export const generateSpeech = async (
   // Generate hash for the text and voice
   const textHash = getTextHash(text, voice);
 
-  // Check if audio already exists in cache
-  if (isAudioCached(textHash)) {
-    return getCachedFileUrl(textHash);
+  // Check if audio already exists in Firebase Storage
+  if (await audioFileExists(textHash)) {
+    return await getAudioFileURL(textHash);
   }
 
   const instructions =
@@ -95,12 +64,16 @@ export const generateSpeech = async (
     // Get the binary data
     const buffer = Buffer.from(await mp3.arrayBuffer());
 
-    // Save to cache
-    if (typeof window === 'undefined') {
-      fs.writeFileSync(getCachedFilePath(textHash), buffer);
-    }
+    // Save to Firebase Storage with metadata
+    const metadata = {
+      text,
+      voice,
+      model,
+      timestamp: new Date().toISOString()
+    };
 
-    return getCachedFileUrl(textHash);
+    // Upload file to Firebase Storage
+    return await uploadAudioFile(textHash, buffer, metadata);
   } catch (error) {
     console.error('Error generating speech:', error);
     return '';
