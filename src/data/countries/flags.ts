@@ -208,7 +208,6 @@ const generateIdentifyFlagQuestions = (
       locale
     );
 
-    // Create options with flag images
     const flagOptions = [
       {
         text: '',
@@ -220,10 +219,9 @@ const generateIdentifyFlagQuestions = (
       }))
     ].sort(() => Math.random() - 0.5); // Shuffle
 
-    // Get the question text in the appropriate language
     const questionText =
       locale === 'he'
-        ? `איזה דגל שייך ל${translatedCountryName}?`
+        ? `מהו הדגל של ${translatedCountryName}?`
         : `Which flag belongs to ${translatedCountryName}?`;
 
     return {
