@@ -1,41 +1,95 @@
-import React from "react";
-import { useTTS } from "../contexts/TTSContext";
+import { TTSOptions } from '@/utils/openai';
+import { speakText } from '@/utils/ttsClient';
+import React, { useEffect, useState } from 'react';
 
 interface SpeakButtonProps {
   text: string;
+  options?: TTSOptions;
   className?: string;
   onClick?: (e: React.MouseEvent) => void;
 }
 
 const SpeakButton: React.FC<SpeakButtonProps> = ({
   text,
-  className = "",
-  onClick,
+  options = {},
+  className = '',
+  onClick
 }) => {
-  const { speakText } = useTTS();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isTTSDisabled, setIsTTSDisabled] = useState(false);
 
-  const handleClick = (e: React.MouseEvent) => {
+  // Check if TTS is enabled on the client side
+  useEffect(() => {
+    const checkTTSAvailability = async () => {
+      try {
+        // Try to fetch from the TTS API as a check
+        const response = await fetch('/api/tts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: 'test' })
+        });
+
+        // If status is 400 and the error is about TTS being disabled
+        if (response.status === 400) {
+          const data = await response.json();
+          if (data.error?.includes('OpenAI TTS is disabled')) {
+            setIsTTSDisabled(true);
+          }
+        }
+      } catch (error) {
+        console.error('Error checking TTS availability:', error);
+      }
+    };
+
+    checkTTSAvailability();
+  }, []);
+
+  const handleClick = async (e: React.MouseEvent) => {
     // Prevent default behavior (like card flipping)
     e.stopPropagation();
+
+    // Don't try to play if TTS is disabled, already playing, or if text is empty
+    if (isTTSDisabled || isPlaying || !text.trim()) return;
 
     // Call the provided onClick if any
     if (onClick) {
       onClick(e);
     }
 
-    // Speak the text
-    speakText(text);
+    try {
+      setIsPlaying(true);
+
+      // Speak the text
+      await speakText(text, options);
+
+      // Add a small delay before allowing to play again
+      setTimeout(() => {
+        setIsPlaying(false);
+      }, 500);
+    } catch (error) {
+      console.error('Error speaking text:', error);
+      setIsPlaying(false);
+    }
   };
+
+  // Don't render the button if TTS is disabled
+  if (isTTSDisabled) {
+    return null;
+  }
 
   return (
     <button
       onClick={handleClick}
-      className={`p-2 text-gray-600 hover:text-blue-500 focus:outline-none ${className}`}
+      className={`p-2 text-gray-600 hover:text-blue-500 focus:outline-none ${
+        isPlaying ? 'text-blue-500' : ''
+      } ${className}`}
       aria-label="Read text aloud"
+      disabled={isPlaying || !text.trim()}
+      title="Read text aloud"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-5 w-5"
+        className={`h-5 w-5 ${isPlaying ? 'animate-pulse' : ''}`}
         viewBox="0 0 20 20"
         fill="currentColor"
       >

@@ -1,5 +1,7 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import type { AnswerResult, CardStats, StatsState } from "../types";
+'use client';
+
+import type { AnswerResult, CardStats, StatsState } from '@/types';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface StatsContextType {
   stats: StatsState;
@@ -10,19 +12,19 @@ interface StatsContextType {
 const StatsContext = createContext<StatsContextType | undefined>(undefined);
 
 export const StatsProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
+  children
 }) => {
   const [stats, setStats] = useState<StatsState>({});
 
   useEffect(() => {
-    const savedStats = localStorage.getItem("foshizzle-stats");
+    const savedStats = localStorage.getItem('foshizzle-stats');
     if (savedStats) {
       setStats(JSON.parse(savedStats));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("foshizzle-stats", JSON.stringify(stats));
+    localStorage.setItem('foshizzle-stats', JSON.stringify(stats));
   }, [stats]);
 
   const updateCardStat = (cardId: string, result: AnswerResult) => {
@@ -31,12 +33,12 @@ export const StatsProvider: React.FC<{ children: React.ReactNode }> = ({
 
       const newCardStats: CardStats = {
         ...cardStats,
-        [result]: cardStats[result] + 1,
+        [result]: cardStats[result] + 1
       };
 
       return {
         ...prevStats,
-        [cardId]: newCardStats,
+        [cardId]: newCardStats
       };
     });
   };
@@ -56,7 +58,7 @@ export const StatsProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useStats = () => {
   const context = useContext(StatsContext);
   if (context === undefined) {
-    throw new Error("useStats must be used within a StatsProvider");
+    throw new Error('useStats must be used within a StatsProvider');
   }
   return context;
 };

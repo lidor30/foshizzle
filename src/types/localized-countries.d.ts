@@ -1,4 +1,4 @@
-declare module "localized-countries" {
+declare module 'localized-countries' {
   interface LocalizedCountries {
     get(countryCode: string): string;
     array(): Array<{ code: string; label: string }>;
@@ -16,7 +16,7 @@ declare module "localized-countries" {
   export default localizedCountriesFactory;
 }
 
-declare module "localized-countries/data/*.json" {
+declare module 'localized-countries/data/*.json' {
   const content: Record<string, string>;
   export default content;
 }

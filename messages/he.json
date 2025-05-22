@@ -1,0 +1,85 @@
+{
+  "Error": {
+    "description": "<p>לצערנו נתקלנו בשגיאה.</p><p>ניתן לנסות <retry>לטעון מחדש את העמוד</retry> בו ביקרת.</p>",
+    "title": "משהו השתבש!"
+  },
+  "LocaleLayout": {
+    "title": "Foshizzle"
+  },
+  "LocaleSwitcher": {
+    "label": "שנה שפה",
+    "locale": "{locale, select, en {🇺🇸 אנגלית} he {🇮🇱 עברית} other {לא ידוע}}"
+  },
+  "Manifest": {
+    "name": "Foshizzle"
+  },
+  "Navigation": {
+    "home": "דף הבית",
+    "darkMode": "מצב כהה",
+    "lightMode": "מצב בהיר",
+    "session": "מפגש לימוד",
+    "endGame": {
+      "title": "סיום משחק",
+      "cancel": "ביטול",
+      "confirm": "סיום",
+      "message": "האם אתה בטוח שברצונך לסיים את המשחק ולחזור למסך הבית? ההתקדמות שלך תאבד."
+    }
+  },
+  "NotFoundPage": {
+    "description": "נא לבדוק את כתובת הדפדפן או להשתמש בניווט כדי לעבור לדף ידוע.",
+    "title": "העמוד לא נמצא"
+  },
+  "PageLayout": {},
+  "IndexPage": {
+    "title": "Foshizzle"
+  },
+  "TopicSelector": {
+    "title": "בחר נושא",
+    "loading": "טוען נושאים...",
+    "selectAtLeastOne": "נא לבחור לפחות נושא אחד",
+    "selectAll": "בחר הכל",
+    "clearAll": "נקה הכל",
+    "difficultyTitle": "בחר רמת קושי",
+    "difficulty": {
+      "easy": "קל",
+      "medium": "בינוני",
+      "hard": "קשה"
+    },
+    "startButtonWithCount": "התחל עם נושא {count}",
+    "startButtonWithCount_plural": "התחל עם {count} נושאים",
+    "startChallengeButton": "התחל מצב אתגר"
+  },
+  "MultipleChoiceQuestion": {
+    "correct": "נכון מאוד!",
+    "incorrect": "לא נכון",
+    "choose_option": "בחר את התשובה הנכונה",
+    "correct_answer": "התשובה הנכונה היא: {answer}"
+  },
+  "Flashcard": {
+    "show": "לחץ כדי לראות את התשובה",
+    "correct": "צדקתי",
+    "incorrect": "טעיתי"
+  },
+  "SessionProgress": {
+    "progress": "התקדמות",
+    "card": "כרטיס {current} מתוך {total}"
+  },
+  "SessionComplete": {
+    "title": "הסשן הושלם!",
+    "description": "כל הכבוד! השלמת את מפגש הלימוד הזה.",
+    "restartButton": "התחל מחדש",
+    "homeButton": "דף הבית"
+  },
+  "Session": {
+    "loading": "טוען שאלות...",
+    "question": "שאלה",
+    "answer": "תשובה",
+    "nextCard": "הבא",
+    "showAnswer": "הצג תשובה",
+    "difficulty": {
+      "easy": "קל",
+      "medium": "בינוני",
+      "hard": "קשה"
+    }
+  }
+}

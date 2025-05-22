@@ -1,0 +1,85 @@
+{
+  "Error": {
+    "description": "<p>We've unfortunately encountered an error.</p><p>You can try to <retry>reload the page</retry> you were visiting.</p>",
+    "title": "Something went wrong!"
+  },
+  "LocaleLayout": {
+    "title": "Foshizzle"
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, en {🇺🇸 English} he {🇮🇱 Hebrew} other {Unknown}}"
+  },
+  "Manifest": {
+    "name": "Foshizzle"
+  },
+  "Navigation": {
+    "home": "Home",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "session": "Study Session",
+    "endGame": {
+      "title": "End Game",
+      "cancel": "Cancel",
+      "confirm": "End Game",
+      "message": "Are you sure you want to end this game and return to the home screen? Your progress will be lost."
+    }
+  },
+  "NotFoundPage": {
+    "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
+    "title": "Page not found"
+  },
+  "PageLayout": {},
+  "IndexPage": {
+    "title": "Foshizzle"
+  },
+  "TopicSelector": {
+    "title": "Select a Topic",
+    "loading": "Loading topics...",
+    "selectAtLeastOne": "Please select at least one topic",
+    "selectAll": "Select All",
+    "clearAll": "Clear All",
+    "difficultyTitle": "Select Difficulty",
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "startButtonWithCount": "Start with {count} topic",
+    "startButtonWithCount_plural": "Start with {count} topics",
+    "startChallengeButton": "Start Challenge Mode"
+  },
+  "MultipleChoiceQuestion": {
+    "correct": "Correct!",
+    "incorrect": "Incorrect!",
+    "choose_option": "Choose the correct answer",
+    "correct_answer": "The correct answer is: {answer}"
+  },
+  "Flashcard": {
+    "show": "Tap to reveal the answer",
+    "correct": "I Got It Right",
+    "incorrect": "I Got It Wrong"
+  },
+  "SessionProgress": {
+    "progress": "Progress",
+    "card": "Card {current} of {total}"
+  },
+  "SessionComplete": {
+    "title": "Session Complete!",
+    "description": "Great job! You've completed this flashcard session.",
+    "restartButton": "Restart",
+    "homeButton": "Home"
+  },
+  "Session": {
+    "loading": "Loading questions...",
+    "question": "Question",
+    "answer": "Answer",
+    "nextCard": "Next Card",
+    "showAnswer": "Show Answer",
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    }
+  }
+}

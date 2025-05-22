@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
-import { useStats } from "../context/StatsContext";
-import type { DifficultyLevel, FlashcardItem } from "../data/topics";
-import { topics } from "../data/topics";
-import type { AnswerResult } from "../types";
+'use client';
+
+import { useStats } from '@/context/StatsContext';
+import { DifficultyLevel, FlashcardItem } from '@/types/questions';
+import { useParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import type { AnswerResult } from '../types';
 
 const DEFAULT_SESSION_SIZE = 20;
 
@@ -12,8 +14,10 @@ export type SessionFlashcard = FlashcardItem & {
 
 export const useSession = (
   selectedTopicIds: string[],
-  difficulty: DifficultyLevel = "medium"
+  difficulty: DifficultyLevel = 'medium'
 ) => {
+  const params = useParams();
+  const locale = params.locale as string;
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [sessionCards, setSessionCards] = useState<SessionFlashcard[]>([]);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -25,37 +29,29 @@ export const useSession = (
     setIsLoading(true);
     try {
       const generateAllFlashcards = async (): Promise<SessionFlashcard[]> => {
-        const selectedTopics = topics.filter((topic) =>
-          selectedTopicIds.includes(topic.id)
-        );
-
-        const topicsWithCards = await Promise.all(
-          selectedTopics.map(async (topic) => {
-            const cards = await topic.generateFlashcards(topic.data);
-            return cards.map((card) => ({
-              ...card,
-              topicIcon: topic.icon,
-            }));
+        const response = await fetch(`/${locale}/api/questions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            topicIds: selectedTopicIds,
+            difficulty: difficulty
           })
-        );
+        });
 
-        return topicsWithCards.flat();
+        if (!response.ok) {
+          throw new Error('Failed to fetch flashcards');
+        }
+
+        return await response.json();
       };
 
       const sampleCards = (
         allCards: SessionFlashcard[],
         size: number
       ): SessionFlashcard[] => {
-        const filteredCards = allCards.filter((card) => {
-          if (difficulty === "easy") return card.difficulty === "easy";
-          if (difficulty === "medium")
-            return card.difficulty === "easy" || card.difficulty === "medium";
-          return true;
-        });
-
-        const cardsToSample =
-          filteredCards.length > 0 ? filteredCards : allCards;
-        const shuffled = [...cardsToSample].sort(() => Math.random() - 0.5);
+        const shuffled = [...allCards].sort(() => Math.random() - 0.5);
         const sampleSize = Math.min(size, shuffled.length);
 
         return shuffled.slice(0, sampleSize);
@@ -76,12 +72,12 @@ export const useSession = (
       setIsFlipped(false);
       setIsLastCardAnswered(false);
     } catch (error) {
-      console.error("Error generating session:", error);
+      console.error('Error generating session:', error);
       setSessionCards([]);
     } finally {
       setIsLoading(false);
     }
-  }, [selectedTopicIds, difficulty]);
+  }, [selectedTopicIds, difficulty, locale]);
 
   useEffect(() => {
     if (selectedTopicIds.length === 0) return;
@@ -128,7 +124,7 @@ export const useSession = (
     generateSession,
     progress: {
       current: currentCardIndex + 1,
-      total: sessionCards.length,
-    },
+      total: sessionCards.length
+    }
   };
 };
