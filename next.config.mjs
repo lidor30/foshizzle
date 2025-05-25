@@ -1,18 +1,18 @@
-import createNextIntlPlugin from 'next-intl/plugin';
-import NextPWA from 'next-pwa';
+import createNextIntlPlugin from 'next-intl/plugin'
+import NextPWA from 'next-pwa'
 
 const withNextIntl = createNextIntlPlugin({
   experimental: {
     createMessagesDeclaration: './messages/en.json'
   }
-});
+})
 
 const withPWA = NextPWA({
   dest: 'public',
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development'
-});
+})
 
 /** @type {import('next').NextConfig} */
 const config = {
@@ -24,6 +24,6 @@ const config = {
       }
     ]
   }
-};
+}
 
-export default withNextIntl(withPWA(config));
+export default withNextIntl(withPWA(config))

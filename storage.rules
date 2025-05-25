@@ -1,0 +1,8 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /tts/{fileName} {
+      allow read, write: if true; // Anyone can read and write TTS files (DEVELOPMENT ONLY)
+    }
+  }
+} 

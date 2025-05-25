@@ -1,5 +1,6 @@
 'use client'
 
+import { APP_VERSION } from '@/constants/app'
 import { useKidsMode } from '@/context/KidsModeContext'
 import { DifficultyLevel } from '@/types/questions'
 import { useLocale, useTranslations } from 'next-intl'
@@ -241,6 +242,9 @@ export default function TopicSelector({ onStartSession }: TopicSelectorProps) {
           ? t('startButtonWithCount', { count: String(selectedCount) })
           : t('startButtonWithCount_plural', { count: String(selectedCount) })}
       </button>
+      <div className="text-end text-xs text-gray-600 pt-6 mt-auto">
+        {APP_VERSION}
+      </div>
     </div>
   )
 }

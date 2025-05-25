@@ -1,0 +1,27 @@
+# Firebase App Hosting Configuration
+service: default
+runtime: nodejs22
+
+env:
+  - variable: OPENAI_API_KEY
+    secret: projects/119566150097/secrets/OPENAI_API_KEY
+    availability: 
+      - RUNTIME
+
+  - variable: ENABLE_OPENAI_TTS
+    value: true
+    availability: 
+      - RUNTIME
+
+skip_files:
+  - ^node_modules$
+  - ^.git$
+  - ^.github$
+  - ^.vscode$
+  - ^firebase.json$
+  - ^.firebaserc$
+  - ^yarn.lock$
+  - ^storage.rules$
+  - ^README.md$
+  - ^FIREBASE_SETUP.md$
+  - ^FIREBASE_DEPLOYMENT.md$ 
