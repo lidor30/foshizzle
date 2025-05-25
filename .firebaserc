@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "foshizzle-proj"
-  }
-} 
+    "default": "foshizzle-proj",
+    "foshizzle": "foshizzle-proj"
+  },
+  "targets": {},
+  "etags": {}
+}

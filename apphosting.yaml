@@ -13,6 +13,41 @@ env:
     availability: 
       - RUNTIME
 
+  - variable: FIREBASE_API_KEY
+    value: AIzaSyBXtGpxC_VQmDlqDBghPMWQcQUCmUBI4Gw
+    availability: 
+      - RUNTIME
+
+  - variable: FIREBASE_AUTH_DOMAIN
+    value: foshizzle-proj.firebaseapp.com
+    availability: 
+      - RUNTIME
+
+  - variable: FIREBASE_PROJECT_ID
+    value: foshizzle-proj
+    availability: 
+      - RUNTIME
+
+  - variable: FIREBASE_STORAGE_BUCKET
+    value: foshizzle-proj.firebasestorage.app
+    availability: 
+      - RUNTIME
+
+  - variable: FIREBASE_MESSAGING_SENDER_ID
+    value: 119566150097
+    availability: 
+      - RUNTIME
+
+  - variable: FIREBASE_APP_ID
+    value: 1:119566150097:web:b136824906319735de98f0
+    availability: 
+      - RUNTIME
+
+  - variable: FIREBASE_MEASUREMENT_ID
+    value: G-ZQXC1MCEG9
+    availability: 
+      - RUNTIME
+
 skip_files:
   - ^node_modules$
   - ^.git$
