@@ -1,131 +1,131 @@
-'use client';
+'use client'
 
-import { useKidsMode } from '@/context/KidsModeContext';
-import { DifficultyLevel } from '@/types/questions';
-import { useLocale, useTranslations } from 'next-intl';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useKidsMode } from '@/context/KidsModeContext'
+import { DifficultyLevel } from '@/types/questions'
+import { useLocale, useTranslations } from 'next-intl'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
 
 type Topic = {
-  id: string;
-  name: string;
-  icon?: string;
-  kidsMode?: boolean;
-};
+  id: string
+  name: string
+  icon?: string
+  kidsMode?: boolean
+}
 
 type TopicSelectorProps = {
   onStartSession?: (
     selectedTopicIds: string[],
     difficulty: DifficultyLevel
-  ) => void;
-};
+  ) => void
+}
 
 export default function TopicSelector({ onStartSession }: TopicSelectorProps) {
-  const [topics, setTopics] = useState<Topic[]>([]);
-  const [filteredTopics, setFilteredTopics] = useState<Topic[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [topics, setTopics] = useState<Topic[]>([])
+  const [filteredTopics, setFilteredTopics] = useState<Topic[]>([])
+  const [loading, setLoading] = useState(true)
   const [selectedTopics, setSelectedTopics] = useState<{
-    [id: string]: boolean;
-  }>({});
+    [id: string]: boolean
+  }>({})
   const [selectedDifficulty, setSelectedDifficulty] =
-    useState<DifficultyLevel>('medium');
-  const t = useTranslations('TopicSelector');
-  const locale = useLocale();
-  const { kidsMode } = useKidsMode();
+    useState<DifficultyLevel>('medium')
+  const t = useTranslations('TopicSelector')
+  const locale = useLocale()
+  const { kidsMode } = useKidsMode()
 
   useEffect(() => {
     const fetchTopics = async () => {
       try {
-        const response = await fetch(`/${locale}/api/topics`);
+        const response = await fetch(`/${locale}/api/topics`)
         if (!response.ok) {
-          throw new Error('Failed to fetch topics');
+          throw new Error('Failed to fetch topics')
         }
-        const data = await response.json();
-        setTopics(data);
+        const data = await response.json()
+        setTopics(data)
       } catch (error) {
-        console.error('Error fetching topics:', error);
+        console.error('Error fetching topics:', error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchTopics();
-  }, [locale]);
+    fetchTopics()
+  }, [locale])
 
   // Filter topics based on kids mode
   useEffect(() => {
     if (kidsMode) {
-      const kidsFriendlyTopics = topics.filter((topic) => topic.kidsMode);
-      setFilteredTopics(kidsFriendlyTopics);
+      const kidsFriendlyTopics = topics.filter((topic) => topic.kidsMode)
+      setFilteredTopics(kidsFriendlyTopics)
     } else {
-      setFilteredTopics(topics);
+      setFilteredTopics(topics)
     }
-  }, [topics, kidsMode]);
+  }, [topics, kidsMode])
 
   // Update selected topics when kids mode changes
   useEffect(() => {
     if (kidsMode) {
-      const kidsFriendlyTopics = topics.filter((topic) => topic.kidsMode);
+      const kidsFriendlyTopics = topics.filter((topic) => topic.kidsMode)
 
       // Reset selected topics when switching to kids mode
       // Only keep selections for kid-friendly topics
       setSelectedTopics((prev) => {
-        const newSelectedTopics = { ...prev };
+        const newSelectedTopics = { ...prev }
 
         // Keep only the kid-friendly topics that were already selected
         Object.keys(newSelectedTopics).forEach((topicId) => {
           if (!kidsFriendlyTopics.some((topic) => topic.id === topicId)) {
-            delete newSelectedTopics[topicId];
+            delete newSelectedTopics[topicId]
           }
-        });
+        })
 
-        return newSelectedTopics;
-      });
+        return newSelectedTopics
+      })
     }
-  }, [kidsMode, topics]);
+  }, [kidsMode, topics])
 
   const toggleTopic = (topicId: string) => {
     setSelectedTopics((prev) => ({
       ...prev,
       [topicId]: !prev[topicId]
-    }));
-  };
+    }))
+  }
 
   const selectAll = () => {
     const allTopics = filteredTopics.reduce(
       (acc, topic) => {
-        acc[topic.id] = true;
-        return acc;
+        acc[topic.id] = true
+        return acc
       },
       {} as { [id: string]: boolean }
-    );
+    )
 
-    setSelectedTopics(allTopics);
-  };
+    setSelectedTopics(allTopics)
+  }
 
   const clearAll = () => {
-    setSelectedTopics({});
-  };
+    setSelectedTopics({})
+  }
 
   const handleStartSession = () => {
     const selectedTopicIds = Object.entries(selectedTopics)
       .filter(([, isSelected]) => isSelected)
-      .map(([id]) => id);
+      .map(([id]) => id)
 
     if (selectedTopicIds.length === 0) {
-      alert(t('selectAtLeastOne'));
-      return;
+      alert(t('selectAtLeastOne'))
+      return
     }
 
     if (onStartSession) {
-      onStartSession(selectedTopicIds, selectedDifficulty);
+      onStartSession(selectedTopicIds, selectedDifficulty)
     }
-  };
+  }
 
-  const selectedCount = Object.values(selectedTopics).filter(Boolean).length;
+  const selectedCount = Object.values(selectedTopics).filter(Boolean).length
 
   if (loading) {
-    return <div className="text-white">{t('loading')}</div>;
+    return <div className="text-white">{t('loading')}</div>
   }
 
   // Kids mode UI classes
@@ -157,7 +157,7 @@ export default function TopicSelector({ onStartSession }: TopicSelectorProps) {
           ${isSelected ? 'bg-primary-500 text-white' : 'bg-gray-100 dark:bg-slate-700 text-slate-900 dark:text-white hover:bg-gray-200'}
         `,
         startButton: 'bg-primary-500 hover:bg-primary-600'
-      };
+      }
 
   return (
     <div className="animate-fadeIn">
@@ -242,5 +242,5 @@ export default function TopicSelector({ onStartSession }: TopicSelectorProps) {
           : t('startButtonWithCount_plural', { count: String(selectedCount) })}
       </button>
     </div>
-  );
+  )
 }

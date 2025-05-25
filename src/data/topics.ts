@@ -1,7 +1,7 @@
-import europaData from './sports/europa.json';
-import fifaData from './sports/fifa.json';
-import nbaData from './sports/nba.json';
-import uefaData from './sports/uefa.json';
+import europaData from './sports/europa.json'
+import fifaData from './sports/fifa.json'
+import nbaData from './sports/nba.json'
+import uefaData from './sports/uefa.json'
 
 import {
   BasicFlashcardItem,
@@ -12,31 +12,31 @@ import {
   MultipleChoiceQuestionItem,
   NBAData,
   SportData
-} from '@/types/questions';
-import { Locale } from 'next-intl';
-import { StaticImageData } from 'next/image';
-import { generateFlagsFlashcards } from './countries/flags';
+} from '@/types/questions'
+import { Locale } from 'next-intl'
+import { StaticImageData } from 'next/image'
+import { generateFlagsFlashcards } from './countries/flags'
 
-const championsIconFileName = 'champions.png';
-const europaIconFileName = 'europa.png';
-const globeIconFileName = 'globe.png';
-const nbaIconFileName = 'nba.png';
-const worldCupIconFileName = 'world-cup.png';
+const championsIconFileName = 'champions.png'
+const europaIconFileName = 'europa.png'
+const globeIconFileName = 'globe.png'
+const nbaIconFileName = 'nba.png'
+const worldCupIconFileName = 'world-cup.png'
 
 export interface TopicConfig<T extends SportData> {
-  id: string;
-  name: string;
-  icon?: string | StaticImageData;
-  data: T[];
-  generateQuestions: (data: T[]) => FlashcardItem[] | Promise<FlashcardItem[]>;
-  kidsMode?: boolean;
+  id: string
+  name: string
+  icon?: string | StaticImageData
+  data: T[]
+  generateQuestions: (data: T[]) => FlashcardItem[] | Promise<FlashcardItem[]>
+  kidsMode?: boolean
 }
 
 // TODO: Should return only the topics without quesations
 export const getTopics = async ({
   locale
 }: {
-  locale: Locale;
+  locale: Locale
 }): Promise<TopicConfig<SportData>[]> => {
   return [
     {
@@ -45,7 +45,7 @@ export const getTopics = async ({
       icon: globeIconFileName,
       data: [], // Data is loaded dynamically
       generateQuestions: async () => {
-        return await generateFlagsFlashcards({ locale });
+        return await generateFlagsFlashcards({ locale })
       },
       kidsMode: true // Mark as kid-friendly
     },
@@ -56,7 +56,7 @@ export const getTopics = async ({
       data: uefaData as ChampionsLeagueData[],
       generateQuestions: (data) =>
         data.flatMap((item) => {
-          const championsItem = item as ChampionsLeagueData;
+          const championsItem = item as ChampionsLeagueData
           return [
             {
               id: `uefa-winner-${championsItem.season}`,
@@ -75,10 +75,12 @@ export const getTopics = async ({
                 {
                   text: championsItem.runnerUp
                 },
-                ...getRandomTeams(2, [
-                  championsItem.winner,
-                  championsItem.runnerUp
-                ]).map((team) => ({
+                ...getRandomTeams(
+                  2,
+                  [championsItem.winner, championsItem.runnerUp],
+                  uefaData,
+                  championsItem.season
+                ).map((team) => ({
                   text: team
                 }))
               ].sort(() => Math.random() - 0.5)
@@ -108,14 +110,17 @@ export const getTopics = async ({
                 {
                   text: `${championsItem.location}\n(${championsItem.stadium})`
                 },
-                ...getRandomStadiums(3, [
-                  `${championsItem.location}\n(${championsItem.stadium})`
-                ]).map((stadium) => ({
+                ...getRandomStadiums(
+                  3,
+                  [`${championsItem.location}\n(${championsItem.stadium})`],
+                  uefaData,
+                  championsItem.season
+                ).map((stadium) => ({
                   text: stadium
                 }))
               ].sort(() => Math.random() - 0.5)
             } as MultipleChoiceQuestionItem
-          ];
+          ]
         })
     },
     {
@@ -125,7 +130,7 @@ export const getTopics = async ({
       data: europaData as EuropaLeagueData[],
       generateQuestions: (data) =>
         data.flatMap((item) => {
-          const europaItem = item as EuropaLeagueData;
+          const europaItem = item as EuropaLeagueData
           return [
             {
               id: `europa-winner-${europaItem.season}`,
@@ -160,7 +165,7 @@ export const getTopics = async ({
               difficulty: 'hard',
               type: 'basic'
             } as BasicFlashcardItem
-          ];
+          ]
         })
     },
     {
@@ -170,7 +175,7 @@ export const getTopics = async ({
       data: fifaData as FIFAData[],
       generateQuestions: (data) => {
         return data.flatMap((item) => {
-          const fifaItem = item as FIFAData;
+          const fifaItem = item as FIFAData
           return [
             {
               id: `fifa-winner-${fifaItem.year}`,
@@ -189,11 +194,14 @@ export const getTopics = async ({
                 {
                   text: fifaItem.runnerUp
                 },
-                ...getRandomTeams(2, [fifaItem.winner, fifaItem.runnerUp]).map(
-                  (team) => ({
-                    text: team
-                  })
-                )
+                ...getRandomTeams(
+                  2,
+                  [fifaItem.winner, fifaItem.runnerUp],
+                  fifaData,
+                  fifaItem.year
+                ).map((team) => ({
+                  text: team
+                }))
               ].sort(() => Math.random() - 0.5)
             } as MultipleChoiceQuestionItem,
             {
@@ -221,13 +229,18 @@ export const getTopics = async ({
                 {
                   text: fifaItem.host
                 },
-                ...getRandomCountries(3, [fifaItem.host]).map((country) => ({
+                ...getRandomCountries(
+                  3,
+                  [fifaItem.host],
+                  fifaData,
+                  fifaItem.year
+                ).map((country) => ({
                   text: country
                 }))
               ].sort(() => Math.random() - 0.5)
             } as MultipleChoiceQuestionItem
-          ];
-        });
+          ]
+        })
       }
     },
     {
@@ -237,7 +250,7 @@ export const getTopics = async ({
       data: nbaData as NBAData[],
       generateQuestions: (data) =>
         data.map((item) => {
-          const nbaItem = item as NBAData;
+          const nbaItem = item as NBAData
           return {
             id: `nba-${nbaItem.year}`,
             question: {
@@ -248,7 +261,7 @@ export const getTopics = async ({
             },
             difficulty: 'easy',
             type: 'basic'
-          } as BasicFlashcardItem;
+          } as BasicFlashcardItem
         })
     }
     // {
@@ -263,86 +276,116 @@ export const getTopics = async ({
     //       difficulty: "easy",
     //     })),
     // },
-  ];
-};
+  ]
+}
 
-// Helper function to get random teams for multiple choice questions
-const getRandomTeams = (count: number, excludeTeams: string[]): string[] => {
-  const teams = [
-    'Brazil',
-    'Germany',
-    'Italy',
-    'France',
-    'Argentina',
-    'Spain',
-    'England',
-    'Uruguay',
-    'Netherlands',
-    'Portugal',
-    'Mexico',
-    'Croatia',
-    'Belgium',
-    'Sweden',
-    'Russia'
-  ].filter((team) => !excludeTeams.includes(team));
+const getRandomTeams = (
+  count: number,
+  excludeTeams: string[],
+  data: SportData[],
+  currentYear: string | number
+): string[] => {
+  const teamsWithYears = data
+    .map((item: any) => ({
+      team: item.winner,
+      year: item.season || item.year
+    }))
+    .filter(({ team }) => !excludeTeams.includes(team))
 
-  return shuffleArray(teams).slice(0, count);
-};
+  teamsWithYears.sort((a, b) => {
+    const yearA =
+      typeof a.year === 'string' ? parseInt(a.year.split('-')[0]) : a.year
+    const yearB =
+      typeof b.year === 'string' ? parseInt(b.year.split('-')[0]) : b.year
+    const targetYear =
+      typeof currentYear === 'string'
+        ? parseInt(currentYear.split('-')[0])
+        : currentYear
 
-// Helper function to get random countries for multiple choice questions
+    return Math.abs(yearA - targetYear) - Math.abs(yearB - targetYear)
+  })
+
+  const result: string[] = []
+  const usedTeams = new Set(excludeTeams)
+
+  for (const { team } of teamsWithYears) {
+    if (!usedTeams.has(team)) {
+      result.push(team)
+      usedTeams.add(team)
+      if (result.length >= count) break
+    }
+  }
+
+  return result
+}
+
 const getRandomCountries = (
   count: number,
-  excludeCountries: string[]
+  excludeCountries: string[],
+  data: FIFAData[],
+  currentYear: number
 ): string[] => {
-  const countries = [
-    'Brazil',
-    'Germany',
-    'South Africa',
-    'France',
-    'Qatar',
-    'Spain',
-    'England',
-    'United States',
-    'Japan',
-    'Russia',
-    'Mexico',
-    'Italy',
-    'South Korea',
-    'Argentina',
-    'Canada'
-  ].filter((country) => !excludeCountries.includes(country));
+  const hostsWithYears = data
+    .map((item) => ({
+      country: item.host,
+      year: item.year
+    }))
+    .filter(({ country }) => !excludeCountries.includes(country))
 
-  return shuffleArray(countries).slice(0, count);
-};
+  hostsWithYears.sort(
+    (a, b) => Math.abs(a.year - currentYear) - Math.abs(b.year - currentYear)
+  )
 
-// Helper function to shuffle an array
-const shuffleArray = <T>(array: T[]): T[] => {
-  const newArray = [...array];
-  for (let i = newArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  const result: string[] = []
+  const usedCountries = new Set(excludeCountries)
+
+  for (const { country } of hostsWithYears) {
+    if (!usedCountries.has(country)) {
+      result.push(country)
+      usedCountries.add(country)
+      if (result.length >= count) break
+    }
   }
-  return newArray;
-};
 
-// Helper function to get random stadiums for multiple choice questions
+  return result
+}
+
 const getRandomStadiums = (
   count: number,
-  excludeStadiums: string[]
+  excludeStadiums: string[],
+  data: SportData[],
+  currentYear: string | number
 ): string[] => {
-  const stadiums = [
-    'London\n(Wembley Stadium)',
-    'Madrid\n(Santiago Bernabéu)',
-    'Munich\n(Allianz Arena)',
-    'Paris\n(Parc des Princes)',
-    'Milan\n(San Siro)',
-    'Barcelona\n(Camp Nou)',
-    'Berlin\n(Olympiastadion)',
-    'Istanbul\n(Atatürk Olympic Stadium)',
-    'Lisbon\n(Estádio da Luz)',
-    'Athens\n(Olympic Stadium)',
-    'Amsterdam\n(Johan Cruyff Arena)'
-  ].filter((stadium) => !excludeStadiums.includes(stadium));
+  const stadiumsWithYears = data
+    .map((item: any) => ({
+      stadium: `${item.location}\n(${item.stadium})`,
+      year: item.season || item.year
+    }))
+    .filter(({ stadium }) => !excludeStadiums.includes(stadium))
 
-  return shuffleArray(stadiums).slice(0, count);
-};
+  stadiumsWithYears.sort((a, b) => {
+    const yearA =
+      typeof a.year === 'string' ? parseInt(a.year.split('-')[0]) : a.year
+    const yearB =
+      typeof b.year === 'string' ? parseInt(b.year.split('-')[0]) : b.year
+    const targetYear =
+      typeof currentYear === 'string'
+        ? parseInt(currentYear.split('-')[0])
+        : currentYear
+
+    return Math.abs(yearA - targetYear) - Math.abs(yearB - targetYear)
+  })
+
+  const result: string[] = []
+  const usedStadiums = new Set(excludeStadiums)
+
+  for (const { stadium } of stadiumsWithYears) {
+    if (!usedStadiums.has(stadium)) {
+      result.push(stadium)
+      usedStadiums.add(stadium)
+      if (result.length >= count) break
+    }
+  }
+
+  return result
+}

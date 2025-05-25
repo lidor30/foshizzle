@@ -1,18 +1,18 @@
-'use client';
+'use client'
 
-import { usePathname, useRouter } from '@/i18n/navigation';
-import { routing } from '@/i18n/routing';
-import clsx from 'clsx';
-import { Locale, useLocale } from 'next-intl';
-import { useParams } from 'next/navigation';
-import { useTransition } from 'react';
+import { usePathname, useRouter } from '@/i18n/navigation'
+import { routing } from '@/i18n/routing'
+import clsx from 'clsx'
+import { Locale, useLocale } from 'next-intl'
+import { useParams } from 'next/navigation'
+import { useTransition } from 'react'
 
 export default function LocaleSwitcher() {
-  const locale = useLocale();
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  const pathname = usePathname();
-  const params = useParams();
+  const locale = useLocale()
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
+  const pathname = usePathname()
+  const params = useParams()
 
   function setLocale(nextLocale: Locale) {
     startTransition(() => {
@@ -22,8 +22,8 @@ export default function LocaleSwitcher() {
         // always match for the current route, we can skip runtime checks.
         { pathname, params },
         { locale: nextLocale }
-      );
-    });
+      )
+    })
   }
 
   return (
@@ -47,5 +47,5 @@ export default function LocaleSwitcher() {
         ))}
       </div>
     </div>
-  );
+  )
 }

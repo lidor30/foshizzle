@@ -1,16 +1,16 @@
-import { useTranslations } from 'next-intl';
-import React from 'react';
+import { useTranslations } from 'next-intl'
+import React from 'react'
 
 interface SessionCompleteProps {
-  onStartNewSession: () => void;
-  onReturnHome: () => void;
+  onStartNewSession: () => void
+  onReturnHome: () => void
 }
 
 const SessionComplete: React.FC<SessionCompleteProps> = ({
   onStartNewSession,
   onReturnHome
 }) => {
-  const t = useTranslations('SessionComplete');
+  const t = useTranslations('SessionComplete')
 
   return (
     <div
@@ -61,7 +61,7 @@ const SessionComplete: React.FC<SessionCompleteProps> = ({
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SessionComplete;
+export default SessionComplete

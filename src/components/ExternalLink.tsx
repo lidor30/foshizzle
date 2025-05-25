@@ -1,8 +1,8 @@
 type Props = {
-  title: string;
-  description: string;
-  href: string;
-};
+  title: string
+  description: string
+  href: string
+}
 
 export default function ExternalLink({ description, href, title }: Props) {
   return (
@@ -17,5 +17,5 @@ export default function ExternalLink({ description, href, title }: Props) {
       </p>
       <p className="mt-2 max-w-[250px] text-gray-400">{description}</p>
     </a>
-  );
+  )
 }

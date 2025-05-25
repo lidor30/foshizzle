@@ -1,63 +1,63 @@
-export type DifficultyLevel = 'easy' | 'medium' | 'hard';
-export type QuestionType = 'basic' | 'multiple_choice';
+export type DifficultyLevel = 'easy' | 'medium' | 'hard'
+export type QuestionType = 'basic' | 'multiple_choice'
 
 export interface ContentItem {
-  text?: string;
-  image?: string;
+  text?: string
+  image?: string
 }
 
 export interface BaseFlashcardItem {
-  id: string;
-  question: ContentItem;
-  answer: ContentItem;
-  difficulty: DifficultyLevel;
-  metadata?: Record<string, string | number | boolean>;
-  autoReadQuestion?: boolean;
+  id: string
+  question: ContentItem
+  answer: ContentItem
+  difficulty: DifficultyLevel
+  metadata?: Record<string, string | number | boolean>
+  autoReadQuestion?: boolean
 }
 
 export interface BasicFlashcardItem extends BaseFlashcardItem {
-  type: 'basic';
+  type: 'basic'
 }
 
 export interface MultipleChoiceQuestionItem extends BaseFlashcardItem {
-  type: 'multiple_choice';
-  options: ContentItem[];
+  type: 'multiple_choice'
+  options: ContentItem[]
 }
 
-export type FlashcardItem = BasicFlashcardItem | MultipleChoiceQuestionItem;
+export type FlashcardItem = BasicFlashcardItem | MultipleChoiceQuestionItem
 
 export interface BaseData {
-  winner: string;
-  runnerUp: string;
+  winner: string
+  runnerUp: string
 }
 
 export interface ChampionsLeagueData extends BaseData {
-  season: string;
-  score: string;
-  location: string;
-  stadium: string;
+  season: string
+  score: string
+  location: string
+  stadium: string
 }
 
 export interface EuropaLeagueData extends BaseData {
-  season: string;
-  score: string;
-  location: string;
-  stadium: string;
+  season: string
+  score: string
+  location: string
+  stadium: string
 }
 
 export interface NBAData extends BaseData {
-  year: string;
+  year: string
 }
 
 export interface TestData {
-  id: number;
+  id: number
 }
 
 export interface FIFAData extends BaseData {
-  year: number;
-  score: string;
-  runnerUp: string;
-  host: string;
+  year: number
+  score: string
+  runnerUp: string
+  host: string
 }
 
 export type SportData =
@@ -65,4 +65,4 @@ export type SportData =
   | EuropaLeagueData
   | FIFAData
   | NBAData
-  | TestData;
+  | TestData

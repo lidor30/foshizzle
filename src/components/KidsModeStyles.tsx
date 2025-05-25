@@ -1,25 +1,25 @@
-'use client';
+'use client'
 
-import { useKidsMode } from '@/context/KidsModeContext';
-import { useEffect } from 'react';
+import { useKidsMode } from '@/context/KidsModeContext'
+import { useEffect } from 'react'
 
 export default function KidsModeStyles() {
-  const { kidsMode } = useKidsMode();
+  const { kidsMode } = useKidsMode()
 
   useEffect(() => {
     // Add/remove kids mode class on the body element
     if (kidsMode) {
-      document.body.classList.add('kids-mode');
+      document.body.classList.add('kids-mode')
     } else {
-      document.body.classList.remove('kids-mode');
+      document.body.classList.remove('kids-mode')
     }
 
     return () => {
-      document.body.classList.remove('kids-mode');
-    };
-  }, [kidsMode]);
+      document.body.classList.remove('kids-mode')
+    }
+  }, [kidsMode])
 
-  if (!kidsMode) return null;
+  if (!kidsMode) return null
 
   // These are decorative elements only shown in kids mode
   return (
@@ -42,5 +42,5 @@ export default function KidsModeStyles() {
         <div className="w-16 h-16 rounded-full bg-gradient-to-r from-indigo-400 to-blue-400 blur-md" />
       </div>
     </>
-  );
+  )
 }

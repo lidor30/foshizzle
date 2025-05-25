@@ -1,18 +1,18 @@
-import { useKidsMode } from '@/context/KidsModeContext';
-import { AnswerResult } from '@/types';
-import { MultipleChoiceQuestionItem } from '@/types/questions';
-import { speakText } from '@/utils/ttsClient';
-import { useTranslations } from 'next-intl';
-import Image from 'next/image';
-import React, { useCallback, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import Fireworks from '../Fireworks';
-import SpeakButton from '../SpeakButton';
+import { useKidsMode } from '@/context/KidsModeContext'
+import { AnswerResult } from '@/types'
+import { MultipleChoiceQuestionItem } from '@/types/questions'
+import { speakText } from '@/utils/ttsClient'
+import { useTranslations } from 'next-intl'
+import Image from 'next/image'
+import React, { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import Fireworks from '../Fireworks'
+import SpeakButton from '../SpeakButton'
 
 interface MultipleChoiceQuestionProps {
-  card: MultipleChoiceQuestionItem;
-  onAnswer: (result: AnswerResult) => void;
-  icon?: string;
+  card: MultipleChoiceQuestionItem
+  onAnswer: (result: AnswerResult) => void
+  icon?: string
 }
 
 const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
@@ -20,65 +20,65 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   onAnswer,
   icon
 }) => {
-  const t = useTranslations('MultipleChoiceQuestion');
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [answerResult, setAnswerResult] = useState<AnswerResult | null>(null);
-  const [showFireworks, setShowFireworks] = useState(false);
-  const { kidsMode } = useKidsMode();
+  const t = useTranslations('MultipleChoiceQuestion')
+  const [selectedOption, setSelectedOption] = useState<number | null>(null)
+  const [answerResult, setAnswerResult] = useState<AnswerResult | null>(null)
+  const [showFireworks, setShowFireworks] = useState(false)
+  const { kidsMode } = useKidsMode()
 
-  const NEXT_QUESTION_DELAY = kidsMode ? 2500 : 1000;
+  const NEXT_QUESTION_DELAY = kidsMode ? 2500 : 1000
 
   // Reset selected option when the card changes
   useEffect(() => {
-    setSelectedOption(null);
-    setAnswerResult(null);
-    setShowFireworks(false);
+    setSelectedOption(null)
+    setAnswerResult(null)
+    setShowFireworks(false)
 
     if (kidsMode && card.autoReadQuestion && card.question.text) {
-      speakText(card.question.text);
+      speakText(card.question.text)
     }
-  }, [card.id, card.autoReadQuestion, card.question.text, kidsMode]);
+  }, [card.id, card.autoReadQuestion, card.question.text, kidsMode])
 
   const readCorrectAnswer = useCallback(() => {
     if (kidsMode && card.autoReadQuestion && answerResult === 'correct') {
-      speakText(t('correct'));
+      speakText(t('correct'))
     }
-  }, [card.autoReadQuestion, answerResult, t, kidsMode]);
+  }, [card.autoReadQuestion, answerResult, t, kidsMode])
 
   useEffect(() => {
-    readCorrectAnswer();
-  }, [answerResult, readCorrectAnswer]);
+    readCorrectAnswer()
+  }, [answerResult, readCorrectAnswer])
 
   const handleOptionSelect = (index: number) => {
-    setSelectedOption(index);
+    setSelectedOption(index)
 
-    let result: AnswerResult;
+    let result: AnswerResult
 
-    const selectedOption = card.options[index];
-    const correctAnswer = card.answer;
+    const selectedOption = card.options[index]
+    const correctAnswer = card.answer
 
     if (selectedOption.image && correctAnswer.image) {
       result =
-        selectedOption.image === correctAnswer.image ? 'correct' : 'incorrect';
+        selectedOption.image === correctAnswer.image ? 'correct' : 'incorrect'
     } else if (selectedOption.text && correctAnswer.text) {
       result =
-        selectedOption.text === correctAnswer.text ? 'correct' : 'incorrect';
+        selectedOption.text === correctAnswer.text ? 'correct' : 'incorrect'
     } else {
       result =
         selectedOption.text === correctAnswer.text ||
         selectedOption.image === correctAnswer.image
           ? 'correct'
-          : 'incorrect';
+          : 'incorrect'
     }
 
-    setAnswerResult(result);
+    setAnswerResult(result)
 
     if (result === 'correct') {
       if (kidsMode) {
-        setShowFireworks(true);
+        setShowFireworks(true)
         setTimeout(() => {
-          setShowFireworks(false);
-        }, NEXT_QUESTION_DELAY);
+          setShowFireworks(false)
+        }, NEXT_QUESTION_DELAY)
       }
 
       toast.success(t('correct'), {
@@ -89,9 +89,9 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
           fontWeight: 'bold',
           fontSize: '1.5rem'
         }
-      });
+      })
     } else {
-      const correctAnswer = getCorrectAnswer();
+      const correctAnswer = getCorrectAnswer()
       toast.error(
         <div>
           <p>{t('incorrect')}</p>
@@ -110,15 +110,15 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
             fontSize: '1.5rem'
           }
         }
-      );
+      )
     }
 
     setTimeout(() => {
-      onAnswer(result);
-    }, NEXT_QUESTION_DELAY);
-  };
+      onAnswer(result)
+    }, NEXT_QUESTION_DELAY)
+  }
 
-  const hasImagesInOptions = card.options.some((option) => option.image);
+  const hasImagesInOptions = card.options.some((option) => option.image)
 
   const getCorrectAnswer = () => {
     const correctOption = card.options.find(
@@ -127,16 +127,16 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
         (option.image &&
           card.answer.image &&
           option.image === card.answer.image)
-    );
-    return correctOption?.text || '';
-  };
+    )
+    return correctOption?.text || ''
+  }
 
   const isCorrectOption = (option: (typeof card.options)[0]) => {
     return (
       (option.text && card.answer.text && option.text === card.answer.text) ||
       (option.image && card.answer.image && option.image === card.answer.image)
-    );
-  };
+    )
+  }
 
   return (
     <div className="w-full">
@@ -189,21 +189,21 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
           }`}
         >
           {card.options.map((option, index) => {
-            const isCorrect = isCorrectOption(option);
-            const isSelected = selectedOption === index;
+            const isCorrect = isCorrectOption(option)
+            const isSelected = selectedOption === index
 
             // Determine button style based on selection and correctness
-            let buttonStyle = '';
+            let buttonStyle = ''
             if (selectedOption !== null) {
               if (isSelected) {
                 // Selected option styling
                 buttonStyle = isCorrect
                   ? 'bg-green-200 dark:bg-green-900 border-green-500' // Correct answer selected
-                  : 'bg-red-300 dark:bg-red-900 border-red-500'; // Wrong answer selected
+                  : 'bg-red-300 dark:bg-red-900 border-red-500' // Wrong answer selected
               } else if (isCorrect && answerResult === 'incorrect') {
                 // Highlight correct answer when user selected wrong answer
                 buttonStyle =
-                  'bg-green-200 dark:bg-green-900 border-green-500 border-2';
+                  'bg-green-200 dark:bg-green-900 border-green-500 border-2'
               }
             }
 
@@ -236,12 +236,12 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
                 )}
                 {option.text && <span>{option.text}</span>}
               </button>
-            );
+            )
           })}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MultipleChoiceQuestion;
+export default MultipleChoiceQuestion

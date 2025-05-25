@@ -1,9 +1,9 @@
-'use client';
+'use client'
 
-import { useKidsMode } from '@/context/KidsModeContext';
+import { useKidsMode } from '@/context/KidsModeContext'
 
 export default function KidsModeToggle() {
-  const { kidsMode, toggleKidsMode } = useKidsMode();
+  const { kidsMode, toggleKidsMode } = useKidsMode()
 
   return (
     <button
@@ -32,5 +32,5 @@ export default function KidsModeToggle() {
         )}
       </div>
     </button>
-  );
+  )
 }

@@ -1,15 +1,15 @@
-import localizedCountriesLib from 'localized-countries';
-import 'server-only';
+import localizedCountriesLib from 'localized-countries'
+import 'server-only'
 
 // Type assertions to handle the untyped module
 type LocalizedCountry = {
-  get: (countryCode: string) => string | undefined;
-};
+  get: (countryCode: string) => string | undefined
+}
 
 const localizedCountries: Record<string, LocalizedCountry> = {
   en: localizedCountriesLib('en'),
   he: localizedCountriesLib('he')
-};
+}
 
 // Function to get country name in the current language
 export const getCountryName = (
@@ -18,11 +18,11 @@ export const getCountryName = (
   language: string
 ): string => {
   // Default to 'en' if language is not supported
-  const lang = language === 'he' ? 'he' : 'en';
+  const lang = language === 'he' ? 'he' : 'en'
 
   // Get the translated country name
-  const translatedName = localizedCountries[lang].get(countryCode);
+  const translatedName = localizedCountries[lang].get(countryCode)
 
   // Return the translated name or fallback to English name
-  return translatedName || countryNameEn;
-};
+  return translatedName || countryNameEn
+}

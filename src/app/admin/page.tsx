@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
 export default function AdminDashboard() {
   return (
@@ -34,5 +34,5 @@ export default function AdminDashboard() {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,58 +1,58 @@
-'use client';
+'use client'
 
-import { TTSCacheEntry, deleteTTSCacheEntry } from '@/utils/firebase';
-import { useEffect, useState } from 'react';
+import { TTSCacheEntry, deleteTTSCacheEntry } from '@/utils/firebase'
+import { useEffect, useState } from 'react'
 
 export default function TTSCacheAdmin() {
-  const [cacheEntries, setCacheEntries] = useState<TTSCacheEntry[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [cacheEntries, setCacheEntries] = useState<TTSCacheEntry[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    loadCacheEntries();
-  }, []);
+    loadCacheEntries()
+  }, [])
 
   const loadCacheEntries = async () => {
     try {
-      setLoading(true);
-      const response = await fetch('/api/tts?list=true');
+      setLoading(true)
+      const response = await fetch('/api/tts?list=true')
       if (!response.ok) {
-        throw new Error('Failed to fetch cache entries');
+        throw new Error('Failed to fetch cache entries')
       }
-      const data = await response.json();
-      setCacheEntries(data.entries);
-      setError(null);
+      const data = await response.json()
+      setCacheEntries(data.entries)
+      setError(null)
     } catch (err) {
-      setError('Failed to load cache entries');
-      console.error(err);
+      setError('Failed to load cache entries')
+      console.error(err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleDelete = async (fileHash: string) => {
     try {
-      const success = await deleteTTSCacheEntry(fileHash);
+      const success = await deleteTTSCacheEntry(fileHash)
       if (success) {
         setCacheEntries(
           cacheEntries.filter((entry) => entry.fileHash !== fileHash)
-        );
+        )
       } else {
-        setError('Failed to delete cache entry');
+        setError('Failed to delete cache entry')
       }
     } catch (err) {
-      setError('Error deleting cache entry');
-      console.error(err);
+      setError('Error deleting cache entry')
+      console.error(err)
     }
-  };
+  }
 
   const renderContent = () => {
     if (loading) {
-      return <p className="text-gray-600">Loading cache entries...</p>;
+      return <p className="text-gray-600">Loading cache entries...</p>
     }
 
     if (cacheEntries.length === 0) {
-      return <p className="text-gray-600">No cache entries found.</p>;
+      return <p className="text-gray-600">No cache entries found.</p>
     }
 
     return (
@@ -139,8 +139,8 @@ export default function TTSCacheAdmin() {
           </tbody>
         </table>
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div>
@@ -180,5 +180,5 @@ export default function TTSCacheAdmin() {
 
       {renderContent()}
     </div>
-  );
+  )
 }

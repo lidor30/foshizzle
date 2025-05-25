@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react'
 
 interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  children: React.ReactNode;
-  actions?: React.ReactNode;
+  isOpen: boolean
+  onClose: () => void
+  title: string
+  children: React.ReactNode
+  actions?: React.ReactNode
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -15,33 +15,33 @@ const Modal: React.FC<ModalProps> = ({
   children,
   actions
 }) => {
-  const modalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onClose();
+        onClose()
       }
-    };
+    }
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEsc);
-      document.body.style.overflow = 'hidden';
+      document.addEventListener('keydown', handleEsc)
+      document.body.style.overflow = 'hidden'
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEsc);
-      document.body.style.overflow = 'auto';
-    };
-  }, [isOpen, onClose]);
+      document.removeEventListener('keydown', handleEsc)
+      document.body.style.overflow = 'auto'
+    }
+  }, [isOpen, onClose])
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-      onClose();
+      onClose()
     }
-  };
+  }
 
   return (
     <div
@@ -67,7 +67,7 @@ const Modal: React.FC<ModalProps> = ({
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Modal;
+export default Modal

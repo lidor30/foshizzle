@@ -1,82 +1,82 @@
-'use client';
+'use client'
 
-import { Moon, Settings, Sun } from 'lucide-react';
-import { useLocale, useTranslations } from 'next-intl';
-import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import KidsModeToggle from './KidsModeToggle';
-import LocaleSwitcher from './LocaleSwitcher';
-import Modal from './Modal';
+import { Moon, Settings, Sun } from 'lucide-react'
+import { useLocale, useTranslations } from 'next-intl'
+import Image from 'next/image'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect, useRef, useState } from 'react'
+import KidsModeToggle from './KidsModeToggle'
+import LocaleSwitcher from './LocaleSwitcher'
+import Modal from './Modal'
 
 export default function Navigation() {
-  const t = useTranslations('Navigation');
-  const router = useRouter();
-  const pathname = usePathname();
-  const locale = useLocale();
-  const [showEndGameModal, setShowEndGameModal] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const menuRef = useRef<HTMLDivElement>(null);
-  const isRTL = locale === 'he';
+  const t = useTranslations('Navigation')
+  const router = useRouter()
+  const pathname = usePathname()
+  const locale = useLocale()
+  const [showEndGameModal, setShowEndGameModal] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  const menuRef = useRef<HTMLDivElement>(null)
+  const isRTL = locale === 'he'
 
   const handleLogoClick = () => {
     if (pathname?.endsWith('/session')) {
-      setShowEndGameModal(true);
+      setShowEndGameModal(true)
     } else {
-      router.push('/');
+      router.push('/')
     }
-  };
+  }
 
   const handleEndGame = () => {
-    setShowEndGameModal(false);
-    router.push('/');
-  };
+    setShowEndGameModal(false)
+    router.push('/')
+  }
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+    setIsMenuOpen(!isMenuOpen)
+  }
 
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    document.documentElement.classList.toggle('dark');
-    localStorage.setItem('theme', newTheme);
-  };
+    const newTheme = theme === 'light' ? 'dark' : 'light'
+    setTheme(newTheme)
+    document.documentElement.classList.toggle('dark')
+    localStorage.setItem('theme', newTheme)
+  }
 
   // Initialize theme from localStorage
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null;
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
     const prefersDark = window.matchMedia(
       '(prefers-color-scheme: dark)'
-    ).matches;
+    ).matches
 
     if (savedTheme) {
-      setTheme(savedTheme);
+      setTheme(savedTheme)
       if (savedTheme === 'dark') {
-        document.documentElement.classList.add('dark');
+        document.documentElement.classList.add('dark')
       }
     } else if (prefersDark) {
-      setTheme('dark');
-      document.documentElement.classList.add('dark');
+      setTheme('dark')
+      document.documentElement.classList.add('dark')
     }
-  }, []);
+  }, [])
 
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false);
+        setIsMenuOpen(false)
       }
-    };
+    }
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside)
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
-  const rtlClass = isRTL ? 'rtl' : '';
+  const rtlClass = isRTL ? 'rtl' : ''
 
   return (
     <header
@@ -171,5 +171,5 @@ export default function Navigation() {
         </p>
       </Modal>
     </header>
-  );
+  )
 }

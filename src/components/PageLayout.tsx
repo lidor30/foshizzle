@@ -1,9 +1,9 @@
-import { ReactNode } from 'react';
+import { ReactNode } from 'react'
 
 type Props = {
-  children?: ReactNode;
-  title?: ReactNode;
-};
+  children?: ReactNode
+  title?: ReactNode
+}
 
 export default function PageLayout({ children, title }: Props) {
   return (
@@ -20,5 +20,5 @@ export default function PageLayout({ children, title }: Props) {
         <main className="mt-6 text-gray-400 md:text-lg">{children}</main>
       </div>
     </div>
-  );
+  )
 }

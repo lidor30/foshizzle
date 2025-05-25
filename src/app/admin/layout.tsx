@@ -1,24 +1,24 @@
-'use client';
+'use client'
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { ReactNode } from 'react';
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { ReactNode } from 'react'
 
-import Image from 'next/image';
-import './styles.css';
+import Image from 'next/image'
+import './styles.css'
 
 interface AdminLayoutProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   const menuItems = [
     { name: 'Dashboard', href: '/admin' },
     { name: 'TTS Cache', href: '/admin/tts-cache' }
     // Add more admin pages as needed
-  ];
+  ]
 
   return (
     <html>
@@ -66,5 +66,5 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
       </body>
     </html>
-  );
+  )
 }

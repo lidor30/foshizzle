@@ -1,17 +1,17 @@
-import { useTranslations } from 'next-intl';
-import React from 'react';
+import { useTranslations } from 'next-intl'
+import React from 'react'
 
 interface SessionProgressProps {
-  current: number;
-  total: number;
+  current: number
+  total: number
 }
 
 const SessionProgress: React.FC<SessionProgressProps> = ({
   current,
   total
 }) => {
-  const t = useTranslations('SessionProgress');
-  const progressPercentage = Math.round((current / total) * 100);
+  const t = useTranslations('SessionProgress')
+  const progressPercentage = Math.round((current / total) * 100)
 
   return (
     <div className="w-full">
@@ -33,7 +33,7 @@ const SessionProgress: React.FC<SessionProgressProps> = ({
         ></div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SessionProgress;
+export default SessionProgress

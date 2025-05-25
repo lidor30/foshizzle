@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
   createContext,
@@ -6,46 +6,46 @@ import {
   useContext,
   useEffect,
   useState
-} from 'react';
+} from 'react'
 
 interface KidsModeContextType {
-  kidsMode: boolean;
-  toggleKidsMode: () => void;
+  kidsMode: boolean
+  toggleKidsMode: () => void
 }
 
 const KidsModeContext = createContext<KidsModeContextType | undefined>(
   undefined
-);
+)
 
 export function KidsModeProvider({ children }: { children: ReactNode }) {
-  const [kidsMode, setKidsMode] = useState(false);
+  const [kidsMode, setKidsMode] = useState(false)
 
   // Try to load saved preference from localStorage on mount
   useEffect(() => {
-    const savedMode = localStorage.getItem('kidsMode');
+    const savedMode = localStorage.getItem('kidsMode')
     if (savedMode) {
-      setKidsMode(savedMode === 'true');
+      setKidsMode(savedMode === 'true')
     }
-  }, []);
+  }, [])
 
   const toggleKidsMode = () => {
-    const newMode = !kidsMode;
-    setKidsMode(newMode);
+    const newMode = !kidsMode
+    setKidsMode(newMode)
     // Save preference to localStorage
-    localStorage.setItem('kidsMode', String(newMode));
-  };
+    localStorage.setItem('kidsMode', String(newMode))
+  }
 
   return (
     <KidsModeContext.Provider value={{ kidsMode, toggleKidsMode }}>
       {children}
     </KidsModeContext.Provider>
-  );
+  )
 }
 
 export function useKidsMode(): KidsModeContextType {
-  const context = useContext(KidsModeContext);
+  const context = useContext(KidsModeContext)
   if (context === undefined) {
-    throw new Error('useKidsMode must be used within a KidsModeProvider');
+    throw new Error('useKidsMode must be used within a KidsModeProvider')
   }
-  return context;
+  return context
 }

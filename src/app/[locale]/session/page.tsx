@@ -1,49 +1,49 @@
-'use client';
+'use client'
 
-import PageLayout from '@/components/PageLayout';
-import Flashcard from '@/components/questions/Flashcard';
-import MultipleChoiceQuestion from '@/components/questions/MultipleChoiceQuestion';
-import SessionComplete from '@/components/session/SessionComplete';
-import SessionProgress from '@/components/session/SessionProgress';
-import { useSession } from '@/hooks/useSession';
+import PageLayout from '@/components/PageLayout'
+import Flashcard from '@/components/questions/Flashcard'
+import MultipleChoiceQuestion from '@/components/questions/MultipleChoiceQuestion'
+import SessionComplete from '@/components/session/SessionComplete'
+import SessionProgress from '@/components/session/SessionProgress'
+import { useSession } from '@/hooks/useSession'
 import {
   DifficultyLevel,
   FlashcardItem,
   MultipleChoiceQuestionItem
-} from '@/types/questions';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+} from '@/types/questions'
+import { useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export default function SessionPage() {
-  const t = useTranslations('Session');
-  const router = useRouter();
-  const [selectedTopicIds, setSelectedTopicIds] = useState<string[]>([]);
+  const t = useTranslations('Session')
+  const router = useRouter()
+  const [selectedTopicIds, setSelectedTopicIds] = useState<string[]>([])
   const [selectedDifficulty, setSelectedDifficulty] =
-    useState<DifficultyLevel>('medium');
+    useState<DifficultyLevel>('medium')
 
   // Load selected topics from sessionStorage
   useEffect(() => {
-    const storedTopics = sessionStorage.getItem('selectedTopicIds');
+    const storedTopics = sessionStorage.getItem('selectedTopicIds')
     const storedDifficulty = sessionStorage.getItem(
       'selectedDifficulty'
-    ) as DifficultyLevel | null;
+    ) as DifficultyLevel | null
 
     if (!storedTopics) {
       console.warn('No topics selected, redirecting to home...', {
         selectedTopicIds: storedTopics,
         selectedDifficulty: storedDifficulty
-      });
-      router.push('/');
-      return;
+      })
+      router.push('/')
+      return
     }
 
-    setSelectedTopicIds(JSON.parse(storedTopics));
+    setSelectedTopicIds(JSON.parse(storedTopics))
 
     if (storedDifficulty) {
-      setSelectedDifficulty(storedDifficulty);
+      setSelectedDifficulty(storedDifficulty)
     }
-  }, [router]);
+  }, [router])
 
   const {
     currentCard,
@@ -54,15 +54,15 @@ export default function SessionPage() {
     handleAnswer,
     generateSession,
     progress
-  } = useSession(selectedTopicIds, selectedDifficulty);
+  } = useSession(selectedTopicIds, selectedDifficulty)
 
   const handleReturnHome = () => {
-    router.push('/');
-  };
+    router.push('/')
+  }
 
   // Handle case when no topics are selected
   if (selectedTopicIds.length === 0) {
-    return <div>{t('loading')}</div>;
+    return <div>{t('loading')}</div>
   }
 
   // Color variants for different difficulty levels
@@ -70,7 +70,7 @@ export default function SessionPage() {
     easy: 'bg-green-500',
     medium: 'bg-yellow-500',
     hard: 'bg-red-500'
-  };
+  }
 
   return (
     <PageLayout>
@@ -124,5 +124,5 @@ export default function SessionPage() {
         </div>
       )}
     </PageLayout>
-  );
+  )
 }

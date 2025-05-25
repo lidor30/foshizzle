@@ -1,12 +1,12 @@
-import { routing } from '@/i18n/routing';
-import { MetadataRoute } from 'next';
-import { getTranslations } from 'next-intl/server';
+import { routing } from '@/i18n/routing'
+import { MetadataRoute } from 'next'
+import { getTranslations } from 'next-intl/server'
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
   const t = await getTranslations({
     locale: routing.defaultLocale,
     namespace: 'Manifest'
-  });
+  })
 
   return {
     name: t('name'),
@@ -30,5 +30,5 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
         purpose: 'any'
       }
     ]
-  };
+  }
 }

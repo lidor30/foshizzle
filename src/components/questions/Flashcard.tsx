@@ -1,22 +1,22 @@
-import { AnswerResult } from '@/types';
-import { ContentItem, FlashcardItem } from '@/types/questions';
-import { speakText } from '@/utils/ttsClient';
-import { useTranslations } from 'next-intl';
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
-import SpeakButton from '../SpeakButton';
+import { AnswerResult } from '@/types'
+import { ContentItem, FlashcardItem } from '@/types/questions'
+import { speakText } from '@/utils/ttsClient'
+import { useTranslations } from 'next-intl'
+import Image from 'next/image'
+import React, { useEffect, useState } from 'react'
+import SpeakButton from '../SpeakButton'
 
 interface FlashcardProps {
-  card: FlashcardItem;
-  isFlipped: boolean;
-  onFlip: () => void;
-  onAnswer: (result: AnswerResult) => void;
-  icon?: string;
+  card: FlashcardItem
+  isFlipped: boolean
+  onFlip: () => void
+  onAnswer: (result: AnswerResult) => void
+  icon?: string
 }
 
 interface DelayedAnswer {
-  answer: ContentItem;
-  icon?: string;
+  answer: ContentItem
+  icon?: string
 }
 
 const Flashcard: React.FC<FlashcardProps> = ({
@@ -26,10 +26,8 @@ const Flashcard: React.FC<FlashcardProps> = ({
   onAnswer,
   icon
 }) => {
-  const t = useTranslations('Flashcard');
-  const [delayedAnswer, setDelayedAnswer] = useState<DelayedAnswer | null>(
-    null
-  );
+  const t = useTranslations('Flashcard')
+  const [delayedAnswer, setDelayedAnswer] = useState<DelayedAnswer | null>(null)
 
   useEffect(() => {
     if (card) {
@@ -37,19 +35,19 @@ const Flashcard: React.FC<FlashcardProps> = ({
         setDelayedAnswer({
           answer: card.answer,
           icon
-        });
-      }, 500);
+        })
+      }, 500)
 
       if (card.autoReadQuestion && card.question.text) {
-        speakText(card.question.text);
+        speakText(card.question.text)
       }
     }
-  }, [card, icon, card.autoReadQuestion, card.question.text]);
+  }, [card, icon, card.autoReadQuestion, card.question.text])
 
   const handleAnswer = (result: AnswerResult, e: React.MouseEvent) => {
-    e.stopPropagation();
-    onAnswer(result);
-  };
+    e.stopPropagation()
+    onAnswer(result)
+  }
 
   return (
     <div className="w-full h-[60vh] perspective-1000">
@@ -156,7 +154,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Flashcard;
+export default Flashcard
