@@ -29,9 +29,15 @@
     "description": "נא לבדוק את כתובת הדפדפן או להשתמש בניווט כדי לעבור לדף ידוע.",
     "title": "העמוד לא נמצא"
   },
-  "PageLayout": {},
+  "PageLayout": {
+    "title": "Foshizzle"
+  },
   "IndexPage": {
     "title": "Foshizzle"
+  },
+  "Topics": {
+    "flags": "דגלי העולם",
+    "math": "חשבון לילדים"
   },
   "TopicSelector": {
     "title": "בחר נושא",
@@ -51,6 +57,16 @@
   },
   "MultipleChoiceQuestion": {
     "correct": "נכון מאוד!",
+    "praise": [
+      "נכון מאוד!",
+      "מצוין!",
+      "כל הכבוד!",
+      "מעולה!",
+      "יפה מאוד!",
+      "נפלא!",
+      "נהדר!",
+      "פשוט מעולה!"
+    ],
     "incorrect": "לא נכון",
     "choose_option": "בחר את התשובה הנכונה",
     "correct_answer": "התשובה הנכונה היא: {answer}"

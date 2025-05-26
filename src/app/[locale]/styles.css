@@ -71,7 +71,6 @@ body {
 }
 
 [dir='rtl'] {
-  text-align: right;
   font-family: var(--font-sans);
 }
 

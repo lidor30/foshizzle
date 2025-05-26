@@ -400,7 +400,6 @@ export const speakText = async (
   options: TTSOptions = {}
 ): Promise<void> => {
   try {
-    // Don't attempt to speak empty text
     if (!text.trim()) return
 
     if (currentAudio) {

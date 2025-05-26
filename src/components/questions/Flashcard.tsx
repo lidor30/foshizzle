@@ -29,6 +29,13 @@ const Flashcard: React.FC<FlashcardProps> = ({
   const t = useTranslations('Flashcard')
   const [delayedAnswer, setDelayedAnswer] = useState<DelayedAnswer | null>(null)
 
+  const useLargeText = card.metadata?.largeText || false
+  const showTTS = card.metadata?.enableTTS === true
+
+  const forceRTL = card.metadata?.isRTL === true
+  const forceLTR = card.metadata?.isRTL === false
+  const textDirection = forceRTL ? 'rtl' : forceLTR ? 'ltr' : 'inherit'
+
   useEffect(() => {
     if (card) {
       setTimeout(() => {
@@ -38,11 +45,11 @@ const Flashcard: React.FC<FlashcardProps> = ({
         })
       }, 500)
 
-      if (card.autoReadQuestion && card.question.text) {
+      if (card.autoReadQuestion && card.question.text && showTTS) {
         speakText(card.question.text)
       }
     }
-  }, [card, icon, card.autoReadQuestion, card.question.text])
+  }, [card, icon, card.autoReadQuestion, card.question.text, showTTS])
 
   const handleAnswer = (result: AnswerResult, e: React.MouseEvent) => {
     e.stopPropagation()
@@ -85,7 +92,12 @@ const Flashcard: React.FC<FlashcardProps> = ({
             )}
 
             <div className="text-center relative">
-              <p className="text-xl font-semibold text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+              <p
+                dir={textDirection}
+                className={`${
+                  useLargeText ? 'text-2xl md:text-3xl' : 'text-xl'
+                } font-semibold text-gray-700 dark:text-gray-300 whitespace-pre-wrap`}
+              >
                 {card.question.text}
               </p>
             </div>
@@ -93,9 +105,11 @@ const Flashcard: React.FC<FlashcardProps> = ({
               {t('show')}
             </div>
 
-            <div className="absolute right-2 top-2 flex">
-              <SpeakButton text={card.question.text || ''} />
-            </div>
+            {showTTS && (
+              <div className="absolute right-2 top-2 flex">
+                <SpeakButton text={card.question.text || ''} />
+              </div>
+            )}
           </div>
 
           {/* Back Side (Answer) */}
@@ -125,27 +139,38 @@ const Flashcard: React.FC<FlashcardProps> = ({
                 )}
 
                 <div className="text-center mb-6 relative">
-                  <p className="text-xl font-semibold text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                  <p
+                    dir={textDirection}
+                    className={`${
+                      useLargeText ? 'text-2xl md:text-3xl' : 'text-xl'
+                    } font-semibold text-gray-700 dark:text-gray-300 whitespace-pre-wrap`}
+                  >
                     {delayedAnswer.answer.text}
                   </p>
                 </div>
 
-                <div className="absolute right-2 top-2 flex">
-                  <SpeakButton text={delayedAnswer.answer.text || ''} />
-                </div>
+                {showTTS && (
+                  <div className="absolute right-2 top-2 flex">
+                    <SpeakButton text={delayedAnswer.answer.text || ''} />
+                  </div>
+                )}
               </>
             )}
 
             <div className="flex space-x-4 rtl:space-x-reverse">
               <button
                 onClick={(e) => handleAnswer('incorrect', e)}
-                className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
+                className={`px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors ${
+                  useLargeText ? 'text-lg font-medium' : ''
+                }`}
               >
                 {t('incorrect')}
               </button>
               <button
                 onClick={(e) => handleAnswer('correct', e)}
-                className="px-4 py-2 rounded-md bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
+                className={`px-4 py-2 rounded-md bg-green-500 text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors ${
+                  useLargeText ? 'text-lg font-medium' : ''
+                }`}
               >
                 {t('correct')}
               </button>

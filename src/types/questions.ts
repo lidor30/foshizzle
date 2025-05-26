@@ -1,3 +1,6 @@
+import { Locale } from 'next-intl'
+import { StaticImageData } from 'next/image'
+
 export type DifficultyLevel = 'easy' | 'medium' | 'hard'
 export type QuestionType = 'basic' | 'multiple_choice'
 
@@ -26,43 +29,67 @@ export interface MultipleChoiceQuestionItem extends BaseFlashcardItem {
 
 export type FlashcardItem = BasicFlashcardItem | MultipleChoiceQuestionItem
 
-export interface BaseData {
+export interface BaseTopicData {
+  [key: string]: any
+}
+
+export interface ChampionsLeagueData extends BaseTopicData {
   winner: string
   runnerUp: string
-}
-
-export interface ChampionsLeagueData extends BaseData {
   season: string
   score: string
   location: string
   stadium: string
 }
 
-export interface EuropaLeagueData extends BaseData {
+export interface EuropaLeagueData extends BaseTopicData {
+  winner: string
+  runnerUp: string
   season: string
   score: string
   location: string
   stadium: string
 }
 
-export interface NBAData extends BaseData {
+export interface NBAData extends BaseTopicData {
+  winner: string
+  runnerUp: string
   year: string
 }
 
-export interface TestData {
-  id: number
-}
-
-export interface FIFAData extends BaseData {
+export interface FIFAData extends BaseTopicData {
+  winner: string
+  runnerUp: string
   year: number
   score: string
-  runnerUp: string
   host: string
 }
 
-export type SportData =
+export interface FlagData extends BaseTopicData {
+  countryCode: string
+}
+
+export interface MathData extends BaseTopicData {
+  operation: 'addition' | 'subtraction'
+  maxNumber: number
+}
+
+export type TopicData =
   | ChampionsLeagueData
   | EuropaLeagueData
   | FIFAData
   | NBAData
-  | TestData
+  | FlagData
+  | MathData
+
+export interface TopicConfig<T extends BaseTopicData> {
+  id: string
+  name: string
+  icon?: string | StaticImageData
+  data: T[]
+  generateQuestions: (
+    data: T[],
+    params?: { locale?: Locale }
+  ) => FlashcardItem[] | Promise<FlashcardItem[]>
+  kidsMode?: boolean
+}

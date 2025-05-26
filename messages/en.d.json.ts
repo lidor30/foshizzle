@@ -32,9 +32,15 @@ declare const messages: {
     "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
     "title": "Page not found"
   },
-  "PageLayout": {},
+  "PageLayout": {
+    "title": "Foshizzle"
+  },
   "IndexPage": {
     "title": "Foshizzle"
+  },
+  "Topics": {
+    "flags": "World Flags",
+    "math": "Kids Math"
   },
   "TopicSelector": {
     "title": "Select a Topic",
@@ -54,6 +60,13 @@ declare const messages: {
   },
   "MultipleChoiceQuestion": {
     "correct": "Correct!",
+    "praise": [
+      "Great job!",
+      "You're doing great!",
+      "You're a genius!",
+      "You're a star!",
+      "You're a champion!"
+    ],
     "incorrect": "Incorrect!",
     "choose_option": "Choose the correct answer",
     "correct_answer": "The correct answer is: {answer}"

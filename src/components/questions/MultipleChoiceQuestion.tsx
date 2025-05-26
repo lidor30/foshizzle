@@ -4,7 +4,7 @@ import { MultipleChoiceQuestionItem } from '@/types/questions'
 import { speakText } from '@/utils/ttsClient'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import Fireworks from '../Fireworks'
 import SpeakButton from '../SpeakButton'
@@ -26,6 +26,14 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   const [showFireworks, setShowFireworks] = useState(false)
   const { kidsMode } = useKidsMode()
 
+  const useLargeAnswerBoxes = card.metadata?.largeAnswerBoxes || false
+  const useLargeText = card.metadata?.largeText || false
+  const showTTS = card.metadata?.enableTTS === true // Only show TTS if explicitly enabled
+
+  const forceRTL = card.metadata?.isRTL === true
+  const forceLTR = card.metadata?.isRTL === false
+  const textDirection = forceRTL ? 'rtl' : forceLTR ? 'ltr' : 'inherit'
+
   const NEXT_QUESTION_DELAY = kidsMode ? 2500 : 1000
 
   // Reset selected option when the card changes
@@ -34,20 +42,26 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
     setAnswerResult(null)
     setShowFireworks(false)
 
-    if (kidsMode && card.autoReadQuestion && card.question.text) {
+    // Only auto-read if TTS is enabled for this question
+    if (kidsMode && card.autoReadQuestion && card.question.text && showTTS) {
       speakText(card.question.text)
     }
-  }, [card.id, card.autoReadQuestion, card.question.text, kidsMode])
+  }, [card.id, card.autoReadQuestion, card.question.text, kidsMode, showTTS])
 
-  const readCorrectAnswer = useCallback(() => {
-    if (kidsMode && card.autoReadQuestion && answerResult === 'correct') {
-      speakText(t('correct'))
+  const getRandomPraiseMessage = () => {
+    try {
+      const praiseMessages = t.raw('praise')
+      if (Array.isArray(praiseMessages) && praiseMessages.length > 0) {
+        // Select a random message from the array
+        const randomIndex = Math.floor(Math.random() * praiseMessages.length)
+        return praiseMessages[randomIndex]
+      }
+      return t('correct')
+    } catch {
+      // Fallback to the default message if there's an error
+      return t('correct')
     }
-  }, [card.autoReadQuestion, answerResult, t, kidsMode])
-
-  useEffect(() => {
-    readCorrectAnswer()
-  }, [answerResult, readCorrectAnswer])
+  }
 
   const handleOptionSelect = (index: number) => {
     setSelectedOption(index)
@@ -79,17 +93,30 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
         setTimeout(() => {
           setShowFireworks(false)
         }, NEXT_QUESTION_DELAY)
-      }
 
-      toast.success(t('correct'), {
-        duration: NEXT_QUESTION_DELAY,
-        style: {
-          borderRadius: '10px',
-          color: '#047857',
-          fontWeight: 'bold',
-          fontSize: '1.5rem'
-        }
-      })
+        const praiseMessage = getRandomPraiseMessage()
+        speakText(praiseMessage)
+
+        toast.success(praiseMessage, {
+          duration: NEXT_QUESTION_DELAY,
+          style: {
+            borderRadius: '10px',
+            color: '#047857',
+            fontWeight: 'bold',
+            fontSize: '1.5rem'
+          }
+        })
+      } else {
+        toast.success(t('correct'), {
+          duration: NEXT_QUESTION_DELAY,
+          style: {
+            borderRadius: '10px',
+            color: '#047857',
+            fontWeight: 'bold',
+            fontSize: '1.5rem'
+          }
+        })
+      }
     } else {
       const correctAnswer = getCorrectAnswer()
       toast.error(
@@ -144,9 +171,8 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
         <Fireworks duration={NEXT_QUESTION_DELAY} />
       )}
 
-      {/* Display topic icon if provided and question doesn't have an image */}
       {icon && !card.question.image && (
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center mb-6">
           <Image
             src={`/images/icons/${icon}`}
             alt="Topic icon"
@@ -157,7 +183,6 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
         </div>
       )}
 
-      {/* Display question image if available */}
       {card.question.image && (
         <div className="flex justify-center mb-6 w-full h-40 md:h-52 md:landscape:h-64 lg:h-64">
           <Image
@@ -171,19 +196,24 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
       )}
 
       <div className="text-center mb-4 relative">
-        <p className="text-xl font-semibold text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+        <p
+          dir={textDirection}
+          className={`${useLargeText ? 'text-2xl md:text-3xl lg:text-4xl' : 'text-xl'} font-semibold text-gray-700 dark:text-gray-300 whitespace-pre-wrap`}
+        >
           {card.question.text}
         </p>
 
-        <div className="absolute right-[0] top-[-4px] rtl:left-[0] flex">
-          <SpeakButton text={card.question.text || ''} />
-        </div>
+        {showTTS && (
+          <div className="absolute right-[0] top-[-4px] rtl:left-[0] flex">
+            <SpeakButton text={card.question.text || ''} />
+          </div>
+        )}
       </div>
 
       <div className="w-full max-w-2xl md:landscape:max-w-3xl mx-auto mt-8">
         <div
           className={`grid ${
-            hasImagesInOptions
+            hasImagesInOptions || useLargeAnswerBoxes
               ? 'grid-cols-2 md:landscape:grid-cols-2 gap-4 md:gap-6 md:landscape:gap-6'
               : 'gap-3'
           }`}
@@ -212,11 +242,16 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
                 key={`${card.id}-option-${index}`}
                 onClick={() => handleOptionSelect(index)}
                 disabled={selectedOption !== null}
+                dir={textDirection}
                 className={`px-4 py-3 ${
-                  option.image
+                  option.image || useLargeAnswerBoxes
                     ? `flex flex-col items-center justify-center ${buttonStyle ? '' : 'bg-slate-300/50 dark:bg-slate-700/70'}`
                     : 'text-left rtl:text-right'
-                } rounded-md transition-colors text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 ${buttonStyle}`}
+                } rounded-md transition-colors text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 ${buttonStyle} ${
+                  useLargeAnswerBoxes
+                    ? 'h-24 md:h-32 flex items-center justify-center'
+                    : ''
+                }`}
               >
                 {/* Display option image - make it larger if it's primarily an image-based option */}
                 {option.image && (
@@ -234,7 +269,13 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
                     />
                   </div>
                 )}
-                {option.text && <span>{option.text}</span>}
+                {option.text && (
+                  <span
+                    className={`${useLargeText ? 'text-xl md:text-3xl lg:text-4xl font-medium' : ''}`}
+                  >
+                    {option.text}
+                  </span>
+                )}
               </button>
             )
           })}
