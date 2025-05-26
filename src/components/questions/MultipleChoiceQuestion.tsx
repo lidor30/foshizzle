@@ -13,12 +13,14 @@ interface MultipleChoiceQuestionProps {
   card: MultipleChoiceQuestionItem
   onAnswer: (result: AnswerResult) => void
   icon?: string
+  enableRetries?: boolean
 }
 
 const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   card,
   onAnswer,
-  icon
+  icon,
+  enableRetries = false
 }) => {
   const t = useTranslations('MultipleChoiceQuestion')
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
@@ -64,12 +66,11 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   }
 
   const handleOptionSelect = (index: number) => {
-    setSelectedOption(index)
-
-    let result: AnswerResult
-
+    // Get the selected option and determine if it's correct
     const selectedOption = card.options[index]
     const correctAnswer = card.answer
+
+    let result: AnswerResult
 
     if (selectedOption.image && correctAnswer.image) {
       result =
@@ -85,9 +86,11 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
           : 'incorrect'
     }
 
-    setAnswerResult(result)
-
+    // Handle correct answer
     if (result === 'correct') {
+      setSelectedOption(index)
+      setAnswerResult(result)
+
       if (kidsMode) {
         setShowFireworks(true)
         setTimeout(() => {
@@ -117,32 +120,76 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
           }
         })
       }
-    } else {
-      const correctAnswer = getCorrectAnswer()
-      toast.error(
-        <div>
-          <p>{t('incorrect')}</p>
-          {card.answer.text && (
-            <p className="mt-1 text-lg">
-              {t('correct_answer', { answer: correctAnswer })}
-            </p>
-          )}
-        </div>,
-        {
-          duration: NEXT_QUESTION_DELAY,
-          style: {
-            borderRadius: '10px',
-            color: '#B91C1C',
-            fontWeight: 'bold',
-            fontSize: '1.5rem'
-          }
-        }
-      )
-    }
 
-    setTimeout(() => {
-      onAnswer(result)
-    }, NEXT_QUESTION_DELAY)
+      // Move to next question after delay
+      setTimeout(() => {
+        onAnswer(result)
+      }, NEXT_QUESTION_DELAY)
+    }
+    // Handle incorrect answer
+    else {
+      // If retries are not enabled, show the correct answer and move to next question
+      if (!enableRetries) {
+        setSelectedOption(index)
+        setAnswerResult(result)
+
+        const correctAnswer = getCorrectAnswer()
+        toast.error(
+          <div>
+            <p>{t('incorrect')}</p>
+            {card.answer.text && (
+              <p className="mt-1 text-lg">
+                {t('correct_answer', { answer: correctAnswer })}
+              </p>
+            )}
+          </div>,
+          {
+            duration: NEXT_QUESTION_DELAY,
+            style: {
+              borderRadius: '10px',
+              color: '#B91C1C',
+              fontWeight: 'bold',
+              fontSize: '1.5rem'
+            }
+          }
+        )
+
+        // Move to next question after delay
+        setTimeout(() => {
+          onAnswer(result)
+        }, NEXT_QUESTION_DELAY)
+      }
+      // If retries are enabled, just show "Try again" and let user select another option
+      else {
+        // Only highlight the selected option temporarily
+        setSelectedOption(index)
+
+        // Show "Try again" message
+        toast.error(
+          <div>
+            <p>{t('tryAgain')}</p>
+          </div>,
+          {
+            duration: 1000,
+            style: {
+              borderRadius: '10px',
+              color: '#B91C1C',
+              fontWeight: 'bold',
+              fontSize: '1.5rem'
+            }
+          }
+        )
+
+        if (kidsMode) {
+          speakText(t('tryAgain'))
+        }
+
+        // Reset selection after a short delay to allow for another selection
+        setTimeout(() => {
+          setSelectedOption(null)
+        }, 1000)
+      }
+    }
   }
 
   const hasImagesInOptions = card.options.some((option) => option.image)
@@ -241,7 +288,10 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
               <button
                 key={`${card.id}-option-${index}`}
                 onClick={() => handleOptionSelect(index)}
-                disabled={selectedOption !== null}
+                disabled={
+                  selectedOption !== null &&
+                  (!enableRetries || isCorrect || answerResult === 'correct')
+                }
                 dir={textDirection}
                 className={`px-4 py-3 ${
                   option.image || useLargeAnswerBoxes

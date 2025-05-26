@@ -35,6 +35,11 @@
   "IndexPage": {
     "title": "Foshizzle"
   },
+  "RetryMode": {
+    "enabled": "מצב ניסיון מחדש פעיל",
+    "disabled": "מצב ניסיון מחדש כבוי",
+    "description": "כאשר מופעל, תוכל להמשיך לנסות עד שתקבל את התשובה הנכונה."
+  },
   "Topics": {
     "flags": "דגלי העולם",
     "math": "חשבון לילדים"
@@ -68,6 +73,7 @@
       "פשוט מעולה!"
     ],
     "incorrect": "לא נכון",
+    "tryAgain": "נסה שוב",
     "choose_option": "בחר את התשובה הנכונה",
     "correct_answer": "התשובה הנכונה היא: {answer}"
   },

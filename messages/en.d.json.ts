@@ -3,7 +3,7 @@
 
 declare const messages: {
   "Error": {
-    "description": "<p>We've unfortunately encountered an error.</p><p>You can try to <retry>reload the page</retry> you were visiting.</p>",
+    "description": "<p>Sorry, we encountered an error.</p><p>You can try to <retry>reload the page</retry> you were visiting.</p>",
     "title": "Something went wrong!"
   },
   "LocaleLayout": {
@@ -20,16 +20,16 @@ declare const messages: {
     "home": "Home",
     "darkMode": "Dark Mode",
     "lightMode": "Light Mode",
-    "session": "Study Session",
+    "session": "Learning Session",
     "endGame": {
       "title": "End Game",
       "cancel": "Cancel",
-      "confirm": "End Game",
-      "message": "Are you sure you want to end this game and return to the home screen? Your progress will be lost."
+      "confirm": "End Games",
+      "message": "Are you sure you want to end the game and return to the home screen? Your progress will be lost."
     }
   },
   "NotFoundPage": {
-    "description": "Please double-check the browser address bar or use the navigation to go to a known page.",
+    "description": "Please check the browser address or use the navigation to go to a known page.",
     "title": "Page not found"
   },
   "PageLayout": {
@@ -38,17 +38,22 @@ declare const messages: {
   "IndexPage": {
     "title": "Foshizzle"
   },
+  "RetryMode": {
+    "enabled": "Retry Mode On",
+    "disabled": "Retry Mode Off",
+    "description": "When enabled, you can keep trying until you get the right answer."
+  },
   "Topics": {
     "flags": "World Flags",
-    "math": "Kids Math"
+    "math": "Math for Kids"
   },
   "TopicSelector": {
-    "title": "Select a Topic",
+    "title": "Select a topic",
     "loading": "Loading topics...",
     "selectAtLeastOne": "Please select at least one topic",
     "selectAll": "Select All",
     "clearAll": "Clear All",
-    "difficultyTitle": "Select Difficulty",
+    "difficultyTitle": "Select difficulty",
     "difficulty": {
       "easy": "Easy",
       "medium": "Medium",
@@ -61,20 +66,24 @@ declare const messages: {
   "MultipleChoiceQuestion": {
     "correct": "Correct!",
     "praise": [
-      "Great job!",
-      "You're doing great!",
-      "You're a genius!",
-      "You're a star!",
-      "You're a champion!"
+      "Correct!",
+      "Excellent!",
+      "Well done!",
+      "Great!",
+      "Very good!",
+      "Wonderful!",
+      "Amazing!",
+      "Fantastic!"
     ],
-    "incorrect": "Incorrect!",
+    "incorrect": "Incorrect",
+    "tryAgain": "Try again",
     "choose_option": "Choose the correct answer",
     "correct_answer": "The correct answer is: {answer}"
   },
   "Flashcard": {
-    "show": "Tap to reveal the answer",
-    "correct": "I Got It Right",
-    "incorrect": "I Got It Wrong"
+    "show": "Tap to see answer",
+    "correct": "I got it right",
+    "incorrect": "I got it wrong"
   },
   "SessionProgress": {
     "progress": "Progress",
@@ -82,7 +91,7 @@ declare const messages: {
   },
   "SessionComplete": {
     "title": "Session Complete!",
-    "description": "Great job! You've completed this flashcard session.",
+    "description": "Congratulations! You have completed this learning session.",
     "restartButton": "Restart",
     "homeButton": "Home"
   },
@@ -90,7 +99,7 @@ declare const messages: {
     "loading": "Loading questions...",
     "question": "Question",
     "answer": "Answer",
-    "nextCard": "Next Card",
+    "nextCard": "Next",
     "showAnswer": "Show Answer",
     "difficulty": {
       "easy": "Easy",

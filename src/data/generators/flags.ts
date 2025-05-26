@@ -56,7 +56,9 @@ export const loadCountriesData = async (): Promise<Country[]> => {
   }
 
   try {
-    countries = countriesModule.default as Country[]
+    countries = countriesModule.default.filter(
+      (c) => c.independent
+    ) as Country[]
     return countries
   } catch (error) {
     console.error('Failed to load countries data:', error)

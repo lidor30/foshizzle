@@ -5,6 +5,7 @@ import Flashcard from '@/components/questions/Flashcard'
 import MultipleChoiceQuestion from '@/components/questions/MultipleChoiceQuestion'
 import SessionComplete from '@/components/session/SessionComplete'
 import SessionProgress from '@/components/session/SessionProgress'
+import { useKidsMode } from '@/context/KidsModeContext'
 import { useSession } from '@/hooks/useSession'
 import {
   DifficultyLevel,
@@ -18,9 +19,11 @@ import { useEffect, useState } from 'react'
 export default function SessionPage() {
   const t = useTranslations('Session')
   const router = useRouter()
+  const { kidsMode } = useKidsMode()
   const [selectedTopicIds, setSelectedTopicIds] = useState<string[]>([])
   const [selectedDifficulty, setSelectedDifficulty] =
     useState<DifficultyLevel>('medium')
+  const [enableRetries, setEnableRetries] = useState<boolean>(false)
 
   // Load selected topics from sessionStorage
   useEffect(() => {
@@ -43,7 +46,10 @@ export default function SessionPage() {
     if (storedDifficulty) {
       setSelectedDifficulty(storedDifficulty)
     }
-  }, [router])
+
+    // Always enable retries in kids mode
+    setEnableRetries(kidsMode)
+  }, [router, kidsMode])
 
   const {
     currentCard,
@@ -109,6 +115,7 @@ export default function SessionPage() {
                     card={currentCard as MultipleChoiceQuestionItem}
                     onAnswer={handleAnswer}
                     icon={currentCard.topicIcon}
+                    enableRetries={enableRetries}
                   />
                 ) : (
                   <Flashcard
