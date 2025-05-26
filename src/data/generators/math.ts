@@ -1,4 +1,9 @@
-import { MultipleChoiceQuestionItem } from '@/types/questions'
+import {
+  DifficultyLevel,
+  MultipleChoiceQuestionItem,
+  QuestionType
+} from '@/types/questions'
+import { Locale } from 'next-intl'
 
 const NUMBER_OF_QUESTIONS = 20
 
@@ -7,31 +12,39 @@ const getRandomNumber = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-// Generate a set of wrong answers for multiple choice
+// Generate wrong answers for a math question
 const generateWrongAnswers = (
   correctAnswer: number,
   count: number,
-  maxValue: number
+  maxNumber: number
 ): number[] => {
   const wrongAnswers: number[] = []
-  const usedAnswers = new Set([correctAnswer])
+  const range = Math.max(maxNumber, 20) // Ensure reasonable range for wrong answers
 
-  // Ensure we don't get negative numbers or duplicates
   while (wrongAnswers.length < count) {
-    // Generate values around the correct answer
-    const offset = getRandomNumber(-3, 3)
-    if (offset === 0) continue // Skip if it would be the correct answer
+    // Generate wrong answer within +/- range of correct answer, but not the correct answer
+    let wrongAnswer: number
+    const useCloseAnswer = Math.random() < 0.7 // 70% chance to use a close answer
 
-    const wrongAnswer = correctAnswer + offset
+    if (useCloseAnswer) {
+      // Generate answer close to correct answer
+      const offset = getRandomNumber(1, 5) * (Math.random() < 0.5 ? 1 : -1)
+      wrongAnswer = correctAnswer + offset
+    } else {
+      // Generate random answer within range
+      wrongAnswer = getRandomNumber(
+        Math.max(1, correctAnswer - range),
+        correctAnswer + range
+      )
+    }
 
-    // Ensure the answer is positive and within a reasonable range
+    // Ensure answer is positive and not a duplicate or the correct answer
     if (
-      wrongAnswer >= 0 &&
-      wrongAnswer <= maxValue * 2 &&
-      !usedAnswers.has(wrongAnswer)
+      wrongAnswer > 0 &&
+      wrongAnswer !== correctAnswer &&
+      !wrongAnswers.includes(wrongAnswer)
     ) {
       wrongAnswers.push(wrongAnswer)
-      usedAnswers.add(wrongAnswer)
     }
   }
 
@@ -41,7 +54,7 @@ const generateWrongAnswers = (
 // Generate random math questions based on difficulty
 const generateMathQuestionsForDifficulty = (
   count: number,
-  difficulty: 'easy' | 'medium' | 'hard'
+  difficulty: DifficultyLevel
 ): MultipleChoiceQuestionItem[] => {
   const questions: MultipleChoiceQuestionItem[] = []
 
@@ -115,10 +128,38 @@ const generateMathQuestionsForDifficulty = (
 }
 
 // Export the main generator function
-export const generateMathQuestions = (): MultipleChoiceQuestionItem[] => {
-  return [
-    ...generateMathQuestionsForDifficulty(NUMBER_OF_QUESTIONS, 'easy'),
-    ...generateMathQuestionsForDifficulty(NUMBER_OF_QUESTIONS, 'medium'),
-    ...generateMathQuestionsForDifficulty(NUMBER_OF_QUESTIONS, 'hard')
-  ]
+export const generateMathQuestions = (
+  locale?: Locale,
+  difficulty?: DifficultyLevel,
+  type?: QuestionType
+): MultipleChoiceQuestionItem[] => {
+  // If type is flashcard, return empty array since math questions are only multiple choice
+  if (type === 'flashcard') {
+    return []
+  }
+
+  // Determine which difficulties to generate based on the parameter
+  const difficultiesToGenerate: DifficultyLevel[] = []
+
+  if (!difficulty || difficulty === 'hard') {
+    // For hard or unspecified, include all difficulties
+    difficultiesToGenerate.push('easy', 'medium', 'hard')
+  } else if (difficulty === 'medium') {
+    // For medium, include easy and medium
+    difficultiesToGenerate.push('easy', 'medium')
+  } else {
+    // For easy, only include easy
+    difficultiesToGenerate.push('easy')
+  }
+
+  // Generate only the questions for the required difficulties
+  const questions: MultipleChoiceQuestionItem[] = []
+
+  for (const diff of difficultiesToGenerate) {
+    questions.push(
+      ...generateMathQuestionsForDifficulty(NUMBER_OF_QUESTIONS, diff)
+    )
+  }
+
+  return questions
 }

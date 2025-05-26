@@ -1,33 +1,69 @@
 import {
   ChampionsLeagueData,
+  DifficultyLevel,
   FlashcardItem,
   MultipleChoiceQuestionItem,
-  QuestionItem
+  QuestionItem,
+  QuestionType
 } from '@/types/questions'
+import { Locale } from 'next-intl'
 import uefaData from '../sports/uefa.json'
 
 const getRandomTeams = (
   count: number,
-  exclude: string[],
+  excludeTeams: string[],
   data: ChampionsLeagueData[],
-  targetSeason: string
+  currentSeason: string
 ): string[] => {
-  const allTeams = data
-    .filter((item) => item.season !== targetSeason)
-    .flatMap((item) => [item.winner, item.runnerUp])
-    .filter((team) => !exclude.includes(team))
+  const allTeams = new Set<string>()
 
-  const uniqueTeams = Array.from(new Set(allTeams))
-  const shuffled = [...uniqueTeams].sort(() => Math.random() - 0.5)
+  data.forEach((item: ChampionsLeagueData) => {
+    if (item.season !== currentSeason) {
+      allTeams.add(item.winner)
+      allTeams.add(item.runnerUp)
+    }
+  })
 
-  return shuffled.slice(0, count)
+  excludeTeams.forEach((team) => allTeams.delete(team))
+
+  const availableTeams = Array.from(allTeams)
+  const selectedTeams: string[] = []
+
+  for (let i = 0; i < count && availableTeams.length > 0; i++) {
+    const randomIndex = Math.floor(Math.random() * availableTeams.length)
+    selectedTeams.push(availableTeams[randomIndex])
+    availableTeams.splice(randomIndex, 1)
+  }
+
+  return selectedTeams
 }
 
-export const generateUEFAChampionsQuestions = (): QuestionItem[] => {
-  return uefaData.flatMap((item) => {
+export const generateUEFAChampionsQuestions = (
+  locale?: Locale,
+  difficulty?: DifficultyLevel,
+  type?: QuestionType
+): QuestionItem[] => {
+  // Determine which difficulties to include
+  const includeDifficulties: DifficultyLevel[] = []
+  if (!difficulty || difficulty === 'hard') {
+    includeDifficulties.push('easy', 'medium', 'hard')
+  } else if (difficulty === 'medium') {
+    includeDifficulties.push('easy', 'medium')
+  } else if (difficulty === 'easy') {
+    includeDifficulties.push('easy')
+  }
+
+  // Generate only the questions that match both difficulty and type criteria
+  return (uefaData as ChampionsLeagueData[]).flatMap((item) => {
     const championsItem = item as ChampionsLeagueData
-    return [
-      {
+    const itemQuestions: QuestionItem[] = []
+
+    // Easy difficulty, multiple choice question
+    if (
+      includeDifficulties.includes('easy') &&
+      (!type || type === 'multiple_choice')
+    ) {
+      itemQuestions.push({
         id: `uefa-winner-${championsItem.season}`,
         question: {
           text: `Who won the UEFA Champions League in ${championsItem.season}?`
@@ -47,14 +83,21 @@ export const generateUEFAChampionsQuestions = (): QuestionItem[] => {
           ...getRandomTeams(
             2,
             [championsItem.winner, championsItem.runnerUp],
-            uefaData,
+            uefaData as ChampionsLeagueData[],
             championsItem.season
           ).map((team) => ({
             text: team
           }))
         ].sort(() => Math.random() - 0.5)
-      } as MultipleChoiceQuestionItem,
-      {
+      } as MultipleChoiceQuestionItem)
+    }
+
+    // Medium difficulty, flashcard question
+    if (
+      includeDifficulties.includes('medium') &&
+      (!type || type === 'flashcard')
+    ) {
+      itemQuestions.push({
         id: `uefa-final-${championsItem.season}`,
         question: {
           text: `Which teams played in the ${championsItem.season} UEFA Champions League final and what was the score?`
@@ -64,8 +107,15 @@ export const generateUEFAChampionsQuestions = (): QuestionItem[] => {
         },
         difficulty: 'medium',
         type: 'flashcard'
-      } as FlashcardItem,
-      {
+      } as FlashcardItem)
+    }
+
+    // Medium difficulty, multiple choice question
+    if (
+      includeDifficulties.includes('medium') &&
+      (!type || type === 'multiple_choice')
+    ) {
+      itemQuestions.push({
         id: `uefa-runnerup-${championsItem.season}`,
         question: {
           text: `Who was the runner-up in the ${championsItem.season} UEFA Champions League?`
@@ -85,13 +135,15 @@ export const generateUEFAChampionsQuestions = (): QuestionItem[] => {
           ...getRandomTeams(
             2,
             [championsItem.winner, championsItem.runnerUp],
-            uefaData,
+            uefaData as ChampionsLeagueData[],
             championsItem.season
           ).map((team) => ({
             text: team
           }))
         ].sort(() => Math.random() - 0.5)
-      } as MultipleChoiceQuestionItem
-    ]
+      } as MultipleChoiceQuestionItem)
+    }
+
+    return itemQuestions
   })
 }

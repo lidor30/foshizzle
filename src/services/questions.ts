@@ -1,4 +1,9 @@
-import { QuestionItem, TopicMetadata } from '@/types/questions'
+import {
+  DifficultyLevel,
+  QuestionItem,
+  QuestionType,
+  TopicMetadata
+} from '@/types/questions'
 import { Locale } from 'next-intl'
 
 import { generateEuropaLeagueQuestions } from '@/data/generators/europa-league'
@@ -10,21 +15,23 @@ import { generateUEFAChampionsQuestions } from '@/data/generators/uefa-champions
 
 export async function generateQuestionsForTopic(
   topicId: string,
-  locale: Locale
+  locale: Locale,
+  difficulty?: DifficultyLevel,
+  type?: QuestionType
 ): Promise<QuestionItem[]> {
   switch (topicId) {
     case 'math':
-      return generateMathQuestions()
+      return generateMathQuestions(locale, difficulty, type)
     case 'flags':
-      return generateFlagsQuestions({ locale })
+      return generateFlagsQuestions({ locale, difficulty, type })
     case 'uefa':
-      return generateUEFAChampionsQuestions()
+      return generateUEFAChampionsQuestions(locale, difficulty, type)
     case 'europa':
-      return generateEuropaLeagueQuestions()
+      return generateEuropaLeagueQuestions(locale, difficulty, type)
     case 'fifa':
-      return generateFifaWorldCupQuestions()
+      return generateFifaWorldCupQuestions(locale, difficulty, type)
     case 'nba':
-      return generateNBAQuestions()
+      return generateNBAQuestions(locale, difficulty, type)
     default:
       throw new Error(`Unknown topic ID: ${topicId}`)
   }
@@ -32,16 +39,22 @@ export async function generateQuestionsForTopic(
 
 export async function generateQuestions(
   topicIds: string[],
-  difficulty: 'easy' | 'medium' | 'hard' = 'medium',
+  difficulty: DifficultyLevel = 'medium',
   locale: Locale,
-  topics: TopicMetadata[]
+  topics: TopicMetadata[],
+  type?: QuestionType
 ): Promise<QuestionItem[]> {
   const questionsArrays = await Promise.all(
     topicIds.map(async (topicId) => {
       const topic = topics.find((t) => t.id === topicId)
       if (!topic) return []
 
-      const questions = await generateQuestionsForTopic(topicId, locale)
+      const questions = await generateQuestionsForTopic(
+        topicId,
+        locale,
+        difficulty,
+        type
+      )
 
       return questions.map((question) => ({
         ...question,
@@ -50,15 +63,7 @@ export async function generateQuestions(
     })
   )
 
-  let allQuestions = questionsArrays.flat()
-
-  if (difficulty === 'easy') {
-    allQuestions = allQuestions.filter((q) => q.difficulty === 'easy')
-  } else if (difficulty === 'medium') {
-    allQuestions = allQuestions.filter(
-      (q) => q.difficulty === 'easy' || q.difficulty === 'medium'
-    )
-  }
+  const allQuestions = questionsArrays.flat()
 
   return allQuestions
 }

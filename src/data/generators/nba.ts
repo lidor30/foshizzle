@@ -1,33 +1,69 @@
 import {
+  DifficultyLevel,
   FlashcardItem,
   MultipleChoiceQuestionItem,
   NBAData,
-  QuestionItem
+  QuestionItem,
+  QuestionType
 } from '@/types/questions'
+import { Locale } from 'next-intl'
 import nbaData from '../sports/nba.json'
 
 const getRandomTeams = (
   count: number,
-  exclude: string[],
+  excludeTeams: string[],
   data: NBAData[],
-  targetYear: string
+  currentYear: string
 ): string[] => {
-  const allTeams = data
-    .filter((item) => item.year !== targetYear)
-    .flatMap((item) => [item.winner, item.runnerUp])
-    .filter((team) => !exclude.includes(team))
+  const allTeams = new Set<string>()
 
-  const uniqueTeams = Array.from(new Set(allTeams))
-  const shuffled = [...uniqueTeams].sort(() => Math.random() - 0.5)
+  data.forEach((item: NBAData) => {
+    if (item.year !== currentYear) {
+      allTeams.add(item.winner)
+      allTeams.add(item.runnerUp)
+    }
+  })
 
-  return shuffled.slice(0, count)
+  excludeTeams.forEach((team) => allTeams.delete(team))
+
+  const availableTeams = Array.from(allTeams)
+  const selectedTeams: string[] = []
+
+  for (let i = 0; i < count && availableTeams.length > 0; i++) {
+    const randomIndex = Math.floor(Math.random() * availableTeams.length)
+    selectedTeams.push(availableTeams[randomIndex])
+    availableTeams.splice(randomIndex, 1)
+  }
+
+  return selectedTeams
 }
 
-export const generateNBAQuestions = (): QuestionItem[] => {
-  return nbaData.flatMap((item) => {
+export const generateNBAQuestions = (
+  locale?: Locale,
+  difficulty?: DifficultyLevel,
+  type?: QuestionType
+): QuestionItem[] => {
+  // Determine which difficulties to include
+  const includeDifficulties: DifficultyLevel[] = []
+  if (!difficulty || difficulty === 'hard') {
+    includeDifficulties.push('easy', 'medium', 'hard')
+  } else if (difficulty === 'medium') {
+    includeDifficulties.push('easy', 'medium')
+  } else if (difficulty === 'easy') {
+    includeDifficulties.push('easy')
+  }
+
+  // Generate only the questions that match both difficulty and type criteria
+  return (nbaData as NBAData[]).flatMap((item) => {
     const nbaItem = item as NBAData
-    return [
-      {
+    const itemQuestions: QuestionItem[] = []
+
+    // Easy difficulty, multiple choice question
+    if (
+      includeDifficulties.includes('easy') &&
+      (!type || type === 'multiple_choice')
+    ) {
+      itemQuestions.push({
         id: `nba-winner-${nbaItem.year}`,
         question: {
           text: `Which team won the NBA Championship in ${nbaItem.year}?`
@@ -47,14 +83,21 @@ export const generateNBAQuestions = (): QuestionItem[] => {
           ...getRandomTeams(
             2,
             [nbaItem.winner, nbaItem.runnerUp],
-            nbaData,
+            nbaData as NBAData[],
             nbaItem.year
           ).map((team) => ({
             text: team
           }))
         ].sort(() => Math.random() - 0.5)
-      } as MultipleChoiceQuestionItem,
-      {
+      } as MultipleChoiceQuestionItem)
+    }
+
+    // Easy difficulty, flashcard question
+    if (
+      includeDifficulties.includes('easy') &&
+      (!type || type === 'flashcard')
+    ) {
+      itemQuestions.push({
         id: `nba-${nbaItem.year}`,
         question: {
           text: `Which team won the NBA Championship in ${nbaItem.year}?`
@@ -64,8 +107,15 @@ export const generateNBAQuestions = (): QuestionItem[] => {
         },
         difficulty: 'easy',
         type: 'flashcard'
-      } as FlashcardItem,
-      {
+      } as FlashcardItem)
+    }
+
+    // Medium difficulty, multiple choice question
+    if (
+      includeDifficulties.includes('medium') &&
+      (!type || type === 'multiple_choice')
+    ) {
+      itemQuestions.push({
         id: `nba-runnerup-${nbaItem.year}`,
         question: {
           text: `Which team was the runner-up in the ${nbaItem.year} NBA Finals?`
@@ -85,24 +135,15 @@ export const generateNBAQuestions = (): QuestionItem[] => {
           ...getRandomTeams(
             2,
             [nbaItem.winner, nbaItem.runnerUp],
-            nbaData,
+            nbaData as NBAData[],
             nbaItem.year
           ).map((team) => ({
             text: team
           }))
         ].sort(() => Math.random() - 0.5)
-      } as MultipleChoiceQuestionItem,
-      {
-        id: `nba-final-${nbaItem.year}`,
-        question: {
-          text: `Which teams played in the ${nbaItem.year} NBA Finals?`
-        },
-        answer: {
-          text: `${nbaItem.winner} vs ${nbaItem.runnerUp}`
-        },
-        difficulty: 'medium',
-        type: 'flashcard'
-      } as FlashcardItem
-    ]
+      } as MultipleChoiceQuestionItem)
+    }
+
+    return itemQuestions
   })
 }
