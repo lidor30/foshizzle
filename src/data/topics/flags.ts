@@ -12,7 +12,7 @@ export const getFlagsTopic = async () => {
     name: t('flags'),
     icon: globeIconFileName,
     data: [],
-    generateQuestions: async (_data, params) => {
+    generateQuestions: async (_data: any, params: any) => {
       const locale = params?.locale as Locale
       const flashcards = await generateFlagsFlashcards({ locale })
 
