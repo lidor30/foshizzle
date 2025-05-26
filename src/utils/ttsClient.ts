@@ -7,6 +7,9 @@ interface AudioCache {
 
 const audioCache: AudioCache = {}
 
+// Track pending speech generation request
+let pendingSpeechPromise: Promise<string> | null = null
+
 let currentAudio: HTMLAudioElement | null = null
 
 // IndexedDB constants
@@ -402,18 +405,34 @@ export const speakText = async (
   try {
     if (!text.trim()) return
 
+    // Cancel any currently playing audio
     if (currentAudio) {
       currentAudio.pause()
       currentAudio.currentTime = 0
       currentAudio = null
     }
 
-    const audioUrl = await generateSpeech(text, options)
-    if (!audioUrl) return
+    // Create a new promise for this request
+    const thisRequest = generateSpeech(text, options)
+    pendingSpeechPromise = thisRequest
 
-    const audio = new Audio(audioUrl)
-    currentAudio = audio
-    await audio.play()
+    // Get the audio URL for this specific request
+    const audioUrl = await thisRequest
+
+    // Only play if this is still the most recent request and we have a URL
+    if (pendingSpeechPromise === thisRequest && audioUrl) {
+      const audio = new Audio(audioUrl)
+
+      // Setup ended event to clean up
+      audio.onended = () => {
+        if (currentAudio === audio) {
+          currentAudio = null
+        }
+      }
+
+      currentAudio = audio
+      await audio.play()
+    }
   } catch (error) {
     console.error('Error speaking text:', error)
   }
