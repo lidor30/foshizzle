@@ -2,38 +2,38 @@ import { Locale } from 'next-intl'
 import { StaticImageData } from 'next/image'
 
 export type DifficultyLevel = 'easy' | 'medium' | 'hard'
-export type QuestionType = 'basic' | 'multiple_choice'
+export type QuestionType = 'flashcard' | 'multiple_choice'
 
-export interface ContentItem {
+export type ContentItem = {
   text?: string
   image?: string
 }
 
-export interface BaseFlashcardItem {
+export type BaseQuestionItem = {
   id: string
   question: ContentItem
   answer: ContentItem
+  type: QuestionType
   difficulty: DifficultyLevel
   metadata?: Record<string, string | number | boolean>
   autoReadQuestion?: boolean
 }
 
-export interface BasicFlashcardItem extends BaseFlashcardItem {
-  type: 'basic'
+export type FlashcardItem = BaseQuestionItem & {
+  type: 'flashcard'
 }
-
-export interface MultipleChoiceQuestionItem extends BaseFlashcardItem {
+export type MultipleChoiceQuestionItem = BaseQuestionItem & {
   type: 'multiple_choice'
   options: ContentItem[]
 }
 
-export type FlashcardItem = BasicFlashcardItem | MultipleChoiceQuestionItem
+export type QuestionItem = FlashcardItem | MultipleChoiceQuestionItem
 
 export interface BaseTopicData {
   [key: string]: any
 }
 
-export interface ChampionsLeagueData extends BaseTopicData {
+export type ChampionsLeagueData = BaseTopicData & {
   winner: string
   runnerUp: string
   season: string
@@ -42,7 +42,7 @@ export interface ChampionsLeagueData extends BaseTopicData {
   stadium: string
 }
 
-export interface EuropaLeagueData extends BaseTopicData {
+export type EuropaLeagueData = BaseTopicData & {
   winner: string
   runnerUp: string
   season: string
@@ -51,13 +51,13 @@ export interface EuropaLeagueData extends BaseTopicData {
   stadium: string
 }
 
-export interface NBAData extends BaseTopicData {
+export type NBAData = BaseTopicData & {
   winner: string
   runnerUp: string
   year: string
 }
 
-export interface FIFAData extends BaseTopicData {
+export type FIFAData = BaseTopicData & {
   winner: string
   runnerUp: string
   year: number
@@ -65,11 +65,11 @@ export interface FIFAData extends BaseTopicData {
   host: string
 }
 
-export interface FlagData extends BaseTopicData {
+export type FlagData = BaseTopicData & {
   countryCode: string
 }
 
-export interface MathData extends BaseTopicData {
+export type MathData = BaseTopicData & {
   operation: 'addition' | 'subtraction'
   maxNumber: number
 }
@@ -82,7 +82,14 @@ export type TopicData =
   | FlagData
   | MathData
 
-export interface TopicConfig<T extends BaseTopicData> {
+export type TopicMetadata = {
+  id: string
+  name: string
+  icon?: string | StaticImageData
+  kidsMode?: boolean
+}
+
+export type TopicConfig<T extends BaseTopicData> = {
   id: string
   name: string
   icon?: string | StaticImageData
@@ -90,6 +97,6 @@ export interface TopicConfig<T extends BaseTopicData> {
   generateQuestions: (
     data: T[],
     params?: { locale?: Locale }
-  ) => FlashcardItem[] | Promise<FlashcardItem[]>
+  ) => QuestionItem[] | Promise<QuestionItem[]>
   kidsMode?: boolean
 }

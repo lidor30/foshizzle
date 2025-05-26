@@ -1,4 +1,5 @@
 import { getTopics } from '@/data/topics'
+import { generateQuestions } from '@/services/questions'
 import { getLocale } from 'next-intl/server'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -14,32 +15,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const allTopics = await getTopics({ locale })
-
-    const selectedTopics = allTopics.filter((topic) =>
-      topicIds.includes(topic.id)
+    const topics = await getTopics()
+    const selectedTopics = topics.filter((topic) => topicIds.includes(topic.id))
+    const allCards = await generateQuestions(
+      topicIds,
+      difficulty,
+      locale,
+      selectedTopics
     )
-
-    const topicsWithCards = await Promise.all(
-      selectedTopics.map(async (topic) => {
-        const cards = await topic.generateQuestions(topic.data)
-        return cards.map((card) => ({
-          ...card,
-          topicIcon: topic.icon
-        }))
-      })
-    )
-
-    let allCards = topicsWithCards.flat()
-
-    // Filter cards by difficulty
-    if (difficulty === 'easy') {
-      allCards = allCards.filter((card) => card.difficulty === 'easy')
-    } else if (difficulty === 'medium') {
-      allCards = allCards.filter(
-        (card) => card.difficulty === 'easy' || card.difficulty === 'medium'
-      )
-    }
 
     return NextResponse.json(allCards)
   } catch (error: unknown) {

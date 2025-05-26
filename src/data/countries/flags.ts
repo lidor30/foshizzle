@@ -1,7 +1,7 @@
 import type {
   DifficultyLevel,
-  FlashcardItem,
-  MultipleChoiceQuestionItem
+  MultipleChoiceQuestionItem,
+  QuestionItem
 } from '@/types/questions'
 import { Locale } from 'next-intl'
 import 'server-only'
@@ -67,7 +67,7 @@ export const generateFlagsFlashcards = async ({
   locale
 }: {
   locale: Locale
-}): Promise<FlashcardItem[]> => {
+}): Promise<QuestionItem[]> => {
   const countriesData = await loadCountriesData()
   if (countriesData.length === 0) return []
 
@@ -144,7 +144,7 @@ export const generateFlagsFlashcards = async ({
 const generateIdentifyCountryQuestions = (
   selectedCountries: Country[],
   locale: string
-): FlashcardItem[] => {
+): QuestionItem[] => {
   return selectedCountries.map((country) => {
     // Get 3 random countries for wrong options
     const randomCountries = getRandomCountries(3, [country.cca2])
@@ -196,7 +196,7 @@ const generateIdentifyCountryQuestions = (
 const generateIdentifyFlagQuestions = (
   selectedCountries: Country[],
   locale: Locale
-): FlashcardItem[] => {
+): QuestionItem[] => {
   return selectedCountries.map((country) => {
     // Get 3 random countries for wrong options
     const randomCountries = getRandomCountries(3, [country.cca2])

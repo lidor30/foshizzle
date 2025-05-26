@@ -1,14 +1,14 @@
 'use client'
 
 import { useStats } from '@/context/StatsContext'
-import { DifficultyLevel, FlashcardItem } from '@/types/questions'
+import { DifficultyLevel, QuestionItem } from '@/types/questions'
 import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import type { AnswerResult } from '../types'
 
 const DEFAULT_SESSION_SIZE = 20
 
-export type SessionFlashcard = FlashcardItem & {
+export type SessionFlashcard = QuestionItem & {
   topicIcon?: string
 }
 

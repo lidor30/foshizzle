@@ -1,13 +1,5 @@
-import { BaseTopicData, MultipleChoiceQuestionItem } from '@/types/questions'
-import { getTranslations } from 'next-intl/server'
+import { MultipleChoiceQuestionItem } from '@/types/questions'
 
-// Define the math question data type
-export interface MathData extends BaseTopicData {
-  operation: 'addition' | 'subtraction'
-  maxNumber: number
-}
-
-const mathIconFileName = 'math.png'
 const NUMBER_OF_QUESTIONS = 20
 
 // Generate a random number between min and max (inclusive)
@@ -47,7 +39,7 @@ const generateWrongAnswers = (
 }
 
 // Generate random math questions based on difficulty
-const generateMathQuestions = (
+const generateMathQuestionsForDifficulty = (
   count: number,
   difficulty: 'easy' | 'medium' | 'hard'
 ): MultipleChoiceQuestionItem[] => {
@@ -122,26 +114,11 @@ const generateMathQuestions = (
   return questions
 }
 
-export const getMathTopic = async () => {
-  const t = await getTranslations('Topics')
-
-  return {
-    id: 'math',
-    name: t('math'),
-    icon: mathIconFileName,
-    data: [
-      { operation: 'addition', maxNumber: 10 },
-      { operation: 'subtraction', maxNumber: 10 },
-      { operation: 'addition', maxNumber: 20 },
-      { operation: 'subtraction', maxNumber: 20 }
-    ],
-    generateQuestions: () => {
-      return [
-        ...generateMathQuestions(NUMBER_OF_QUESTIONS, 'easy'),
-        ...generateMathQuestions(NUMBER_OF_QUESTIONS, 'medium'),
-        ...generateMathQuestions(NUMBER_OF_QUESTIONS, 'hard')
-      ]
-    },
-    kidsMode: true
-  }
+// Export the main generator function
+export const generateMathQuestions = (): MultipleChoiceQuestionItem[] => {
+  return [
+    ...generateMathQuestionsForDifficulty(NUMBER_OF_QUESTIONS, 'easy'),
+    ...generateMathQuestionsForDifficulty(NUMBER_OF_QUESTIONS, 'medium'),
+    ...generateMathQuestionsForDifficulty(NUMBER_OF_QUESTIONS, 'hard')
+  ]
 }

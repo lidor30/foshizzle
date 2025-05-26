@@ -1,5 +1,5 @@
 import { AnswerResult } from '@/types'
-import { ContentItem, FlashcardItem } from '@/types/questions'
+import { ContentItem, QuestionItem } from '@/types/questions'
 import { speakText } from '@/utils/ttsClient'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react'
 import SpeakButton from '../SpeakButton'
 
 interface FlashcardProps {
-  card: FlashcardItem
+  card: QuestionItem
   isFlipped: boolean
   onFlip: () => void
   onAnswer: (result: AnswerResult) => void

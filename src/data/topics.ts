@@ -1,32 +1,48 @@
-import { TopicConfig } from '@/types/questions'
-import { Locale } from 'next-intl'
-import { europaLeagueTopic } from './topics/europa-league'
-import { fifaWorldCupTopic } from './topics/fifa-world-cup'
-import { getFlagsTopic } from './topics/flags'
-import { getMathTopic } from './topics/math'
-import { nbaTopic } from './topics/nba'
-import { uefaChampionsTopic } from './topics/uefa-champions'
+import { TopicMetadata } from '@/types/questions'
+import { getTranslations } from 'next-intl/server'
 
-export const getTopics = async ({
-  locale
-}: {
-  locale: Locale
-}): Promise<TopicConfig<any>[]> => {
-  const mathTopic = await getMathTopic()
+const mathIconFileName = 'math.png'
+const globeIconFileName = 'globe.png'
+const championsIconFileName = 'champions.png'
+const europaIconFileName = 'europa.png'
+const worldCupIconFileName = 'world-cup.png'
+const nbaIconFileName = 'nba.png'
 
-  const flagsTopic = await getFlagsTopic()
-  const localizedFlagsTopic = {
-    ...flagsTopic,
-    generateQuestions: async () =>
-      await flagsTopic.generateQuestions([], { locale })
-  }
+export const getTopics = async (): Promise<TopicMetadata[]> => {
+  const t = await getTranslations('Topics')
 
   return [
-    localizedFlagsTopic,
-    mathTopic,
-    uefaChampionsTopic,
-    europaLeagueTopic,
-    fifaWorldCupTopic,
-    nbaTopic
+    {
+      id: 'flags',
+      name: t('flags'),
+      icon: globeIconFileName,
+      kidsMode: true
+    },
+    {
+      id: 'math',
+      name: t('math'),
+      icon: mathIconFileName,
+      kidsMode: true
+    },
+    {
+      id: 'uefa',
+      name: 'UEFA Champions League',
+      icon: championsIconFileName
+    },
+    {
+      id: 'europa',
+      name: 'UEFA Europa League',
+      icon: europaIconFileName
+    },
+    {
+      id: 'fifa',
+      name: 'FIFA World Cup',
+      icon: worldCupIconFileName
+    },
+    {
+      id: 'nba',
+      name: 'NBA',
+      icon: nbaIconFileName
+    }
   ]
 }

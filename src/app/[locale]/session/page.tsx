@@ -8,8 +8,8 @@ import SessionProgress from '@/components/session/SessionProgress'
 import { useSession } from '@/hooks/useSession'
 import {
   DifficultyLevel,
-  FlashcardItem,
-  MultipleChoiceQuestionItem
+  MultipleChoiceQuestionItem,
+  QuestionItem
 } from '@/types/questions'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
@@ -112,7 +112,7 @@ export default function SessionPage() {
                   />
                 ) : (
                   <Flashcard
-                    card={currentCard as FlashcardItem}
+                    card={currentCard as QuestionItem}
                     isFlipped={isFlipped}
                     onFlip={flipCard}
                     onAnswer={handleAnswer}

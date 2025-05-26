@@ -183,7 +183,7 @@ export default function TopicSelector({ onStartSession }: TopicSelectorProps) {
                 />
               </div>
             )}
-            <span className="text-sm">{topic.name}</span>
+            <span className="text-sm dark:text-white">{topic.name}</span>
           </button>
         ))}
       </div>
@@ -242,7 +242,7 @@ export default function TopicSelector({ onStartSession }: TopicSelectorProps) {
           ? t('startButtonWithCount', { count: String(selectedCount) })
           : t('startButtonWithCount_plural', { count: String(selectedCount) })}
       </button>
-      <div className="text-end text-xs text-gray-600 pt-6 mt-auto">
+      <div className="text-end text-xs text-gray-600/40 dark:text-gray-600 pt-6 mt-auto">
         {APP_VERSION}
       </div>
     </div>
