@@ -19,6 +19,23 @@ const DB_VERSION = 1
 const MAX_CACHE_SIZE = 500 * 1024 // 500KB
 const MAX_CACHE_ENTRIES = 500
 
+// Track if user has interacted with the page
+let userHasInteracted = false
+
+// Listen for user interaction events to set the flag
+if (typeof window !== 'undefined') {
+  const interactionEvents = ['click', 'touchstart', 'keydown', 'scroll']
+  interactionEvents.forEach((event) => {
+    window.addEventListener(
+      event,
+      () => {
+        userHasInteracted = true
+      },
+      { once: false, passive: true }
+    )
+  })
+}
+
 const isIndexedDBAvailable = (): boolean => {
   try {
     if (typeof window === 'undefined') {
@@ -431,7 +448,16 @@ export const speakText = async (
       }
 
       currentAudio = audio
-      await audio.play()
+
+      if (userHasInteracted) {
+        try {
+          await audio.play()
+        } catch (playError) {
+          console.warn('Audio playback failed:', playError)
+        }
+      } else {
+        console.warn('Audio playback requires user interaction first')
+      }
     }
   } catch (error) {
     console.error('Error speaking text:', error)

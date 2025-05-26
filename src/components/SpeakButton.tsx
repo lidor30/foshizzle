@@ -9,6 +9,20 @@ interface SpeakButtonProps {
   onClick?: (e: React.MouseEvent) => void
 }
 
+let userHasInteracted = false
+if (typeof window !== 'undefined') {
+  const interactionEvents = ['click', 'touchstart', 'keydown', 'scroll']
+  interactionEvents.forEach((event) => {
+    window.addEventListener(
+      event,
+      () => {
+        userHasInteracted = true
+      },
+      { once: false, passive: true }
+    )
+  })
+}
+
 const SpeakButton: React.FC<SpeakButtonProps> = ({
   text,
   options = {},
@@ -17,6 +31,7 @@ const SpeakButton: React.FC<SpeakButtonProps> = ({
 }) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [isTTSDisabled, setIsTTSDisabled] = useState(false)
+  const [needsInteraction, setNeedsInteraction] = useState(!userHasInteracted)
 
   // Check if TTS is enabled on the client side
   useEffect(() => {
@@ -42,11 +57,26 @@ const SpeakButton: React.FC<SpeakButtonProps> = ({
     }
 
     checkTTSAvailability()
+
+    const updateInteractionState = () => {
+      if (userHasInteracted) {
+        setNeedsInteraction(false)
+      }
+    }
+
+    updateInteractionState()
+    const intervalId = setInterval(updateInteractionState, 1000)
+
+    return () => clearInterval(intervalId)
   }, [])
 
   const handleClick = async (e: React.MouseEvent) => {
     // Prevent default behavior (like card flipping)
     e.stopPropagation()
+
+    // This click counts as user interaction
+    userHasInteracted = true
+    setNeedsInteraction(false)
 
     // Don't try to play if TTS is disabled, already playing, or if text is empty
     if (isTTSDisabled || isPlaying || !text.trim()) return
@@ -82,10 +112,14 @@ const SpeakButton: React.FC<SpeakButtonProps> = ({
       onClick={handleClick}
       className={`p-2 text-gray-600 hover:text-blue-500 focus:outline-none ${
         isPlaying ? 'text-blue-500' : ''
-      } ${className}`}
-      aria-label="Read text aloud"
+      } ${needsInteraction ? 'animate-pulse' : ''} ${className}`}
+      aria-label={
+        needsInteraction ? 'Click to enable audio' : 'Read text aloud'
+      }
       disabled={isPlaying || !text.trim()}
-      title="Read text aloud"
+      title={
+        needsInteraction ? 'Click to enable audio playback' : 'Read text aloud'
+      }
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
