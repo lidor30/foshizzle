@@ -1,6 +1,7 @@
 import { DifficultyLevel, QuestionItem, QuestionType } from '@/types/questions'
 import { Locale } from 'next-intl'
 import { generateFlagsFlashcards } from '../countries/flags'
+import { getDifficultyLevels } from './utils'
 
 export const generateFlagsQuestions = async ({
   locale,
@@ -14,24 +15,16 @@ export const generateFlagsQuestions = async ({
   // Get the base flashcards
   const allFlashcards = await generateFlagsFlashcards({ locale })
 
-  // First, filter by difficulty if specified
-  let difficultyFiltered = allFlashcards
-  if (difficulty) {
-    if (difficulty === 'easy') {
-      difficultyFiltered = allFlashcards.filter((q) => q.difficulty === 'easy')
-    } else if (difficulty === 'medium') {
-      difficultyFiltered = allFlashcards.filter(
-        (q) => q.difficulty === 'easy' || q.difficulty === 'medium'
-      )
-    }
-    // For 'hard', keep all questions
-  }
+  // First, filter by difficulty
+  const includeDifficulties = getDifficultyLevels(difficulty)
+  const difficultyFiltered = allFlashcards.filter((q) =>
+    includeDifficulties.includes(q.difficulty)
+  )
 
   // Then filter by type if specified
-  let typeFiltered = difficultyFiltered
-  if (type) {
-    typeFiltered = difficultyFiltered.filter((q) => q.type === type)
-  }
+  const typeFiltered = type
+    ? difficultyFiltered.filter((q) => q.type === type)
+    : difficultyFiltered
 
   // Finally, add metadata to the filtered questions
   return typeFiltered.map((card) => ({

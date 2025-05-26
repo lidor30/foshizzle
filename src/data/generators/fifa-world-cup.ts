@@ -1,46 +1,21 @@
 import {
   DifficultyLevel,
   FIFAData,
-  FlashcardItem,
-  MultipleChoiceQuestionItem,
   QuestionItem,
   QuestionType
 } from '@/types/questions'
 import { Locale } from 'next-intl'
 import fifaData from '../sports/fifa.json'
+import {
+  createFlashcardQuestion,
+  createMultipleChoiceQuestion,
+  getDifficultyLevels,
+  getRandomTeams,
+  shouldIncludeQuestionType,
+  shuffleArray
+} from './utils'
 
-const getRandomTeams = (
-  count: number,
-  excludeTeams: string[],
-  data: FIFAData[],
-  currentYear: number
-): string[] => {
-  const allTeams = new Set<string>()
-
-  // Collect all unique teams
-  data.forEach((item: FIFAData) => {
-    if (item.year !== currentYear) {
-      allTeams.add(item.winner)
-      allTeams.add(item.runnerUp)
-    }
-  })
-
-  // Remove excluded teams
-  excludeTeams.forEach((team) => allTeams.delete(team))
-
-  // Convert to array and randomly select teams
-  const availableTeams = Array.from(allTeams)
-  const selectedTeams: string[] = []
-
-  for (let i = 0; i < count && availableTeams.length > 0; i++) {
-    const randomIndex = Math.floor(Math.random() * availableTeams.length)
-    selectedTeams.push(availableTeams[randomIndex])
-    availableTeams.splice(randomIndex, 1)
-  }
-
-  return selectedTeams
-}
-
+// Special function for FIFA data to get random countries (hosts)
 const getRandomCountries = (
   count: number,
   excludeCountries: string[],
@@ -78,14 +53,7 @@ export const generateFifaWorldCupQuestions = (
   type?: QuestionType
 ): QuestionItem[] => {
   // Determine which difficulties to include
-  const includeDifficulties: DifficultyLevel[] = []
-  if (!difficulty || difficulty === 'hard') {
-    includeDifficulties.push('easy', 'medium', 'hard')
-  } else if (difficulty === 'medium') {
-    includeDifficulties.push('easy', 'medium')
-  } else if (difficulty === 'easy') {
-    includeDifficulties.push('easy')
-  }
+  const includeDifficulties = getDifficultyLevels(difficulty)
 
   // Generate only the questions that match both difficulty and type criteria
   return (fifaData as FIFAData[]).flatMap((item) => {
@@ -95,83 +63,74 @@ export const generateFifaWorldCupQuestions = (
     // Easy difficulty, multiple choice question
     if (
       includeDifficulties.includes('easy') &&
-      (!type || type === 'multiple_choice')
+      shouldIncludeQuestionType(type, 'multiple_choice')
     ) {
-      itemQuestions.push({
-        id: `fifa-winner-${fifaItem.year}`,
-        question: {
-          text: `Who won the FIFA World Cup in ${fifaItem.year}?`
-        },
-        answer: {
-          text: fifaItem.winner
-        },
-        difficulty: 'easy',
-        type: 'multiple_choice',
-        options: [
-          {
-            text: fifaItem.winner
-          },
-          {
-            text: fifaItem.runnerUp
-          },
-          ...getRandomTeams(
-            2,
-            [fifaItem.winner, fifaItem.runnerUp],
-            fifaData as FIFAData[],
-            fifaItem.year
-          ).map((team) => ({
-            text: team
-          }))
-        ].sort(() => Math.random() - 0.5)
-      } as MultipleChoiceQuestionItem)
+      const randomTeams = getRandomTeams(
+        2,
+        [fifaItem.winner, fifaItem.runnerUp],
+        fifaData as FIFAData[],
+        fifaItem.year.toString(),
+        'year'
+      )
+
+      const options = shuffleArray([
+        { text: fifaItem.winner },
+        { text: fifaItem.runnerUp },
+        ...randomTeams.map((team) => ({ text: team }))
+      ])
+
+      itemQuestions.push(
+        createMultipleChoiceQuestion(
+          `fifa-winner-${fifaItem.year}`,
+          `Who won the FIFA World Cup in ${fifaItem.year}?`,
+          fifaItem.winner,
+          options,
+          'easy'
+        )
+      )
     }
 
     // Medium difficulty, flashcard question
     if (
       includeDifficulties.includes('medium') &&
-      (!type || type === 'flashcard')
+      shouldIncludeQuestionType(type, 'flashcard')
     ) {
-      itemQuestions.push({
-        id: `fifa-final-${fifaItem.year}`,
-        question: {
-          text: `Which teams played in the ${fifaItem.year} FIFA World Cup final and what was the score?`
-        },
-        answer: {
-          text: `${fifaItem.winner} vs ${fifaItem.runnerUp}\n(${fifaItem.score})`
-        },
-        difficulty: 'medium',
-        type: 'flashcard'
-      } as FlashcardItem)
+      itemQuestions.push(
+        createFlashcardQuestion(
+          `fifa-final-${fifaItem.year}`,
+          `Which teams played in the ${fifaItem.year} FIFA World Cup final and what was the score?`,
+          `${fifaItem.winner} vs ${fifaItem.runnerUp}\n(${fifaItem.score})`,
+          'medium'
+        )
+      )
     }
 
+    // Medium difficulty, multiple choice question for host country
     if (
       includeDifficulties.includes('medium') &&
-      (!type || type === 'multiple_choice')
+      shouldIncludeQuestionType(type, 'multiple_choice')
     ) {
-      itemQuestions.push({
-        id: `fifa-host-${fifaItem.year}`,
-        question: {
-          text: `Which country hosted the FIFA World Cup in ${fifaItem.year}?`
-        },
-        answer: {
-          text: fifaItem.host
-        },
-        difficulty: 'medium',
-        type: 'multiple_choice',
-        options: [
-          {
-            text: fifaItem.host
-          },
-          ...getRandomCountries(
-            3,
-            [fifaItem.host],
-            fifaData as FIFAData[],
-            fifaItem.year
-          ).map((country) => ({
-            text: country
-          }))
-        ].sort(() => Math.random() - 0.5)
-      } as MultipleChoiceQuestionItem)
+      const randomCountries = getRandomCountries(
+        3,
+        [fifaItem.host],
+        fifaData as FIFAData[],
+        fifaItem.year
+      )
+
+      const options = shuffleArray([
+        { text: fifaItem.host },
+        ...randomCountries.map((country) => ({ text: country }))
+      ])
+
+      itemQuestions.push(
+        createMultipleChoiceQuestion(
+          `fifa-host-${fifaItem.year}`,
+          `Which country hosted the FIFA World Cup in ${fifaItem.year}?`,
+          fifaItem.host,
+          options,
+          'medium'
+        )
+      )
     }
 
     return itemQuestions

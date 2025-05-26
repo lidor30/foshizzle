@@ -1,42 +1,18 @@
 import {
   DifficultyLevel,
   EuropaLeagueData,
-  FlashcardItem,
-  MultipleChoiceQuestionItem,
   QuestionItem,
   QuestionType
 } from '@/types/questions'
 import { Locale } from 'next-intl'
 import europaData from '../sports/europa.json'
-
-const getRandomTeams = (
-  count: number,
-  excludeTeams: string[],
-  data: EuropaLeagueData[],
-  currentSeason: string
-): string[] => {
-  const allTeams = new Set<string>()
-
-  data.forEach((item: EuropaLeagueData) => {
-    if (item.season !== currentSeason) {
-      allTeams.add(item.winner)
-      allTeams.add(item.runnerUp)
-    }
-  })
-
-  excludeTeams.forEach((team) => allTeams.delete(team))
-
-  const availableTeams = Array.from(allTeams)
-  const selectedTeams: string[] = []
-
-  for (let i = 0; i < count && availableTeams.length > 0; i++) {
-    const randomIndex = Math.floor(Math.random() * availableTeams.length)
-    selectedTeams.push(availableTeams[randomIndex])
-    availableTeams.splice(randomIndex, 1)
-  }
-
-  return selectedTeams
-}
+import {
+  createFlashcardQuestion,
+  createMultipleChoiceQuestion,
+  getDifficultyLevels,
+  getRandomTeams,
+  shouldIncludeQuestionType
+} from './utils'
 
 export const generateEuropaLeagueQuestions = (
   locale?: Locale,
@@ -44,14 +20,7 @@ export const generateEuropaLeagueQuestions = (
   type?: QuestionType
 ): QuestionItem[] => {
   // Determine which difficulties to include
-  const includeDifficulties: DifficultyLevel[] = []
-  if (!difficulty || difficulty === 'hard') {
-    includeDifficulties.push('easy', 'medium', 'hard')
-  } else if (difficulty === 'medium') {
-    includeDifficulties.push('easy', 'medium')
-  } else if (difficulty === 'easy') {
-    includeDifficulties.push('easy')
-  }
+  const includeDifficulties = getDifficultyLevels(difficulty)
 
   // Generate only the questions that match both difficulty and type criteria
   return (europaData as EuropaLeagueData[]).flatMap((item) => {
@@ -61,105 +30,91 @@ export const generateEuropaLeagueQuestions = (
     // Easy difficulty, multiple choice question
     if (
       includeDifficulties.includes('easy') &&
-      (!type || type === 'multiple_choice')
+      shouldIncludeQuestionType(type, 'multiple_choice')
     ) {
-      itemQuestions.push({
-        id: `europa-winner-${europaItem.season}`,
-        question: {
-          text: `Who won the UEFA Europa League in ${europaItem.season}?`
-        },
-        answer: {
-          text: europaItem.winner
-        },
-        difficulty: 'easy',
-        type: 'multiple_choice',
-        options: [
-          {
-            text: europaItem.winner
-          },
-          {
-            text: europaItem.runnerUp
-          },
-          ...getRandomTeams(
-            2,
-            [europaItem.winner, europaItem.runnerUp],
-            europaData as EuropaLeagueData[],
-            europaItem.season
-          ).map((team) => ({
-            text: team
-          }))
-        ].sort(() => Math.random() - 0.5)
-      } as MultipleChoiceQuestionItem)
+      const randomTeams = getRandomTeams(
+        2,
+        [europaItem.winner, europaItem.runnerUp],
+        europaData as EuropaLeagueData[],
+        europaItem.season,
+        'season'
+      )
+
+      const options = [
+        { text: europaItem.winner },
+        { text: europaItem.runnerUp },
+        ...randomTeams.map((team) => ({ text: team }))
+      ].sort(() => Math.random() - 0.5)
+
+      itemQuestions.push(
+        createMultipleChoiceQuestion(
+          `europa-winner-${europaItem.season}`,
+          `Who won the UEFA Europa League in ${europaItem.season}?`,
+          europaItem.winner,
+          options,
+          'easy'
+        )
+      )
     }
 
     // Medium difficulty, flashcard question
     if (
       includeDifficulties.includes('medium') &&
-      (!type || type === 'flashcard')
+      shouldIncludeQuestionType(type, 'flashcard')
     ) {
-      itemQuestions.push({
-        id: `europa-final-${europaItem.season}`,
-        question: {
-          text: `Which teams played in the ${europaItem.season} UEFA Europa League final and what was the score?`
-        },
-        answer: {
-          text: `${europaItem.winner} vs ${europaItem.runnerUp}\n(${europaItem.score})`
-        },
-        difficulty: 'medium',
-        type: 'flashcard'
-      } as FlashcardItem)
+      itemQuestions.push(
+        createFlashcardQuestion(
+          `europa-final-${europaItem.season}`,
+          `Which teams played in the ${europaItem.season} UEFA Europa League final and what was the score?`,
+          `${europaItem.winner} vs ${europaItem.runnerUp}\n(${europaItem.score})`,
+          'medium'
+        )
+      )
     }
 
     // Hard difficulty, flashcard question
     if (
       includeDifficulties.includes('hard') &&
-      (!type || type === 'flashcard')
+      shouldIncludeQuestionType(type, 'flashcard')
     ) {
-      itemQuestions.push({
-        id: `europa-location-stadium-${europaItem.season}`,
-        question: {
-          text: `Where was the UEFA Europa League final in ${europaItem.season} held (city and stadium)?`
-        },
-        answer: {
-          text: `${europaItem.location}\n(${europaItem.stadium})`
-        },
-        difficulty: 'hard',
-        type: 'flashcard'
-      } as FlashcardItem)
+      itemQuestions.push(
+        createFlashcardQuestion(
+          `europa-location-stadium-${europaItem.season}`,
+          `Where was the UEFA Europa League final in ${europaItem.season} held (city and stadium)?`,
+          `${europaItem.location}\n(${europaItem.stadium})`,
+          'hard'
+        )
+      )
     }
 
     // Medium difficulty, multiple choice question
     if (
       includeDifficulties.includes('medium') &&
-      (!type || type === 'multiple_choice')
+      shouldIncludeQuestionType(type, 'multiple_choice')
     ) {
-      itemQuestions.push({
-        id: `europa-runnerup-${europaItem.season}`,
-        question: {
-          text: `Who was the runner-up in the ${europaItem.season} UEFA Europa League?`
-        },
-        answer: {
-          text: europaItem.runnerUp
-        },
-        difficulty: 'medium',
-        type: 'multiple_choice',
-        options: [
-          {
-            text: europaItem.runnerUp
-          },
-          {
-            text: europaItem.winner
-          },
-          ...getRandomTeams(
-            2,
-            [europaItem.winner, europaItem.runnerUp],
-            europaData as EuropaLeagueData[],
-            europaItem.season
-          ).map((team) => ({
-            text: team
-          }))
-        ].sort(() => Math.random() - 0.5)
-      } as MultipleChoiceQuestionItem)
+      const randomTeams = getRandomTeams(
+        2,
+        [europaItem.winner, europaItem.runnerUp],
+        europaData as EuropaLeagueData[],
+        europaItem.season,
+        'season'
+      )
+
+      const options = [
+        { text: europaItem.runnerUp },
+        { text: europaItem.winner },
+        ...randomTeams.map((team) => ({ text: team }))
+      ].sort(() => Math.random() - 0.5)
+
+      itemQuestions.push(
+        createMultipleChoiceQuestion(
+          `europa-runnerup-${europaItem.season}`,
+          `Who was the runner-up in the ${europaItem.season} UEFA Europa League?`,
+          europaItem.runnerUp,
+          options,
+          'medium'
+        )
+      )
     }
 
     return itemQuestions

@@ -4,13 +4,15 @@ import {
   QuestionType
 } from '@/types/questions'
 import { Locale } from 'next-intl'
+import {
+  createMultipleChoiceQuestion,
+  getDifficultyLevels,
+  getRandomNumber,
+  shouldIncludeQuestionType,
+  shuffleArray
+} from './utils'
 
 const NUMBER_OF_QUESTIONS = 20
-
-// Generate a random number between min and max (inclusive)
-const getRandomNumber = (min: number, max: number): number => {
-  return Math.floor(Math.random() * (max - min + 1)) + min
-}
 
 // Generate wrong answers for a math question
 const generateWrongAnswers = (
@@ -100,28 +102,28 @@ const generateMathQuestionsForDifficulty = (
     // Generate wrong answers
     const wrongAnswers = generateWrongAnswers(answer, 3, maxNumber)
 
+    // Create options with answer and wrong answers
+    const options = shuffleArray([
+      { text: answer.toString() },
+      ...wrongAnswers.map((a) => ({ text: a.toString() }))
+    ])
+
     // Create question
-    questions.push({
-      id: `math-${difficulty}-${i}`,
-      question: {
-        text: questionText
-      },
-      answer: {
-        text: answer.toString()
-      },
-      difficulty,
-      type: 'multiple_choice',
-      options: [
-        { text: answer.toString() },
-        ...wrongAnswers.map((a) => ({ text: a.toString() }))
-      ].sort(() => Math.random() - 0.5),
-      metadata: {
-        largeAnswerBoxes: true,
-        largeText: true,
-        kidsQuestion: true,
-        isRTL: false
-      }
-    })
+    questions.push(
+      createMultipleChoiceQuestion(
+        `math-${difficulty}-${i}`,
+        questionText,
+        answer.toString(),
+        options,
+        difficulty,
+        {
+          largeAnswerBoxes: true,
+          largeText: true,
+          kidsQuestion: true,
+          isRTL: false
+        }
+      )
+    )
   }
 
   return questions
@@ -134,23 +136,12 @@ export const generateMathQuestions = (
   type?: QuestionType
 ): MultipleChoiceQuestionItem[] => {
   // If type is flashcard, return empty array since math questions are only multiple choice
-  if (type === 'flashcard') {
+  if (!shouldIncludeQuestionType(type, 'multiple_choice')) {
     return []
   }
 
   // Determine which difficulties to generate based on the parameter
-  const difficultiesToGenerate: DifficultyLevel[] = []
-
-  if (!difficulty || difficulty === 'hard') {
-    // For hard or unspecified, include all difficulties
-    difficultiesToGenerate.push('easy', 'medium', 'hard')
-  } else if (difficulty === 'medium') {
-    // For medium, include easy and medium
-    difficultiesToGenerate.push('easy', 'medium')
-  } else {
-    // For easy, only include easy
-    difficultiesToGenerate.push('easy')
-  }
+  const difficultiesToGenerate = getDifficultyLevels(difficulty)
 
   // Generate only the questions for the required difficulties
   const questions: MultipleChoiceQuestionItem[] = []
