@@ -7,6 +7,7 @@ import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import Fireworks from '../Fireworks'
+import HtmlContent from '../HtmlContent'
 import SpeakButton from '../SpeakButton'
 
 interface MultipleChoiceQuestionProps {
@@ -78,10 +79,19 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
     } else if (selectedOption.text && correctAnswer.text) {
       result =
         selectedOption.text === correctAnswer.text ? 'correct' : 'incorrect'
+    } else if (selectedOption.htmlContent && correctAnswer.htmlContent) {
+      // Handle HTML content comparison (if they have a defined ID or other identifiable property)
+      result =
+        JSON.stringify(selectedOption.htmlContent) ===
+        JSON.stringify(correctAnswer.htmlContent)
+          ? 'correct'
+          : 'incorrect'
     } else {
       result =
         selectedOption.text === correctAnswer.text ||
-        selectedOption.image === correctAnswer.image
+        selectedOption.image === correctAnswer.image ||
+        JSON.stringify(selectedOption.htmlContent) ===
+          JSON.stringify(correctAnswer.htmlContent)
           ? 'correct'
           : 'incorrect'
     }
@@ -193,6 +203,9 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   }
 
   const hasImagesInOptions = card.options.some((option) => option.image)
+  const hasHtmlContentInOptions = card.options.some(
+    (option) => option.htmlContent
+  )
 
   const getCorrectAnswer = () => {
     const correctOption = card.options.find(
@@ -200,7 +213,11 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
         (option.text && card.answer.text && option.text === card.answer.text) ||
         (option.image &&
           card.answer.image &&
-          option.image === card.answer.image)
+          option.image === card.answer.image) ||
+        (option.htmlContent &&
+          card.answer.htmlContent &&
+          JSON.stringify(option.htmlContent) ===
+            JSON.stringify(card.answer.htmlContent))
     )
     return correctOption?.text || ''
   }
@@ -208,7 +225,13 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   const isCorrectOption = (option: (typeof card.options)[0]) => {
     return (
       (option.text && card.answer.text && option.text === card.answer.text) ||
-      (option.image && card.answer.image && option.image === card.answer.image)
+      (option.image &&
+        card.answer.image &&
+        option.image === card.answer.image) ||
+      (option.htmlContent &&
+        card.answer.htmlContent &&
+        JSON.stringify(option.htmlContent) ===
+          JSON.stringify(card.answer.htmlContent))
     )
   }
 
@@ -260,7 +283,7 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
       <div className="w-full max-w-2xl md:landscape:max-w-3xl mx-auto mt-8">
         <div
           className={`grid ${
-            hasImagesInOptions || useLargeAnswerBoxes
+            hasImagesInOptions || hasHtmlContentInOptions || useLargeAnswerBoxes
               ? 'grid-cols-2 md:landscape:grid-cols-2 gap-4 md:gap-6 md:landscape:gap-6'
               : 'gap-3'
           }`}
@@ -294,7 +317,7 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
                 }
                 dir={textDirection}
                 className={`px-4 py-3 ${
-                  option.image || useLargeAnswerBoxes
+                  option.image || option.htmlContent || useLargeAnswerBoxes
                     ? `flex flex-col items-center justify-center ${buttonStyle ? '' : 'bg-slate-300/50 dark:bg-slate-700/70'}`
                     : 'text-left rtl:text-right'
                 } rounded-md transition-colors text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 ${buttonStyle} ${
@@ -319,6 +342,16 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
                     />
                   </div>
                 )}
+
+                {/* Display HTML content */}
+                {option.htmlContent && (
+                  <div
+                    className={`flex justify-center ${option.text ? 'mb-2' : ''} w-full`}
+                  >
+                    <HtmlContent content={option.htmlContent} />
+                  </div>
+                )}
+
                 {option.text && (
                   <span
                     className={`${useLargeText ? 'text-xl md:text-3xl lg:text-4xl font-medium' : ''}`}

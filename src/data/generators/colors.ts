@@ -24,7 +24,7 @@ const colors: ColorData[] = [
   { name: 'orange', hebrewName: 'כתום', color: '#FFA500' },
   { name: 'purple', hebrewName: 'סגול', color: '#800080' },
   { name: 'pink', hebrewName: 'ורוד', color: '#FFC0CB' },
-  { name: 'brown', hebrewName: 'חום', color: '#A52A2A' },
+  { name: 'brown', hebrewName: 'חום', color: '#FF5733' },
   { name: 'black', hebrewName: 'שחור', color: '#000000' },
   { name: 'white', hebrewName: 'לבן', color: '#FFFFFF' }
 ]
@@ -43,23 +43,43 @@ const generateColorsQuestionsForDifficulty = (
     const otherColors = colors.filter((c) => c.name !== color.name)
     const distractors = shuffleArray([...otherColors]).slice(0, 3)
 
-    // Create options - each option is a colored square
+    // Create options - each option is a colored ball using HTML component
     const options = shuffleArray([
       {
-        image: `/images/colors/${color.name}.svg`,
+        htmlContent: {
+          type: 'ColorBall',
+          props: {
+            color: color.color,
+            size: 'large'
+          }
+        },
         text: '' // Add empty text to satisfy the type requirement
       },
       ...distractors.map((c) => ({
-        image: `/images/colors/${c.name}.svg`,
+        htmlContent: {
+          type: 'ColorBall',
+          props: {
+            color: c.color,
+            size: 'large'
+          }
+        },
         text: '' // Add empty text to satisfy the type requirement
       }))
     ])
 
-    // Create the question as a direct object rather than using the utility function
+    // Create the question as a direct object
     const question: MultipleChoiceQuestionItem = {
       id: `colors-${difficulty}-${colorIndex}`,
       question: { text: questionText },
-      answer: { image: `/images/colors/${color.name}.svg` },
+      answer: {
+        htmlContent: {
+          type: 'ColorBall',
+          props: {
+            color: color.color,
+            size: 'large'
+          }
+        }
+      },
       difficulty,
       type: 'multiple_choice',
       options,

@@ -4,9 +4,16 @@ import { StaticImageData } from 'next/image'
 export type DifficultyLevel = 'easy' | 'medium' | 'hard'
 export type QuestionType = 'flashcard' | 'multiple_choice'
 
+// Define HTML content structure
+export interface HtmlContentProps {
+  type: string
+  props: Record<string, any>
+}
+
 export type ContentItem = {
   text?: string
   image?: string
+  htmlContent?: HtmlContentProps
 }
 
 export type BaseQuestionItem = {
