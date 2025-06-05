@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import type { AnswerResult } from '../types'
 
-const DEFAULT_SESSION_SIZE = 1
+const DEFAULT_SESSION_SIZE = 20
 
 export type SessionFlashcard = QuestionItem & {
   topicIcon?: string
