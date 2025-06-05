@@ -9,6 +9,74 @@ interface SessionSummaryProps {
   onReturnHome: () => void
 }
 
+// Sound generation utility functions
+const createAudioContext = () => {
+  if (typeof window !== 'undefined' && window.AudioContext) {
+    return new AudioContext()
+  }
+  return null
+}
+
+const playScoreSound = () => {
+  const audioContext = createAudioContext()
+  if (!audioContext) return
+
+  // Create a rising tone effect for score counting
+  const oscillator = audioContext.createOscillator()
+  const gainNode = audioContext.createGain()
+
+  oscillator.connect(gainNode)
+  gainNode.connect(audioContext.destination)
+
+  oscillator.frequency.setValueAtTime(200, audioContext.currentTime)
+  oscillator.frequency.exponentialRampToValueAtTime(
+    400,
+    audioContext.currentTime + 0.1
+  )
+
+  gainNode.gain.setValueAtTime(0.1, audioContext.currentTime)
+  gainNode.gain.exponentialRampToValueAtTime(
+    0.01,
+    audioContext.currentTime + 0.1
+  )
+
+  oscillator.type = 'sine'
+  oscillator.start(audioContext.currentTime)
+  oscillator.stop(audioContext.currentTime + 0.1)
+}
+
+const playStarSound = () => {
+  const audioContext = createAudioContext()
+  if (!audioContext) return
+
+  // Create a magical "ding" sound for stars
+  const oscillator = audioContext.createOscillator()
+  const gainNode = audioContext.createGain()
+
+  oscillator.connect(gainNode)
+  gainNode.connect(audioContext.destination)
+
+  oscillator.frequency.setValueAtTime(800, audioContext.currentTime)
+  oscillator.frequency.exponentialRampToValueAtTime(
+    1200,
+    audioContext.currentTime + 0.05
+  )
+  oscillator.frequency.exponentialRampToValueAtTime(
+    600,
+    audioContext.currentTime + 0.2
+  )
+
+  gainNode.gain.setValueAtTime(0.2, audioContext.currentTime)
+  gainNode.gain.exponentialRampToValueAtTime(
+    0.01,
+    audioContext.currentTime + 0.3
+  )
+
+  oscillator.type = 'sine'
+  oscillator.start(audioContext.currentTime)
+  oscillator.stop(audioContext.currentTime + 0.3)
+}
+
 const SessionSummary: React.FC<SessionSummaryProps> = ({
   correctAnswers,
   totalQuestions,
@@ -40,11 +108,17 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({
     const steps = 50
     const increment = finalScore / steps
     const stepDuration = duration / steps
+    const soundInterval = 5 // Play sound every 5 steps
 
     let currentStep = 0
     const timer = setInterval(() => {
       currentStep += 1
       setDisplayScore(Math.round(currentStep * increment))
+
+      // Play score sound occasionally during counting
+      if (currentStep % soundInterval === 0) {
+        playScoreSound()
+      }
 
       if (currentStep >= steps) {
         clearInterval(timer)
@@ -66,6 +140,7 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({
           setTimeout(
             () => {
               setVisibleStars(i)
+              playStarSound()
             },
             (i - 1) * starDelay
           )
