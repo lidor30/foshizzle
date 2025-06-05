@@ -6,6 +6,7 @@ import {
 } from '@/types/questions'
 import { Locale } from 'next-intl'
 
+import { generateColorsQuestions } from '@/data/generators/colors'
 import { generateEuropaLeagueQuestions } from '@/data/generators/europa-league'
 import { generateFifaWorldCupQuestions } from '@/data/generators/fifa-world-cup'
 import { generateFlagsQuestions } from '@/data/generators/flags'
@@ -32,6 +33,8 @@ export async function generateQuestionsForTopic(
       return generateFifaWorldCupQuestions(locale, difficulty, type)
     case 'nba':
       return generateNBAQuestions(locale, difficulty, type)
+    case 'colors':
+      return generateColorsQuestions(locale, difficulty, type)
     default:
       throw new Error(`Unknown topic ID: ${topicId}`)
   }

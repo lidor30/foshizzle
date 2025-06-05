@@ -7,6 +7,7 @@ const championsIconFileName = 'champions.png'
 const europaIconFileName = 'europa.png'
 const worldCupIconFileName = 'world-cup.png'
 const nbaIconFileName = 'nba.png'
+const colorsIconFileName = 'colors.png'
 
 export const getTopics = async (): Promise<TopicMetadata[]> => {
   const t = await getTranslations('Topics')
@@ -22,6 +23,12 @@ export const getTopics = async (): Promise<TopicMetadata[]> => {
       id: 'math',
       name: t('math'),
       icon: mathIconFileName,
+      kidsMode: true
+    },
+    {
+      id: 'colors',
+      name: t('colors'),
+      icon: colorsIconFileName,
       kidsMode: true
     },
     {

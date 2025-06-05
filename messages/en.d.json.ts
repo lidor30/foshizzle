@@ -45,7 +45,8 @@ declare const messages: {
   },
   "Topics": {
     "flags": "World Flags",
-    "math": "Math for Kids"
+    "math": "Math for Kids",
+    "colors": "Learn Colors"
   },
   "TopicSelector": {
     "title": "Select a topic",
