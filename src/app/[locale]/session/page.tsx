@@ -3,8 +3,8 @@
 import PageLayout from '@/components/PageLayout'
 import Flashcard from '@/components/questions/Flashcard'
 import MultipleChoiceQuestion from '@/components/questions/MultipleChoiceQuestion'
-import SessionComplete from '@/components/session/SessionComplete'
 import SessionProgress from '@/components/session/SessionProgress'
+import SessionSummary from '@/components/session/SessionSummary'
 import { useKidsMode } from '@/context/KidsModeContext'
 import { useSession } from '@/hooks/useSession'
 import {
@@ -59,6 +59,7 @@ export default function SessionPage() {
     flipCard,
     handleAnswer,
     generateSession,
+    sessionStats,
     progress
   } = useSession(selectedTopicIds, selectedDifficulty)
 
@@ -81,7 +82,9 @@ export default function SessionPage() {
   return (
     <PageLayout>
       {isSessionComplete ? (
-        <SessionComplete
+        <SessionSummary
+          correctAnswers={sessionStats.correctAnswers}
+          totalQuestions={progress.total}
           onStartNewSession={generateSession}
           onReturnHome={handleReturnHome}
         />
