@@ -1,5 +1,12 @@
 import { initializeApp } from 'firebase/app'
 import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  User
+} from 'firebase/auth'
+import {
   deleteObject,
   getDownloadURL,
   getMetadata,
@@ -11,18 +18,30 @@ import {
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID
+  apiKey:
+    process.env.NEXT_PUBLIC_FIREBASE_API_KEY || process.env.FIREBASE_API_KEY,
+  authDomain:
+    process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ||
+    process.env.FIREBASE_AUTH_DOMAIN,
+  projectId:
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ||
+    process.env.FIREBASE_PROJECT_ID,
+  storageBucket:
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ||
+    process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId:
+    process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ||
+    process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || process.env.FIREBASE_APP_ID,
+  measurementId:
+    process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID ||
+    process.env.FIREBASE_MEASUREMENT_ID
 }
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 const storage = getStorage(app)
+const auth = getAuth(app)
 
 // Reference to the TTS audio files folder
 const getTTSFolderRef = () => ref(storage, 'tts')
@@ -131,3 +150,18 @@ export const deleteTTSCacheEntry = async (
     return false
   }
 }
+
+// Auth functions
+export const loginWithEmail = async (email: string, password: string) => {
+  return await signInWithEmailAndPassword(auth, email, password)
+}
+
+export const logout = async () => {
+  return await signOut(auth)
+}
+
+export const onAuthStateChange = (callback: (user: User | null) => void) => {
+  return onAuthStateChanged(auth, callback)
+}
+
+export { auth }
