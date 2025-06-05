@@ -81,7 +81,10 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({
     <div className="mx-auto p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md text-center">
       {/* Score Display */}
       <div className="mb-8 animate-float-medium">
-        <div className="text-9xl font-bold text-primary-600 mb-2">
+        <div
+          className="text-9xl font-bold text-primary-600 mb-2"
+          style={{ fontFamily: '"Comic Sans MS", "Comic Neue", cursive' }}
+        >
           {displayScore}
         </div>
       </div>
