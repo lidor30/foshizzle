@@ -24,9 +24,10 @@ const colors: ColorData[] = [
   { name: 'orange', hebrewName: 'כתום', color: '#FFA500' },
   { name: 'purple', hebrewName: 'סגול', color: '#800080' },
   { name: 'pink', hebrewName: 'ורוד', color: '#FFC0CB' },
-  { name: 'brown', hebrewName: 'חום', color: '#FF5733' },
+  { name: 'brown', hebrewName: 'חום', color: '#7B3F00' },
   { name: 'black', hebrewName: 'שחור', color: '#000000' },
-  { name: 'white', hebrewName: 'לבן', color: '#FFFFFF' }
+  { name: 'white', hebrewName: 'לבן', color: '#FFFFFF' },
+  { name: 'gray', hebrewName: 'אפור', color: '#808080' }
 ]
 
 const generateColorsQuestionsForDifficulty = (
@@ -37,7 +38,7 @@ const generateColorsQuestionsForDifficulty = (
   // We'll make a set of questions for each color
   colors.forEach((color, colorIndex) => {
     // Create question asking to identify a specific color
-    const questionText = `לחץ על הצבע ${color.hebrewName}`
+    const questionText = `איפה הכדור ה${color.hebrewName}?`
 
     // Choose 3 random different colors as distractors
     const otherColors = colors.filter((c) => c.name !== color.name)

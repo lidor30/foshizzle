@@ -322,7 +322,7 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
                     : 'text-left rtl:text-right'
                 } rounded-md transition-colors text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 ${buttonStyle} ${
                   useLargeAnswerBoxes
-                    ? 'h-24 md:h-32 flex items-center justify-center'
+                    ? 'h-28 md:h-36 flex items-center justify-center'
                     : ''
                 }`}
               >
@@ -346,7 +346,9 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
                 {/* Display HTML content */}
                 {option.htmlContent && (
                   <div
-                    className={`flex justify-center ${option.text ? 'mb-2' : ''} w-full`}
+                    className={`flex justify-center items-center ${
+                      option.text ? 'mb-2' : ''
+                    } w-full h-24 p-2`}
                   >
                     <HtmlContent content={option.htmlContent} />
                   </div>

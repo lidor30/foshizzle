@@ -6,11 +6,11 @@ interface ColorBallProps {
 }
 
 const ColorBall: React.FC<ColorBallProps> = ({ color, size = 'medium' }) => {
-  // Define sizes
+  // Define sizes with relative constraints to prevent overflow
   const sizes = {
-    small: 'w-16 h-16',
-    medium: 'w-24 h-24 md:w-32 md:h-32',
-    large: 'w-32 h-32 md:w-40 md:h-40'
+    small: 'w-12 h-12 min-w-[3rem] max-w-[4rem]',
+    medium: 'w-20 h-20 min-w-[5rem] max-w-[6rem]',
+    large: 'w-24 h-24 min-w-[6rem] max-w-[8rem]'
   }
 
   // Calculate a darker shade for the bottom of the ball to create 3D effect
