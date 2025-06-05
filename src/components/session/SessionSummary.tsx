@@ -1,3 +1,4 @@
+import { useKidsMode } from '@/context/KidsModeContext'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
@@ -84,6 +85,7 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({
   onReturnHome
 }) => {
   const t = useTranslations('SessionComplete')
+  const { kidsMode } = useKidsMode()
   const [displayScore, setDisplayScore] = useState(0)
   const [visibleStars, setVisibleStars] = useState(0)
 
@@ -115,8 +117,8 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({
       currentStep += 1
       setDisplayScore(Math.round(currentStep * increment))
 
-      // Play score sound occasionally during counting
-      if (currentStep % soundInterval === 0) {
+      // Play score sound occasionally during counting (only in kids mode)
+      if (kidsMode && currentStep % soundInterval === 0) {
         playScoreSound()
       }
 
@@ -127,7 +129,7 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({
     }, stepDuration)
 
     return () => clearInterval(timer)
-  }, [finalScore])
+  }, [finalScore, kidsMode])
 
   // Animate stars appearing one by one after score animation
   useEffect(() => {
@@ -140,7 +142,10 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({
           setTimeout(
             () => {
               setVisibleStars(i)
-              playStarSound()
+              // Play star sound when each star appears (only in kids mode)
+              if (kidsMode) {
+                playStarSound()
+              }
             },
             (i - 1) * starDelay
           )
@@ -150,15 +155,19 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({
     }, startDelay)
 
     return () => clearTimeout(timer)
-  }, [starCount])
+  }, [starCount, kidsMode])
 
   return (
     <div className="mx-auto p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md text-center">
       {/* Score Display */}
-      <div className="mb-8 animate-float-medium">
+      <div className={`mb-8 ${kidsMode ? 'animate-float-medium' : ''}`}>
         <div
           className="text-9xl font-bold text-primary-600 mb-2"
-          style={{ fontFamily: '"Comic Sans MS", "Comic Neue", cursive' }}
+          style={{
+            fontFamily: kidsMode
+              ? '"Comic Sans MS", "Comic Neue", cursive'
+              : 'inherit'
+          }}
         >
           {displayScore}
         </div>
@@ -171,11 +180,11 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({
             key={starIndex}
             className={`transition-all duration-500 transform ${
               starIndex <= visibleStars
-                ? 'scale-100 opacity-100 animate-bounce'
+                ? `scale-100 opacity-100 ${kidsMode ? 'animate-bounce' : ''}`
                 : 'scale-0 opacity-0'
             }`}
             style={{
-              animationDelay: `${(starIndex - 1) * 0.2}s`
+              animationDelay: kidsMode ? `${(starIndex - 1) * 0.2}s` : '0s'
             }}
           >
             <Image
