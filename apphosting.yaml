@@ -19,6 +19,11 @@ env:
       - RUNTIME
       - BUILD
 
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: foshizzle-proj.firebaseapp.com
+    availability: 
+      - RUNTIME
+
   - variable: FIREBASE_API_KEY
     value: AIzaSyBXtGpxC_VQmDlqDBghPMWQcQUCmUBI4Gw
     availability: 
