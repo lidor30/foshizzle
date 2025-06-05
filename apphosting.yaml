@@ -17,6 +17,7 @@ env:
     value: AIzaSyBXtGpxC_VQmDlqDBghPMWQcQUCmUBI4Gw
     availability: 
       - RUNTIME
+      - BUILD
 
   - variable: FIREBASE_API_KEY
     value: AIzaSyBXtGpxC_VQmDlqDBghPMWQcQUCmUBI4Gw
