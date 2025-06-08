@@ -12,6 +12,11 @@ export type SessionFlashcard = QuestionItem & {
   topicIcon?: string
 }
 
+export interface SessionStats {
+  correctAnswers: number
+  totalAnswers: number
+}
+
 export const useSession = (
   selectedTopicIds: string[],
   difficulty: DifficultyLevel = 'medium'
@@ -23,10 +28,17 @@ export const useSession = (
   const [isFlipped, setIsFlipped] = useState(false)
   const [isLastCardAnswered, setIsLastCardAnswered] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [sessionStats, setSessionStats] = useState<SessionStats>({
+    correctAnswers: 0,
+    totalAnswers: 0
+  })
   const { updateCardStat } = useStats()
 
   const generateSession = useCallback(async () => {
     setIsLoading(true)
+    // Reset session stats when generating new session
+    setSessionStats({ correctAnswers: 0, totalAnswers: 0 })
+
     try {
       const generateAllFlashcards = async (): Promise<SessionFlashcard[]> => {
         const response = await fetch(`/${locale}/api/questions`, {
@@ -96,6 +108,12 @@ export const useSession = (
     const currentCard = sessionCards[currentCardIndex]
     updateCardStat(currentCard.id, result)
 
+    // Update session stats
+    setSessionStats((prev) => ({
+      correctAnswers: prev.correctAnswers + (result === 'correct' ? 1 : 0),
+      totalAnswers: prev.totalAnswers + 1
+    }))
+
     if (currentCardIndex >= sessionCards.length - 1) {
       setIsLastCardAnswered(true)
     } else {
@@ -122,6 +140,7 @@ export const useSession = (
     flipCard,
     handleAnswer,
     generateSession,
+    sessionStats,
     progress: {
       current: currentCardIndex + 1,
       total: sessionCards.length
