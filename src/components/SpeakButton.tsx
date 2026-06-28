@@ -1,9 +1,10 @@
-import { TTSOptions } from '@/utils/openai'
+import { TTSOptions } from '@/utils/googleTts'
 import { speakText } from '@/utils/ttsClient'
 import React, { useEffect, useState } from 'react'
 
 interface SpeakButtonProps {
   text: string
+  locale?: TTSOptions['locale']
   options?: TTSOptions
   className?: string
   onClick?: (e: React.MouseEvent) => void
@@ -25,6 +26,7 @@ if (typeof window !== 'undefined') {
 
 const SpeakButton: React.FC<SpeakButtonProps> = ({
   text,
+  locale,
   options = {},
   className = '',
   onClick
@@ -89,7 +91,7 @@ const SpeakButton: React.FC<SpeakButtonProps> = ({
       setIsPlaying(true)
 
       // Speak the text
-      await speakText(text, options)
+      await speakText(text, { ...options, locale: locale ?? options.locale })
 
       // Add a small delay before allowing to play again
       setTimeout(() => {

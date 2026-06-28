@@ -2,7 +2,7 @@ import { useKidsMode } from '@/context/KidsModeContext'
 import { AnswerResult } from '@/types'
 import { MultipleChoiceQuestionItem } from '@/types/questions'
 import { speakText } from '@/utils/ttsClient'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -24,6 +24,7 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
   enableRetries = false
 }) => {
   const t = useTranslations('MultipleChoiceQuestion')
+  const locale = useLocale() as 'en' | 'he'
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
   const [answerResult, setAnswerResult] = useState<AnswerResult | null>(null)
   const [showFireworks, setShowFireworks] = useState(false)
@@ -47,7 +48,7 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
 
     // Only auto-read if TTS is enabled for this question
     if (kidsMode && card.autoReadQuestion && card.question.text && showTTS) {
-      speakText(card.question.text)
+      speakText(card.question.text, { locale })
     }
   }, [card.id, card.autoReadQuestion, card.question.text, kidsMode, showTTS])
 
@@ -108,7 +109,7 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
         }, NEXT_QUESTION_DELAY)
 
         const praiseMessage = getRandomPraiseMessage()
-        speakText(praiseMessage)
+        speakText(praiseMessage, { locale })
 
         toast.success(praiseMessage, {
           duration: NEXT_QUESTION_DELAY,
@@ -191,7 +192,7 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
         )
 
         if (kidsMode) {
-          speakText(t('tryAgain'))
+          speakText(t('tryAgain'), { locale })
         }
 
         // Reset selection after a short delay to allow for another selection
@@ -275,7 +276,7 @@ const MultipleChoiceQuestion: React.FC<MultipleChoiceQuestionProps> = ({
 
         {showTTS && (
           <div className="absolute right-[0] top-[-4px] rtl:left-[0] flex">
-            <SpeakButton text={card.question.text || ''} />
+            <SpeakButton text={card.question.text || ''} locale={locale} />
           </div>
         )}
       </div>

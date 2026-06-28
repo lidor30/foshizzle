@@ -1,7 +1,7 @@
 import { AnswerResult } from '@/types'
 import { ContentItem, QuestionItem } from '@/types/questions'
 import { speakText } from '@/utils/ttsClient'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import SpeakButton from '../SpeakButton'
@@ -27,6 +27,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
   icon
 }) => {
   const t = useTranslations('Flashcard')
+  const locale = useLocale() as 'en' | 'he'
   const [delayedAnswer, setDelayedAnswer] = useState<DelayedAnswer | null>(null)
 
   const useLargeText = card.metadata?.largeText || false
@@ -46,7 +47,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
       }, 500)
 
       if (card.autoReadQuestion && card.question.text && showTTS) {
-        speakText(card.question.text)
+        speakText(card.question.text, { locale })
       }
     }
   }, [card, icon, card.autoReadQuestion, card.question.text, showTTS])
@@ -107,7 +108,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
 
             {showTTS && (
               <div className="absolute right-2 top-2 flex">
-                <SpeakButton text={card.question.text || ''} />
+                <SpeakButton text={card.question.text || ''} locale={locale} />
               </div>
             )}
           </div>
@@ -151,7 +152,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
 
                 {showTTS && (
                   <div className="absolute right-2 top-2 flex">
-                    <SpeakButton text={delayedAnswer.answer.text || ''} />
+                    <SpeakButton text={delayedAnswer.answer.text || ''} locale={locale} />
                   </div>
                 )}
               </>

@@ -1,18 +1,18 @@
 import { listTTSCacheEntries } from '@/utils/firebase'
-import { generateSpeech } from '@/utils/openai'
+import { generateSpeech } from '@/utils/googleTts'
 import fs from 'fs'
 import { NextRequest, NextResponse } from 'next/server'
 import path from 'path'
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, voice } = await request.json()
+    const { text, voice, locale } = await request.json()
 
     if (!text) {
       return NextResponse.json({ error: 'Text is required' }, { status: 400 })
     }
 
-    const audioUrl = await generateSpeech(text, { voice })
+    const audioUrl = await generateSpeech(text, { voice, locale })
 
     if (!audioUrl) {
       return NextResponse.json(

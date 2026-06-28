@@ -1,4 +1,4 @@
-import type { TTSOptions } from './openai'
+import type { TTSOptions } from './googleTts'
 
 // Cache for audio URLs
 interface AudioCache {
@@ -346,7 +346,8 @@ export const generateSpeech = async (
       },
       body: JSON.stringify({
         text,
-        voice: options.voice
+        voice: options.voice,
+        locale: options.locale
       })
     })
 

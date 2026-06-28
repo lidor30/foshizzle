@@ -7,47 +7,14 @@ const getTextHash = (text: string, voice: string): string => {
   return crypto.createHash('md5').update(`${text}-${voice}`).digest('hex')
 }
 
+const LOCALE_CONFIG: Record<string, { languageCode: string; defaultVoice: string }> = {
+  he: { languageCode: 'he-IL', defaultVoice: 'he-IL-Chirp3-HD-Aoede' },
+  en: { languageCode: 'en-US', defaultVoice: 'en-US-Chirp3-HD-Kore' }
+}
+
 export interface TTSOptions {
-  voice?:
-    | 'he-IL-Chirp3-HD-Achernar'
-    | 'he-IL-Chirp3-HD-Achird'
-    | 'he-IL-Chirp3-HD-Algenib'
-    | 'he-IL-Chirp3-HD-Algieba'
-    | 'he-IL-Chirp3-HD-Alnilam'
-    | 'he-IL-Chirp3-HD-Aoede'
-    | 'he-IL-Chirp3-HD-Autonoe'
-    | 'he-IL-Chirp3-HD-Callirrhoe'
-    | 'he-IL-Chirp3-HD-Charon'
-    | 'he-IL-Chirp3-HD-Despina'
-    | 'he-IL-Chirp3-HD-Enceladus'
-    | 'he-IL-Chirp3-HD-Erinome'
-    | 'he-IL-Chirp3-HD-Fenrir'
-    | 'he-IL-Chirp3-HD-Gacrux'
-    | 'he-IL-Chirp3-HD-Iapetus'
-    | 'he-IL-Chirp3-HD-Kore'
-    | 'he-IL-Chirp3-HD-Laomedeia'
-    | 'he-IL-Chirp3-HD-Leda'
-    | 'he-IL-Chirp3-HD-Orus'
-    | 'he-IL-Chirp3-HD-Pulcherrima'
-    | 'he-IL-Chirp3-HD-Puck'
-    | 'he-IL-Chirp3-HD-Rasalgethi'
-    | 'he-IL-Chirp3-HD-Sadachbia'
-    | 'he-IL-Chirp3-HD-Sadaltager'
-    | 'he-IL-Chirp3-HD-Schedar'
-    | 'he-IL-Chirp3-HD-Sulafat'
-    | 'he-IL-Chirp3-HD-Umbriel'
-    | 'he-IL-Chirp3-HD-Vindemiatrix'
-    | 'he-IL-Chirp3-HD-Zephyr'
-    | 'he-IL-Chirp3-HD-Zubenelgenubi'
-    | 'he-IL-Wavenet-A'
-    | 'he-IL-Wavenet-B'
-    | 'he-IL-Wavenet-C'
-    | 'he-IL-Wavenet-D'
-    | 'he-IL-Standard-A'
-    | 'he-IL-Standard-B'
-    | 'he-IL-Standard-C'
-    | 'he-IL-Standard-D'
-  languageCode?: string
+  locale?: 'en' | 'he'
+  voice?: string
 }
 
 /**
@@ -59,8 +26,9 @@ export const generateSpeech = async (
 ): Promise<string> => {
   if (!text.trim()) return ''
 
-  const voice = options.voice || 'he-IL-Chirp3-HD-Aoede'
-  const languageCode = options.languageCode || 'he-IL'
+  const config = LOCALE_CONFIG[options.locale ?? 'he'] ?? LOCALE_CONFIG.he
+  const voice = options.voice ?? config.defaultVoice
+  const { languageCode } = config
   const textHash = getTextHash(text, voice)
 
   if (await audioFileExists(textHash)) {
@@ -95,14 +63,12 @@ export const generateSpeech = async (
     const data = await response.json()
     const buffer = Buffer.from(data.audioContent, 'base64')
 
-    const metadata = {
+    return await uploadAudioFile(textHash, buffer, {
       text,
       voice,
       languageCode,
       timestamp: new Date().toISOString()
-    }
-
-    return await uploadAudioFile(textHash, buffer, metadata)
+    })
   } catch (error) {
     console.error('Error generating speech:', error)
     return ''
