@@ -1,27 +1,57 @@
 import crypto from 'crypto'
-import OpenAI from 'openai'
 import { audioFileExists, getAudioFileURL, uploadAudioFile } from './firebase'
 
-// Initialize OpenAI client
-const apiKey = process.env.OPENAI_API_KEY || ''
-const isEnabled = process.env.ENABLE_OPENAI_TTS === 'true'
-const openai = new OpenAI({ apiKey })
+const apiKey = process.env.GOOGLE_API_KEY || ''
 
-// Create a hash of the text to use as filename
 const getTextHash = (text: string, voice: string): string => {
   return crypto.createHash('md5').update(`${text}-${voice}`).digest('hex')
 }
 
 export interface TTSOptions {
-  voice?: 'coral' | 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer'
-  model?: 'gpt-4o-mini-tts' | 'tts-1' | 'tts-1-hd'
+  voice?:
+    | 'he-IL-Chirp3-HD-Achernar'
+    | 'he-IL-Chirp3-HD-Achird'
+    | 'he-IL-Chirp3-HD-Algenib'
+    | 'he-IL-Chirp3-HD-Algieba'
+    | 'he-IL-Chirp3-HD-Alnilam'
+    | 'he-IL-Chirp3-HD-Aoede'
+    | 'he-IL-Chirp3-HD-Autonoe'
+    | 'he-IL-Chirp3-HD-Callirrhoe'
+    | 'he-IL-Chirp3-HD-Charon'
+    | 'he-IL-Chirp3-HD-Despina'
+    | 'he-IL-Chirp3-HD-Enceladus'
+    | 'he-IL-Chirp3-HD-Erinome'
+    | 'he-IL-Chirp3-HD-Fenrir'
+    | 'he-IL-Chirp3-HD-Gacrux'
+    | 'he-IL-Chirp3-HD-Iapetus'
+    | 'he-IL-Chirp3-HD-Kore'
+    | 'he-IL-Chirp3-HD-Laomedeia'
+    | 'he-IL-Chirp3-HD-Leda'
+    | 'he-IL-Chirp3-HD-Orus'
+    | 'he-IL-Chirp3-HD-Pulcherrima'
+    | 'he-IL-Chirp3-HD-Puck'
+    | 'he-IL-Chirp3-HD-Rasalgethi'
+    | 'he-IL-Chirp3-HD-Sadachbia'
+    | 'he-IL-Chirp3-HD-Sadaltager'
+    | 'he-IL-Chirp3-HD-Schedar'
+    | 'he-IL-Chirp3-HD-Sulafat'
+    | 'he-IL-Chirp3-HD-Umbriel'
+    | 'he-IL-Chirp3-HD-Vindemiatrix'
+    | 'he-IL-Chirp3-HD-Zephyr'
+    | 'he-IL-Chirp3-HD-Zubenelgenubi'
+    | 'he-IL-Wavenet-A'
+    | 'he-IL-Wavenet-B'
+    | 'he-IL-Wavenet-C'
+    | 'he-IL-Wavenet-D'
+    | 'he-IL-Standard-A'
+    | 'he-IL-Standard-B'
+    | 'he-IL-Standard-C'
+    | 'he-IL-Standard-D'
+  languageCode?: string
 }
 
 /**
- * Generate speech from text and cache it in Firebase Storage
- * @param text Text to convert to speech
- * @param options TTS options (voice, model)
- * @returns URL to the audio file
+ * Generate speech from text using Google Cloud TTS and cache in Firebase Storage
  */
 export const generateSpeech = async (
   text: string,
@@ -29,50 +59,49 @@ export const generateSpeech = async (
 ): Promise<string> => {
   if (!text.trim()) return ''
 
-  // Check if OpenAI TTS is enabled
-  if (!isEnabled) {
-    console.warn(
-      'OpenAI TTS is disabled. Set ENABLE_OPENAI_TTS=true in .env to enable it.'
-    )
-    return ''
-  }
-
-  // Default options
-  const voice = options.voice || 'coral'
-  const model = options.model || 'gpt-4o-mini-tts'
-
-  // Generate hash for the text and voice
+  const voice = options.voice || 'he-IL-Chirp3-HD-Aoede'
+  const languageCode = options.languageCode || 'he-IL'
   const textHash = getTextHash(text, voice)
 
-  // Check if audio already exists in Firebase Storage
   if (await audioFileExists(textHash)) {
     return await getAudioFileURL(textHash)
   }
 
-  const instructions =
-    'הקול צריך להיות בעברית.\nהקול צריך להיות נעים לשמיעה, השימוש הוא עבור משחק לילדים בגיל 5.\nהקצב צריך להיות יחסית איטי והקול צריך להיות ברור ושמח.'
-
   try {
-    // Generate speech with OpenAI
-    const mp3 = await openai.audio.speech.create({
-      model,
-      voice,
-      instructions,
-      input: text
-    })
+    const response = await fetch(
+      `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input: { text },
+          voice: { languageCode, name: voice },
+          audioConfig: {
+            audioEncoding: 'MP3',
+            speakingRate: 0.9,
+            pitch: 0.0,
+            effectsProfileId: ['headphone-class-device']
+          }
+        })
+      }
+    )
 
-    // Get the binary data
-    const buffer = Buffer.from(await mp3.arrayBuffer())
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('Google Cloud TTS error:', error)
+      return ''
+    }
 
-    // Save to Firebase Storage with metadata
+    const data = await response.json()
+    const buffer = Buffer.from(data.audioContent, 'base64')
+
     const metadata = {
       text,
       voice,
-      model,
+      languageCode,
       timestamp: new Date().toISOString()
     }
 
-    // Upload file to Firebase Storage
     return await uploadAudioFile(textHash, buffer, metadata)
   } catch (error) {
     console.error('Error generating speech:', error)
@@ -82,21 +111,12 @@ export const generateSpeech = async (
 
 /**
  * Play audio from text
- * @param text Text to speak
- * @param options TTS options
  */
 export const speakText = async (
   text: string,
   options: TTSOptions = {}
 ): Promise<void> => {
   try {
-    if (!isEnabled) {
-      console.warn(
-        'OpenAI TTS is disabled. Set ENABLE_OPENAI_TTS=true in .env to enable it.'
-      )
-      return
-    }
-
     const audioUrl = await generateSpeech(text, options)
     if (!audioUrl) return
 

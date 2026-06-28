@@ -44,10 +44,9 @@ const SpeakButton: React.FC<SpeakButtonProps> = ({
           body: JSON.stringify({ text: 'test' })
         })
 
-        // If status is 400 and the error is about TTS being disabled
         if (response.status === 400) {
           const data = await response.json()
-          if (data.error?.includes('OpenAI TTS is disabled')) {
+          if (data.error?.includes('TTS is disabled')) {
             setIsTTSDisabled(true)
           }
         }

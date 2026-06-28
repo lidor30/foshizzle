@@ -1,4 +1,4 @@
-import { TTSOptions } from './openai'
+import type { TTSOptions } from './openai'
 
 // Cache for audio URLs
 interface AudioCache {
@@ -346,22 +346,12 @@ export const generateSpeech = async (
       },
       body: JSON.stringify({
         text,
-        voice: options.voice,
-        model: options.model
+        voice: options.voice
       })
     })
 
     if (!response.ok) {
       const error = await response.json()
-
-      if (
-        response.status === 400 &&
-        error.error?.includes('OpenAI TTS is disabled')
-      ) {
-        console.warn(error.error)
-        return ''
-      }
-
       throw new Error(error.error || 'Failed to generate speech')
     }
 

@@ -4,27 +4,15 @@ import fs from 'fs'
 import { NextRequest, NextResponse } from 'next/server'
 import path from 'path'
 
-const isEnabled = process.env.ENABLE_OPENAI_TTS === 'true'
-
 export async function POST(request: NextRequest) {
-  if (!isEnabled) {
-    return NextResponse.json(
-      {
-        error:
-          'OpenAI TTS is disabled. Set ENABLE_OPENAI_TTS=true in .env to enable it.'
-      },
-      { status: 400 }
-    )
-  }
-
   try {
-    const { text, voice, model } = await request.json()
+    const { text, voice } = await request.json()
 
     if (!text) {
       return NextResponse.json({ error: 'Text is required' }, { status: 400 })
     }
 
-    const audioUrl = await generateSpeech(text, { voice, model })
+    const audioUrl = await generateSpeech(text, { voice })
 
     if (!audioUrl) {
       return NextResponse.json(
@@ -33,7 +21,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Instead of returning the URL, fetch the audio file and return it directly
     try {
       const audioResponse = await fetch(audioUrl)
 
@@ -42,7 +29,6 @@ export async function POST(request: NextRequest) {
           `Failed to fetch audio from URL: ${audioUrl}`,
           audioResponse.status
         )
-        // Fall back to returning the URL if we can't fetch the audio
         return NextResponse.json({ url: audioUrl })
       }
 
@@ -52,7 +38,7 @@ export async function POST(request: NextRequest) {
         headers: {
           'Content-Type': 'audio/mpeg',
           'Content-Length': audioArrayBuffer.byteLength.toString(),
-          'Cache-Control': 'public, max-age=31536000' // 1 year
+          'Cache-Control': 'public, max-age=31536000'
         }
       })
     } catch (error) {
@@ -75,7 +61,6 @@ export async function GET(request: NextRequest) {
     const fileHash = url.searchParams.get('file')
     const listAll = url.searchParams.get('list') === 'true'
 
-    // If list=true is provided, return all cache entries
     if (listAll) {
       const entries = await listTTSCacheEntries()
       return NextResponse.json({ entries })
