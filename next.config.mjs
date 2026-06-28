@@ -16,6 +16,7 @@ const withPWA = NextPWA({
 
 /** @type {import('next').NextConfig} */
 const config = {
+  transpilePackages: ['next-intl', 'use-intl'],
   images: {
     remotePatterns: [
       {

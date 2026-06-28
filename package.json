@@ -53,5 +53,11 @@
     "singleQuote": true,
     "trailingComma": "none",
     "semi": false
-  }
+  },
+  "browserslist": [
+    "ios >= 12",
+    "> 0.5%",
+    "last 2 versions",
+    "not dead"
+  ]
 }

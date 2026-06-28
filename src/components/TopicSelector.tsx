@@ -126,7 +126,11 @@ export default function TopicSelector({ onStartSession }: TopicSelectorProps) {
   const selectedCount = Object.values(selectedTopics).filter(Boolean).length
 
   if (loading) {
-    return <div className="text-white">{t('loading')}</div>
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+      </div>
+    )
   }
 
   // Kids mode UI classes
