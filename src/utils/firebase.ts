@@ -145,7 +145,13 @@ export const deleteTTSCacheEntry = async (
     const fileRef = ref(getTTSFolderRef(), `${fileHash}.mp3`)
     await deleteObject(fileRef)
     return true
-  } catch (error) {
+  } catch (error: unknown) {
+    if (
+      error instanceof Error &&
+      (error as { code?: string }).code === 'storage/object-not-found'
+    ) {
+      return true
+    }
     console.error('Error deleting TTS cache entry:', error)
     return false
   }
