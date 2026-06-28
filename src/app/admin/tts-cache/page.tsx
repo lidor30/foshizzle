@@ -136,13 +136,13 @@ export default function TTSCacheAdmin() {
               ) : (
                 paginated.map((entry) => (
                   <tr key={entry.fileHash} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 font-mono text-gray-900 break-all max-w-[140px]">
+                    <td className="px-4 py-3 font-mono text-gray-900 whitespace-nowrap truncate max-w-[140px]">
                       {entry.fileHash}
                     </td>
                     <td className="px-4 py-3 text-gray-500 max-w-[200px] truncate whitespace-nowrap">
                       {entry.metadata?.text || 'N/A'}
                     </td>
-                    <td className="px-4 py-3 text-gray-500 break-words max-w-[100px]">
+                    <td className="px-4 py-3 text-gray-500 whitespace-nowrap truncate max-w-[100px]">
                       {entry.metadata?.voice || 'N/A'}
                     </td>
                     <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
