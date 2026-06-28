@@ -1,7 +1,7 @@
 'use client'
 
 import { loginWithEmail } from '@/utils/firebase'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 
@@ -31,11 +31,12 @@ const getAuthErrorMessage = (errorCode: string): string => {
   }
 }
 
-export default function AdminLogin() {
+export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -44,7 +45,10 @@ export default function AdminLogin() {
     try {
       await loginWithEmail(email, password)
       toast.success('Login successful!')
-      router.push('/admin')
+
+      // Redirect to original URL or default to home
+      const redirectTo = searchParams.get('redirect') || '/'
+      router.push(redirectTo)
     } catch (error: any) {
       // Get user-friendly error message
       const errorMessage = getAuthErrorMessage(error.code)
@@ -59,7 +63,7 @@ export default function AdminLogin() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Admin Login
+            Login
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

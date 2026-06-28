@@ -1,5 +1,5 @@
-import AdminLogin from '@/components/AdminLogin'
+import Login from '@/components/Login'
 
 export default function AdminLoginPage() {
-  return <AdminLogin />
+  return <Login />
 }

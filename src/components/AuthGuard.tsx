@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuth } from '@/context/AuthContext'
-import AdminLogin from './AdminLogin'
+import Login from './Login'
 
 interface AuthGuardProps {
   children: React.ReactNode
@@ -19,7 +19,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   }
 
   if (!user) {
-    return <AdminLogin />
+    return <Login />
   }
 
   return <>{children}</>

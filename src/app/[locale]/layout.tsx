@@ -1,6 +1,7 @@
 import KidsModeStyles from '@/components/KidsModeStyles'
 import Navigation from '@/components/Navigation'
 import PWAInstallPromptWrapper from '@/components/PWAInstallPromptWrapper'
+import { AuthProvider } from '@/context/AuthContext'
 import { KidsModeProvider } from '@/context/KidsModeContext'
 import { StatsProvider } from '@/context/StatsContext'
 import { routing } from '@/i18n/routing'
@@ -93,17 +94,19 @@ export default async function LocaleLayout({ children, params }: Props) {
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
       <body className={clsx(fontClass, 'flex h-full flex-col')}>
-        <NextIntlClientProvider>
-          <StatsProvider>
-            <KidsModeProvider>
-              <KidsModeStyles />
-              <Navigation />
-              {children}
-              <PWAInstallPromptWrapper />
-              <Toaster position="bottom-center" reverseOrder={false} />
-            </KidsModeProvider>
-          </StatsProvider>
-        </NextIntlClientProvider>
+        <AuthProvider>
+          <NextIntlClientProvider>
+            <StatsProvider>
+              <KidsModeProvider>
+                <KidsModeStyles />
+                <Navigation />
+                {children}
+                <PWAInstallPromptWrapper />
+                <Toaster position="bottom-center" reverseOrder={false} />
+              </KidsModeProvider>
+            </StatsProvider>
+          </NextIntlClientProvider>
+        </AuthProvider>
       </body>
     </html>
   )
